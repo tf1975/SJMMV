@@ -1,0 +1,54 @@
+[
+  {
+    "id": "endovier",
+    "title": "Endovier",
+    "type": "canon",
+    "summary": "A brutal salt-mine prison camp used by Adarlan for forced labor.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 1
+      }
+    ]
+  },
+  {
+    "id": "champion",
+    "title": "The King\u2019s Champion",
+    "type": "canon",
+    "summary": "A covert agent chosen to carry out the king\u2019s missions.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 3
+      }
+    ]
+  },
+  {
+    "id": "glass-castle",
+    "title": "The Glass Castle",
+    "type": "canon",
+    "summary": "The royal seat in Rifthold, built partly of glass and visible above the city.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 5
+      }
+    ]
+  },
+  {
+    "id": "crossing",
+    "title": "World-Crossing Thread",
+    "type": "connection",
+    "summary": "A cross-world link that appears only after every required chapter is complete.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 55
+      },
+      {
+        "bookId": "hofas",
+        "chapter": 102
+      }
+    ]
+  }
+]
