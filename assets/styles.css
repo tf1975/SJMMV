@@ -320,3 +320,70 @@
  .reader-row{grid-template-columns:1fr;gap:.3rem!important}
  .name-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* Character and Places contrast fix */
+.front-inline-panel,
+.front-inline-panel *,
+.directory-group,
+.directory-group *,
+.series-directory,
+.series-directory * {
+  color: #2c2418 !important;
+}
+
+.front-inline-panel,
+.directory-group {
+  background: #f8f1df !important;
+  border-color: #c8b99b !important;
+}
+
+.front-inline-panel h2,
+.front-inline-panel h3,
+.directory-group h2,
+.directory-group h3,
+.series-directory h2,
+.series-directory h3 {
+  color: #5c4421 !important;
+}
+
+.front-inline-panel p,
+.directory-group p,
+.series-directory p {
+  color: #3d3325 !important;
+  line-height: 1.6;
+}
+
+.front-inline-panel small,
+.directory-group small,
+.series-directory small,
+.front-inline-panel .fine-print,
+.directory-group .fine-print,
+.series-directory .fine-print {
+  color: #7b6542 !important;
+}
+
+.directory-group article {
+  border-top-color: #d4c6aa !important;
+}
+
+.name-grid span {
+  background: #efe6d3 !important;
+  color: #2c2418 !important;
+  border: 1px solid #c8b99b !important;
+  border-radius: 10px;
+  padding: .55rem .75rem;
+  transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.name-grid span:hover {
+  background: #e7dcc5 !important;
+  border-color: #b08a45 !important;
+  transform: translateY(-1px);
+}
+
+/* Keep Archive-wide series containers dark, but use light catalog cards inside */
+.series-directory {
+  background: #f8f1df !important;
+  border-color: #c8b99b !important;
+}

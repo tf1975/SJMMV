@@ -66,3 +66,10 @@ Upload to the GitHub `development` branch and open the permanent Netlify develop
 - Added Throne of Glass chapter summaries for Chapters 9–20.
 - Improved Book Club reader/progress spacing.
 - Added Global Connect and More to Come premium-preview cards.
+
+
+## Character and Places contrast fix
+- Corrected dark text/background conflicts in Characters and Places.
+- Changed inline book panels to parchment styling.
+- Improved heading, paragraph, and fine-print contrast.
+- Restyled character-name chips as light catalog entries.
