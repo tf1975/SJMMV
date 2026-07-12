@@ -73,3 +73,25 @@ Upload to the GitHub `development` branch and open the permanent Netlify develop
 - Changed inline book panels to parchment styling.
 - Improved heading, paragraph, and fine-print contrast.
 - Restyled character-name chips as light catalog entries.
+
+
+## Cloud profile and progress sync
+This build connects:
+- `profiles`
+- `reading_progress`
+
+Synced across devices:
+- nickname
+- First Read / Reread mode
+- onboarding completion
+- current chapter for every book
+- reading status
+
+On first cloud login, existing local browser progress can be imported.
+
+Still browser-local:
+- discussions
+- mentions
+- reactions
+- notes
+- quotes
