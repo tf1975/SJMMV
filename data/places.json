@@ -23,7 +23,27 @@
       "group": "Northern Kingdoms",
       "safeAt": 5,
       "bio": "A northern kingdom referenced in the wider history of Erilea."
-    }
+    },
+    {"name":"Adarlan","group":"Kingdoms","safeAt":1,"bio":"The expanding kingdom that controls Endovier, Rifthold, and the royal court."},
+    {"name":"Eyllwe","group":"Southern Kingdoms","safeAt":12,"bio":"Nehemia’s homeland, resisting occupation and violence by Adarlan."},
+    {"name":"The Castle Library","group":"The Glass Castle","safeAt":7,"bio":"A vast royal collection where Celaena reads, researches, and begins tracing forbidden history."},
+    {"name":"The Secret Tunnels","group":"Beneath the Glass Castle","safeAt":24,"bio":"Hidden passages connecting Celaena’s rooms to older structures beneath the castle."},
+    {"name":"Elena and Gavin’s Tomb","group":"Beneath the Glass Castle","safeAt":25,"bio":"An ancient tomb protected by Wyrdmarks and concealed beneath the royal complex."},
+    {"name":"The Clock Tower","group":"The Glass Castle","safeAt":8,"bio":"A black stone tower whose strange markings and hidden nature become central to the final duel."},
+    {"name":"The Champion Training Hall","group":"The Glass Castle","safeAt":8,"bio":"The practice and testing space where the contestants train under Brullo and Chaol."}
+  ],
+  "com": [
+    {"name":"Rifthold","group":"Adarlan","safeAt":1,"bio":"The capital where Celaena conducts the king’s missions and secretly investigates the resistance."},
+    {"name":"The Glass Castle","group":"Rifthold","safeAt":1,"bio":"The royal seat whose rooms, towers, library, and hidden foundations contain several dangerous secrets."},
+    {"name":"The Willows","group":"Rifthold","safeAt":7,"bio":"An elegant tea salon where Celaena arranges a carefully staged meeting with Archer Finn."},
+    {"name":"The Winter Fair","group":"Rifthold","safeAt":19,"bio":"A seasonal fair visited by Celaena, Chaol, and Dorian, including Baba Yellowlegs’s wagon."},
+    {"name":"Calaculla","group":"Eyllwe","safeAt":3,"bio":"A brutal labor camp where people of Eyllwe are imprisoned under Adarlanian control."},
+    {"name":"Queen Elena’s Tomb","group":"Beneath the Glass Castle","safeAt":6,"bio":"An ancient chamber guarded by Mort and connected to Wyrdmarks, Damaris, and the history of the Wyrdkeys."},
+    {"name":"The Secret Tunnels","group":"Beneath the Glass Castle","safeAt":6,"bio":"A hidden network linking Celaena’s rooms, Elena’s tomb, the library, and older parts of the castle."},
+    {"name":"The Vaults","group":"Rifthold Underworld","safeAt":35,"bio":"A dangerous den where Celaena searches for information about Grave."},
+    {"name":"The Clock Tower","group":"The Glass Castle","safeAt":43,"bio":"An obsidian structure above corrupted passages and experiments tied to the Wyrdkeys."},
+    {"name":"Morath","group":"Adarlan","safeAt":45,"bio":"Duke Perrington’s stronghold, where Kaltain is taken and darker plans appear to be developing."},
+    {"name":"Wendlyn","group":"Across the Sea","safeAt":52,"bio":"A kingdom beyond Adarlan where Fae and magic endure, chosen as Celaena’s next destination."}
   ],
   "acotar1": [
     {

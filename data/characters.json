@@ -71,7 +71,18 @@
       "group": "Glass Castle Household",
       "safeAt": 7,
       "bio": "A member of Celaena’s household staff in the glass castle."
-    }
+    },
+    {"name":"Queen Georgina Havilliard","group":"House Havilliard","safeAt":9,"bio":"The Queen of Adarlan, whose court favors appearances, alliances, and advantageous marriages."},
+    {"name":"Prince Hollin Havilliard","group":"House Havilliard","safeAt":9,"bio":"Dorian’s younger brother and another member of Adarlan’s ruling family."},
+    {"name":"Captain Brullo","group":"Royal Guard","safeAt":8,"bio":"The weapons master who administers several tests in the Champion competition."},
+    {"name":"Ress","group":"Royal Guard","safeAt":7,"bio":"A palace guard assigned to watch Celaena’s rooms."},
+    {"name":"Renault","group":"Champion Contestants","safeAt":8,"bio":"A competitor who reaches the final four before facing Cain."},
+    {"name":"Verin","group":"Champion Contestants","safeAt":8,"bio":"An aggressive competitor whose fate becomes part of the murder investigation."},
+    {"name":"Xavier Forul","group":"Champion Contestants","safeAt":8,"bio":"A former royal guard competing for the title of King’s Champion."},
+    {"name":"Queen Elena Galathynius Havilliard","group":"Ancient Erilea","safeAt":25,"bio":"The spirit of Gavin’s queen, who warns Celaena about the evil moving beneath the castle."},
+    {"name":"Gavin Havilliard","group":"Ancient Erilea","safeAt":25,"bio":"The first King of Adarlan, remembered as a legendary warrior and Elena’s husband."},
+    {"name":"Fleetfoot","group":"Glass Castle Household","safeAt":36,"bio":"The silver-and-gold puppy Dorian gives Celaena for Yulemas."},
+    {"name":"The Ridderak","group":"Creatures","safeAt":41,"bio":"A summoned predator used to kill contestants and transfer their strength to its summoner."}
   ],
   "com": [
     {"name":"Celaena Sardothien","group":"The King’s Champion","safeAt":1,"bio":"The king’s newly appointed Champion, carrying out secret assignments for the crown."},
@@ -79,7 +90,20 @@
     {"name":"Dorian Havilliard","group":"House Havilliard","safeAt":1,"bio":"Crown Prince of Adarlan, increasingly aware that the kingdom holds secrets of its own."},
     {"name":"Princess Nehemia","group":"Eyllwe","safeAt":1,"bio":"Princess of Eyllwe and Celaena’s trusted friend."},
     {"name":"Archer Finn","group":"Rifthold","safeAt":2,"bio":"A former acquaintance of Celaena who becomes connected to one of her assignments."},
-    {"name":"Mort","group":"The Castle","safeAt":5,"bio":"A talking bronze door knocker guarding an old passage beneath the castle."}
+    {"name":"Mort","group":"The Castle","safeAt":6,"bio":"A talking bronze door knocker guarding Queen Elena’s tomb beneath the castle."},
+    {"name":"Roland Havilliard","group":"House Havilliard","safeAt":4,"bio":"Dorian’s cousin, newly appointed to the king’s council and watched closely by both Dorian and Chaol."},
+    {"name":"The King of Adarlan","group":"House Havilliard","safeAt":2,"bio":"The ruler who uses Celaena as his Champion and threatens everyone she loves to ensure her obedience."},
+    {"name":"Queen Elena Galathynius Havilliard","group":"Ancient Erilea","safeAt":6,"bio":"A spirit connected to the tomb beneath the castle and the dangerous task Celaena has resisted."},
+    {"name":"Baba Yellowlegs","group":"Ironteeth Witches","safeAt":19,"bio":"An ancient witch at the winter fair who possesses forbidden knowledge about magic and the Wyrdkeys."},
+    {"name":"Grave","group":"Rifthold Underworld","safeAt":34,"bio":"An assassin from the Champion competition whose methods become central to the investigation of Nehemia’s murder."},
+    {"name":"Minister Mullison","group":"Adarlanian Court","safeAt":36,"bio":"A royal minister accused of arranging Nehemia’s assassination."},
+    {"name":"Duke Perrington","group":"Adarlanian Court","safeAt":4,"bio":"A powerful duke whose influence at court and interest in Kaltain remain deeply unsettling."},
+    {"name":"Kaltain Rompier","group":"Adarlanian Court","safeAt":31,"bio":"A courtier imprisoned beneath the castle after the Champion competition and later removed to Morath."},
+    {"name":"Ress","group":"Royal Guard","safeAt":2,"bio":"A loyal palace guard who helps protect the royal household and restrains Celaena during a moment of crisis."},
+    {"name":"Philippa Spindlehead","group":"Glass Castle Household","safeAt":3,"bio":"Celaena’s housekeeper, who tends to her rooms and cares for her through grief."},
+    {"name":"Fleetfoot","group":"Glass Castle Household","safeAt":3,"bio":"Celaena’s loyal hound and a source of comfort as danger spreads through the castle."},
+    {"name":"Gavin Havilliard","group":"Ancient Erilea","safeAt":37,"bio":"The first King of Adarlan, remembered through Damaris, Elena’s tomb, and warnings that reach Dorian in dreams."},
+    {"name":"Aelin Galathynius","group":"Terrasen","safeAt":11,"bio":"The missing heir whom a growing rebel movement hopes to restore to Terrasen’s throne; her fate remains unknown at this point."}
   ],
   "tab": [
     {"name":"Celaena Sardothien","group":"Assassin’s Guild","safeAt":1,"bio":"A gifted teenage assassin beginning to question the life chosen for her."},

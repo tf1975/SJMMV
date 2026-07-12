@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false,mentionCandidates=[],mentionActiveIndex=-1,mentionMatch=null,mentionLoadState='idle';
+let authUser=null,catalog,bookContent={},lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false,mentionCandidates=[],mentionActiveIndex=-1,mentionMatch=null,mentionLoadState='idle';
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -28,9 +28,10 @@ const orderedTogIds=()=>assassinsBladeOrder()==='purist'?['tab','tog','com','hof
 const orderedBooksForCollection=c=>c.id!=='throne-of-glass'?c.books:[...c.books].sort((a,b)=>orderedTogIds().indexOf(a[0])-orderedTogIds().indexOf(b[0]));
 function view(id){$$('.view').forEach(v=>v.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 async function boot(){
- [catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem]=await Promise.all([
-  'data/catalog.json','content/tog.json','data/lore.json','data/front-matter.json','data/characters.json','data/places.json','data/character-index.json','data/connections.json','data/tandem.json'
+ const [loadedCatalog,togContent,comContent,loadedLore,loadedFrontMatter,loadedCharacters,loadedPlaces,loadedCharacterIndex,loadedConnections,loadedTandem]=await Promise.all([
+  'data/catalog.json','content/tog.json','content/com.json','data/lore.json','data/front-matter.json','data/characters.json','data/places.json','data/character-index.json','data/connections.json','data/tandem.json'
  ].map(u=>fetch(u).then(r=>r.json())));
+ catalog=loadedCatalog;bookContent={tog:togContent,com:comContent};lore=loadedLore;frontMatter=loadedFrontMatter;characters=loadedCharacters;places=loadedPlaces;characterIndex=loadedCharacterIndex;connections=loadedConnections;tandem=loadedTandem;
  bind();await initAuth();renderAll();
 }
 function bind(){
@@ -307,7 +308,8 @@ function renderFrontPanels(){
  $('#frontPlacesPanel').innerHTML='<h3>Places in this book</h3>'+groupEntries(safeEntries(places,currentBook.id,p));
  const fm=frontMatter[currentBook.id]||{};
  const mayReadFull=readingStatus(currentBook)==='finished';
- const full=mayReadFull?(currentBook.id==='tog'&&tog.summary?tog.summary.map(x=>`<p>${esc(x)}</p>`).join(''):`<p>${esc(fm.summary||'Full summary in editorial production.')}</p><p class="fine-print">A spoiler-filled complete recap is still being reviewed.</p>`):'<div class="locked-summary"><b>Finish this book to unlock its complete summary.</b><p>The spoiler-free overview above remains available while you read.</p></div>';
+ const fullContent=bookContent[currentBook.id];
+ const full=mayReadFull?(fullContent?.summary?fullContent.summary.map(x=>`<p>${esc(x)}</p>`).join(''):`<p>${esc(fm.summary||'Full summary in editorial production.')}</p><p class="fine-print">A spoiler-filled complete recap is still being reviewed.</p>`):'<div class="locked-summary"><b>Finish this book to unlock its complete summary.</b><p>The spoiler-free overview above remains available while you read.</p></div>';
  $('#frontWholeBookPanel').innerHTML='<h3>Whole-book summary</h3>'+full;
  $$('.front-inline-panel,.front-panel-button').forEach(x=>x.classList.remove('active'));
 }
@@ -339,7 +341,7 @@ function renderBook(){
 function renderChapter(){
  if(isTandem(currentBook)){renderTandemChapter();return}
  $('#complete').textContent='Mark chapter complete';$('#next').textContent='Next chapter →';
- $('#chapterLabel').textContent=`Chapter ${currentChapter}`;const seed=currentBook.id==='tog'?tog.chapters[String(currentChapter)]:null;
+ $('#chapterLabel').textContent=`Chapter ${currentChapter}`;const seed=bookContent[currentBook.id]?.chapters?.[String(currentChapter)]||null;
  const chapterSafe=currentChapter<=completedThrough(currentBook)||readingStatus(currentBook)==='finished';
  $('#summary').innerHTML=!chapterSafe?'<div class="locked-summary"><b>Finish this chapter to unlock its recap.</b><p>This protects you from seeing the chapter’s events too early.</p></div>':seed?`<ul>${seed.bullets.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>This chapter summary is in editorial production.</p>';
  renderBookDirectoryTabs();renderChapterLore();renderDiscussion();

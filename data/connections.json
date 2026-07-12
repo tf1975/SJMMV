@@ -190,5 +190,45 @@
       {"bookId":"hoeab","chapter":97}
     ],
     "evidence": ["Heir of Fire completed","House of Earth and Blood completed","Community theory — not confirmed canon"]
-  }
+  },
+  {
+    "id": "tog-protective-marks-reframed",
+    "title": "The marks beneath Celaena’s bed were protection",
+    "status": "canon connection",
+    "summary": "Celaena originally treats the marks beneath her bed as evidence against Nehemia. Nehemia later explains that she placed them there to protect Celaena, reversing an earlier suspicion.",
+    "requires": [{"bookId":"tog","chapter":51}],
+    "evidence": ["Throne of Glass, Chapter 35","Throne of Glass, Chapter 51"]
+  },
+  {
+    "id": "tog-elena-nehemia-duel",
+    "title": "Nehemia opens the way for Elena",
+    "status": "canon connection",
+    "summary": "The supernatural rescue during the final duel is a collaboration: Nehemia uses Wyrdmarks to open the portal, and Elena crosses through it to drive back Cain’s creatures and remove the poison.",
+    "requires": [{"bookId":"tog","chapter":51}],
+    "evidence": ["Throne of Glass, Chapters 49 and 51"]
+  },
+  {
+    "id": "tog-black-ring-network",
+    "title": "The black rings connect the court’s hidden powers",
+    "status": "canon clue",
+    "summary": "Cain’s altered strength, Kaltain’s headaches, Perrington’s manipulation, and the king’s own ring belong to the same hidden pattern. The complete source of that power is not yet explained.",
+    "requires": [{"bookId":"tog","chapter":52}],
+    "evidence": ["Throne of Glass, Chapters 30, 45, and 52"]
+  },
+  {
+    "id": "tog-cain-spirit-memories",
+    "title": "How Cain knew about Celaena’s parents",
+    "status": "strong inference",
+    "summary": "Cain’s movement between the mortal and spirit worlds appears to have exposed memories Celaena never shared with him, explaining his otherwise impossible knowledge during the duel.",
+    "requires": [{"bookId":"tog","chapter":53}],
+    "evidence": ["Throne of Glass, Chapters 48–49 and 53"]
+  },
+  {"id":"com-shadow-figure-creature","title":"The shadow near the library foreshadows the tower creature","status":"canon connection","summary":"The inhuman figure Celaena encounters early in the book points toward the corrupted creature later found in the passages beneath the clock tower.","requires":[{"bookId":"com","chapter":44}],"evidence":["Crown of Midnight, Chapters 5 and 44"]},
+  {"id":"com-cain-wyrdkey-experiments","title":"Cain was part of a larger Wyrdkey pattern","status":"canon connection","summary":"The transformation of Cain in the Champion contest and the creature beneath the tower are separate experiments produced by the same hidden system of Wyrdmarks, black rings, and the king’s stolen power.","requires":[{"bookId":"tog","chapter":55},{"bookId":"com","chapter":44}],"evidence":["Throne of Glass completed","Crown of Midnight, Chapter 44"]},
+  {"id":"com-wyrdmarks-world-language","title":"Are Wyrdmarks a language between worlds?","status":"supported question","summary":"Wyrdmarks do more than cast ordinary spells: they open portals, call beings across realms, and address forces outside Erilea. Fans often compare that role with other Maasverse systems used to cross or bind worlds, but identical origins are not yet confirmed at this point.","requires":[{"bookId":"com","chapter":47},{"bookId":"hosab","chapter":78}],"evidence":["Crown of Midnight, Chapters 40 and 47","House of Sky and Breath completed"]},
+  {"id":"com-brannon-stag-line","title":"Brannon, fire, and the white stag","status":"canon clue","summary":"Baba Yellowlegs ties the Wyrdkeys to Brannon, while Celaena’s dreams and Terrasen’s sacred imagery repeatedly use the white stag. The clues begin linking royal blood, fire, and the responsibility to guard the Wyrdkeys.","requires":[{"bookId":"com","chapter":40}],"evidence":["Crown of Midnight, Chapters 20 and 40"]},
+  {"id":"com-nehemia-elena-plan","title":"Nehemia and Elena were working toward the same turning point","status":"canon connection","summary":"Nehemia’s secret meeting with Elena reveals that her challenges to Celaena and her final sacrifice were part of a shared effort to force Celaena to stop hiding from her role.","requires":[{"bookId":"com","chapter":47}],"evidence":["Crown of Midnight, Chapters 25 and 47"]},
+  {"id":"com-black-ring-creature","title":"Black rings, headaches, and the creature beneath the tower","status":"canon clue","summary":"Cain’s ring, Kaltain’s and Roland’s headaches, Perrington’s influence, and the altered creature all point toward one method of magical corruption. The exact being behind that corruption is still hidden.","requires":[{"bookId":"com","chapter":45}],"evidence":["Throne of Glass, Chapter 52","Crown of Midnight, Chapters 4, 44–45"]},
+  {"id":"com-gavin-dorian-warning","title":"Gavin’s warning reaches Dorian","status":"canon connection","summary":"The first king who once fought beside Elena appears in Dorian’s dream to warn him that Celaena is in danger, continuing the ancient royal pair’s intervention in the present.","requires":[{"bookId":"com","chapter":46}],"evidence":["Throne of Glass, Chapters 25 and 42","Crown of Midnight, Chapter 46"]},
+  {"id":"com-portal-fae-magic","title":"Crossing the portal releases Celaena’s suppressed form","status":"canon connection","summary":"Magic is suppressed in Adarlan, but entering another realm removes that constraint long enough for Celaena’s Fae form and fire to emerge.","requires":[{"bookId":"com","chapter":49}],"evidence":["Crown of Midnight, Chapters 46–50"]}
 ]
