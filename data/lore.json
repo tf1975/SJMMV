@@ -104,5 +104,41 @@
     "evidence": [
       {"bookId": "tog", "chapter": 27, "note": "The marks become identifiable as part of the mystery surrounding The Walking Dead."}
     ]
+  },
+  {
+    "id": "wyrdgates",
+    "title": "Wyrdgates",
+    "type": "canon",
+    "category": "world-walking",
+    "summary": "Celaena’s research links Wyrd to gates between the living world and other realms, though she does not yet understand how those gates operate.",
+    "requires": [{"bookId":"tog","chapter":27}],
+    "evidence": [{"bookId":"tog","chapter":27,"note":"Her library research introduces competing ideas about Wyrd and Wyrdgates."}]
+  },
+  {
+    "id": "elena-and-gavin",
+    "title": "Elena and Gavin’s tomb",
+    "type": "canon",
+    "category": "history",
+    "summary": "A hidden tomb beneath the castle preserves the memory of Queen Elena and King Gavin alongside maps of the earth, stars, and ancient Wyrdmarks.",
+    "requires": [{"bookId":"tog","chapter":25}],
+    "evidence": [{"bookId":"tog","chapter":25,"note":"Celaena finds the tomb through the passage behind her rooms."}]
+  },
+  {
+    "id": "eye-of-elena",
+    "title": "The Eye of Elena",
+    "type": "canon",
+    "category": "artifact",
+    "summary": "A protective amulet associated with Elena and Gavin. Elena gives it to Celaena while warning her about the evil inside the castle.",
+    "requires": [{"bookId":"tog","chapter":25}],
+    "evidence": [{"bookId":"tog","chapter":25,"note":"Celaena awakens from the tomb encounter holding the amulet."}]
+  },
+  {
+    "id": "deannas-arrow",
+    "title": "Deanna’s golden arrow",
+    "type": "canon",
+    "category": "gods and symbols",
+    "summary": "During Yulemas rites, Celaena receives the token of Deanna, goddess of the hunt and protection of the young.",
+    "requires": [{"bookId":"tog","chapter":37}],
+    "evidence": [{"bookId":"tog","chapter":37,"note":"A child in the ceremonial procession presents Celaena with the arrow."}]
   }
 ]

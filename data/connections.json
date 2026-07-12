@@ -135,5 +135,60 @@
       "Throne of Glass series completed",
       "House of Flame and Shadow, Chapter 94"
     ]
+  },
+  {
+    "id": "book-of-breathings-library",
+    "title": "The Book of Breathings reaches Midgard",
+    "status": "canon connection",
+    "summary": "The Book of Breathings, an important magical text in ACOTAR, is later named among the rare books connected to Jesiba’s library. Its presence establishes another physical object shared across worlds, although its route to Midgard remains unknown.",
+    "requires": [
+      {"bookId":"acomaf","chapter":69},
+      {"bookId":"hoeab","chapter":97}
+    ],
+    "evidence": ["A Court of Mist and Fury completed","House of Earth and Blood completed"]
+  },
+  {
+    "id": "rhys-ruhn-resemblance",
+    "title": "Why does Rhysand look like Ruhn?",
+    "status": "canon clue",
+    "summary": "When Bryce reaches Prythian, Rhysand’s appearance is familiar enough that she initially connects him with Ruhn. The resemblance is explicit, but whether it signals shared ancestry, parallel bloodlines, or another explanation remains unresolved.",
+    "requires": [
+      {"bookId":"acomaf","chapter":69},
+      {"bookId":"hosab","chapter":78}
+    ],
+    "evidence": ["A Court of Mist and Fury completed","House of Sky and Breath, Chapter 78"]
+  },
+  {
+    "id": "daglan-asteri",
+    "title": "The Daglan and the Asteri",
+    "status": "canon connection",
+    "summary": "House of Flame and Shadow identifies the ancient conquerors remembered in Prythian as the Daglan with the parasitic rulers known in Midgard as the Asteri.",
+    "requires": [
+      {"bookId":"acosf","chapter":80},
+      {"bookId":"hofas","chapter":102}
+    ],
+    "evidence": ["A Court of Silver Flames completed","House of Flame and Shadow completed"]
+  },
+  {
+    "id": "horn-dread-trove",
+    "title": "The Horn and the Dread Trove",
+    "status": "canon connection",
+    "summary": "The Horn carried by Bryce is revealed to belong with the Mask, Harp, and Crown—the objects Prythian remembers as the Dread Trove.",
+    "requires": [
+      {"bookId":"acosf","chapter":80},
+      {"bookId":"hofas","chapter":102}
+    ],
+    "evidence": ["A Court of Silver Flames completed","House of Flame and Shadow completed"]
+  },
+  {
+    "id": "three-faced-goddess",
+    "title": "One three-faced goddess across worlds?",
+    "status": "fan theory",
+    "summary": "Witch traditions in more than one series use threefold divine imagery. Fans question whether these faiths remember the same being under different names, but the books have not confirmed a shared goddess.",
+    "requires": [
+      {"bookId":"hof","chapter":68},
+      {"bookId":"hoeab","chapter":97}
+    ],
+    "evidence": ["Heir of Fire completed","House of Earth and Blood completed","Community theory — not confirmed canon"]
   }
 ]

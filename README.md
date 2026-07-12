@@ -121,3 +121,14 @@ Still browser-local:
 - Lunathion was replaced in the Atlas by the supplied Midgard map.
 - Supabase is version-pinned with integrity checking and Netlify now sends baseline security headers.
 - Complete, reproducible RLS migrations are included for profiles, progress, and book settings.
+
+## Archive 2.3 tandem-book and editorial pass
+- Tandem Read now opens and behaves like a normal book instead of a separate checklist dashboard.
+- Its 50 reading sections replace chapter numbers with the exact Empire of Storms / Tower of Dawn assignment.
+- Tandem sections include What You’ll Remember, Characters, Places, Lore, Connections, and Discussion.
+- Completing a section continues updating both original books automatically.
+- Readers may turn Tandem Read off or back on without deleting their saved place or either book’s progress.
+- The Archive character directory is divided into separate Throne of Glass, ACOTAR, and Crescent City views.
+- Character profiles are deduplicated inside each series and remain gated by completed chapters.
+- Original Throne of Glass chapter summaries now cover Chapters 1–40.
+- Lore and Connections gained additional reviewed artifacts, world-walking concepts, canon crossovers, and clearly marked fan theories.

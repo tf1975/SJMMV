@@ -26,5 +26,27 @@
       "url": "https://www.reddit.com/r/crescentcitysjm/comments/fssz28/",
       "usedFor": "Community identification of repeated books and symbols; verified separately before publication"
     }
+  ],
+  "chapterSummaries": [
+    {
+      "title": "Throne of Glass chapter summaries",
+      "publisher": "SparkNotes",
+      "url": "https://www.sparknotes.com/lit/throne-of-glass/",
+      "usedFor": "Cross-checking Throne of Glass Chapters 21–40; Archive summaries are independently written"
+    },
+    {
+      "title": "Throne of Glass Chapters 29–35 Summary & Analysis",
+      "publisher": "SuperSummary",
+      "url": "https://www.supersummary.com/throne-of-glass/chapters-29-35-summary/",
+      "usedFor": "Second-source verification of chapter boundaries and major events"
+    }
+  ],
+  "lore": [
+    {
+      "title": "Wyrdmarks",
+      "publisher": "Throne of Glass Wiki",
+      "url": "https://throneofglass.fandom.com/wiki/Wyrdmarks",
+      "usedFor": "Secondary cross-check of Wyrdmark terminology; claims remain tied to book chapters"
+    }
   ]
 }

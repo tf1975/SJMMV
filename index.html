@@ -111,7 +111,7 @@
       <p id="frontTagline" class="front-tagline"></p>
       <h3>Spoiler-free overview</h3>
       <p id="frontSummary"></p>
-      <div class="reading-status-card">
+      <div id="frontReadingStatus" class="reading-status-card">
         <h3>Your reading status</h3>
         <div class="front-status-options">
           <label><input type="radio" name="frontStatus" value="not-started"> Haven’t started</label>
@@ -121,6 +121,13 @@
         <label id="frontChapterWrap">Current chapter <input id="frontChapter" type="number" min="1"></label>
         <label class="book-reread"><input id="frontRereading" type="checkbox"> I’m rereading this book</label>
         <button id="saveFrontStatus" class="gold">Save status</button>
+      </div>
+      <div id="tandemFrontStatus" class="reading-status-card hidden">
+        <h3>Your tandem reading status</h3>
+        <p id="tandemFrontPreferenceText"></p>
+        <label>Current section <input id="tandemFrontSection" type="number" min="1" max="50"></label>
+        <div class="tandem-front-actions"><button id="saveTandemFront" class="gold">Save section</button><button id="toggleTandemFront" class="outline">Turn Tandem Read off</button></div>
+        <p class="fine-print">Turning it off keeps your progress in both books. You can turn it back on whenever you want.</p>
       </div>
       <div class="front-links">
         <button class="outline front-panel-button" data-front-panel="frontCharactersPanel">Characters</button>
@@ -143,7 +150,7 @@
   <div class="openbook">
     <section class="page left"><div class="pad">
       <small id="seriesLabel"></small><h1 id="bookTitle"></h1><div id="bookmark" class="bookmark"></div>
-      <div class="quick-progress"><label>Jump to current chapter<input id="chapterNumber" type="number" min="0"></label><button id="saveChapterNumber" class="outline">Save chapter</button><button id="markFinished" class="text-link">Mark book finished</button></div>
+      <div class="quick-progress"><label><span id="quickProgressLabel">Jump to current chapter</span><input id="chapterNumber" type="number" min="0"></label><button id="saveChapterNumber" class="outline">Save chapter</button><button id="markFinished" class="text-link">Mark book finished</button></div>
       <div id="chapterNav" class="chapters"></div>
     </div></section>
     <section class="page right"><div class="pad">
@@ -172,18 +179,6 @@
     <article><button class="map-open" data-src="assets/maps/prythian.jpeg" data-title="Prythian"><img src="assets/maps/prythian.jpeg" alt="Map of Prythian"></button><h2>Prythian</h2></article>
     <article><button class="map-open" data-src="assets/maps/midgard.jpg" data-title="Midgard"><img src="assets/maps/midgard.jpg" alt="Map of Midgard"></button><h2>Midgard</h2></article>
   </div>
-</section>
-
-<section id="tandem" class="view">
-  <button class="back" data-home>← Home</button>
-  <div class="tandem-hero"><small>THRONE OF GLASS</small><h1>Tandem Read</h1><p>Follow <em>Empire of Storms</em> and <em>Tower of Dawn</em> in one spoiler-free reading path. Completing each step updates both books automatically.</p></div>
-  <section class="panel tandem-current">
-    <div><small id="tandemStepLabel"></small><h2 id="tandemStepTitle"></h2><p id="tandemStepDetail"></p></div>
-    <button id="completeTandemStep" class="gold">Mark this step complete</button>
-  </section>
-  <div class="tandem-actions"><button id="tandemPrevious" class="outline">← Previous step</button><button id="tandemPreference" class="outline">Change tandem preference</button></div>
-  <div id="tandemChecklist" class="tandem-checklist"></div>
-  <p class="fine-print">Reading order adapted from the T.L. Branson tandem guide. This tracker contains chapter order only—no plot spoilers.</p>
 </section>
 
 <div id="mapModal" class="map-modal hidden"><button id="closeMap" aria-label="Close map">×</button><h2 id="mapModalTitle"></h2><div class="map-scroll"><img id="mapModalImage" alt=""></div></div>

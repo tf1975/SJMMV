@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,pendingNewUser=false,wizardBooks=[],wizardIndex=-1;
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,pendingNewUser=false,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass';
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -14,9 +14,11 @@ const setSyncStatus=(label,status='idle')=>{const el=$('#syncStatus');if(!el)ret
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const allBooks=()=>catalog.collections.flatMap(c=>c.books.map(b=>({id:b[0],title:b[1],chapters:b[2],upcoming:!!b[3],release:b[4],theme:c.theme,collection:c.title,collectionId:c.id})));
 const byId=id=>allBooks().find(b=>b.id===id);
-const progressEntry=b=>ArchiveProgress.normalize(state.progress[b.id],b.chapters);
+const isTandem=b=>b?.id==='tandem';
+const tandemBook=()=>({id:'tandem',title:'Tandem Read',chapters:tandem?.steps?.length||50,upcoming:false,theme:'tog',collection:'Throne of Glass',collectionId:'throne-of-glass'});
+const progressEntry=b=>isTandem(b)?{status:tandemStep()>=b.chapters?'finished':'reading',currentChapter:Math.min(b.chapters,tandemStep()+1)}:ArchiveProgress.normalize(state.progress[b.id],b.chapters);
 const progress=b=>progressEntry(b).currentChapter;
-const completedThrough=b=>ArchiveProgress.lastCompleted(state.progress[b.id],b.chapters);
+const completedThrough=b=>isTandem(b)?tandemStep():ArchiveProgress.lastCompleted(state.progress[b.id],b.chapters);
 const readingStatus=b=>progressEntry(b).status;
 const setBookProgress=(b,status,current=0)=>{state.progress[b.id]=ArchiveProgress.normalize({status,currentChapter:current},b.chapters)};
 const readingPlan=()=>state.bookSettings['tog-plan']?.uiPreferences||{};
@@ -44,7 +46,7 @@ function bind(){
  $$('.tabs button').forEach(b=>b.onclick=async()=>{$$('.tabs button,.tabpane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.tab).classList.add('active');if(currentBook){state.bookSettings[currentBook.id]={...(state.bookSettings[currentBook.id]||{}),uiPreferences:{...(state.bookSettings[currentBook.id]?.uiPreferences||{}),lastTab:b.dataset.tab}};save();await saveBookSettingsToCloud(currentBook.id)}});
  $$('.archive-tabs button').forEach(b=>b.onclick=()=>openArchivePane(b.dataset.archive));
  $$('.map-open').forEach(b=>b.onclick=()=>openMap(b.dataset.src,b.dataset.title));$('#closeMap').onclick=()=>$('#mapModal').classList.add('hidden');$('#mapModal').onclick=e=>{if(e.target.id==='mapModal')$('#mapModal').classList.add('hidden')};
- $('#completeTandemStep').onclick=completeTandemStep;$('#tandemPrevious').onclick=previousTandemStep;$('#tandemPreference').onclick=changeTandemPreference;
+ $('#saveTandemFront').onclick=saveTandemFront;$('#toggleTandemFront').onclick=toggleTandemEnabled;
 }
 function openArchivePane(id){$$('.archive-tabs button,.archive-pane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-archive="${id}"]`)?.classList.add('active');$('#'+id).classList.add('active')}
 function openMap(src,title){$('#mapModalImage').src=src;$('#mapModalTitle').textContent=title;$('#mapModal').classList.remove('hidden')}
@@ -253,7 +255,7 @@ function renderLibrary(){
   const bt=document.createElement('button');bt.className=`spine ${c.theme}${b.upcoming?' upcoming':''}${readingStatus(b)==='reading'?' current':''}`;bt.innerHTML=`<span>${esc(b.title)}</span>`;if(!b.upcoming)bt.onclick=()=>animateBookOpen(bt,b);sh.append(bt)
  });el.append(w)});
 }
-function createTandemSpine(){const bt=document.createElement('button');bt.className='spine tandem-spine'+(tandemPreference()==='yes'?' current':'');bt.innerHTML='<span>Tandem Read</span>';bt.onclick=()=>{view('tandem');renderTandem()};return bt}
+function createTandemSpine(){const bt=document.createElement('button');bt.className='spine tandem-spine'+(tandemPreference()==='yes'?' current':'')+(tandemPreference()==='no'?' tandem-off':'');bt.innerHTML=`<span>Tandem Read${tandemPreference()==='no'?' · Off':''}</span>`;bt.onclick=()=>animateBookOpen(bt,tandemBook());return bt}
 function animateBookOpen(spine,b){
  const overlay=$('#bookTransition'),rect=spine.getBoundingClientRect(),clone=overlay.querySelector('.transition-spine'),cover=overlay.querySelector('.transition-cover');
  clone.style.left=rect.left+'px';clone.style.top=rect.top+'px';clone.style.width=rect.width+'px';clone.style.height=rect.height+'px';clone.className='transition-spine '+b.theme;cover.className='transition-cover '+b.theme;cover.querySelector('b').textContent=b.title;
@@ -266,13 +268,17 @@ function toggleFrontPanel(id){
 }
 function renderBookFront(){
  view('bookFront');const fm=frontMatter[currentBook.id]||{};
- $('#frontCoverSeries').textContent=currentBook.collection;$('#frontCoverTitle').textContent=currentBook.title;$('#frontSeries').textContent=currentBook.collection;$('#frontTitle').textContent=currentBook.title;$('#frontTagline').textContent=fm.tagline||'';$('#frontSummary').textContent=fm.summary||'Spoiler-free summary in editorial production.';$('#frontContentStatus').textContent=fm.contentStatus||'Content in editorial production.';
+ const tandemMode=isTandem(currentBook),tandemOverview='Read Empire of Storms and Tower of Dawn as one continuous experience. The books unfold during the same period in different parts of the world, and this guide tells you exactly when to switch without revealing what happens next.';
+ $('#frontCoverSeries').textContent=currentBook.collection;$('#frontCoverTitle').textContent=tandemMode?'Empire of Storms + Tower of Dawn':currentBook.title;$('#frontSeries').textContent=currentBook.collection;$('#frontTitle').textContent=currentBook.title;$('#frontTagline').textContent=tandemMode?'Two books. One shared timeline.':fm.tagline||'';$('#frontSummary').textContent=tandemMode?tandemOverview:fm.summary||'Spoiler-free summary in editorial production.';$('#frontContentStatus').textContent=tandemMode?'Fifty spoiler-free reading sections based on the selected tandem guide.':fm.contentStatus||'Content in editorial production.';
+ $('#frontReadingStatus').classList.toggle('hidden',tandemMode);$('#tandemFrontStatus').classList.toggle('hidden',!tandemMode);$('#continueIntoBook').textContent=tandemMode?'Open tandem guide →':'Open chapter guide →';
+ if(tandemMode){$('#tandemFrontSection').value=Math.min(currentBook.chapters,tandemStep()+1);$('#tandemFrontPreferenceText').textContent=tandemPreference()==='yes'?'Tandem Read is currently on.':'Tandem Read is currently off, but your saved place is still here.';$('#toggleTandemFront').textContent=tandemPreference()==='yes'?'Turn Tandem Read off':'Turn Tandem Read on'}
  const p=progress(currentBook),status=readingStatus(currentBook);$$('input[name="frontStatus"]').forEach(r=>r.checked=r.value===status);$('#frontChapter').max=currentBook.chapters;$('#frontChapter').value=Math.max(1,p||1);$('#frontChapterWrap').classList.toggle('hidden',status!=='reading');
  $('#frontRereading').checked=!!state.bookSettings[currentBook.id]?.rereading;
  $$('input[name="frontStatus"]').forEach(r=>r.onchange=()=>$('#frontChapterWrap').classList.toggle('hidden',r.value!=='reading'||!r.checked));
  renderFrontPanels();
 }
 function renderFrontPanels(){
+ if(isTandem(currentBook)){renderTandemFrontPanels();return}
  const p=Math.max(0,completedThrough(currentBook));
  $('#frontCharactersPanel').innerHTML='<h3>Characters in this book</h3>'+groupEntries(safeEntries(characters,currentBook.id,p));
  $('#frontPlacesPanel').innerHTML='<h3>Places in this book</h3>'+groupEntries(safeEntries(places,currentBook.id,p));
@@ -282,25 +288,54 @@ function renderFrontPanels(){
  $('#frontWholeBookPanel').innerHTML='<h3>Whole-book summary</h3>'+full;
  $$('.front-inline-panel,.front-panel-button').forEach(x=>x.classList.remove('active'));
 }
+function tandemUnderlyingProgress(done=tandemStep()){
+ const result={eos:0,tod:0};tandem.steps.slice(0,done).forEach(step=>{result[step.bookId]=Math.max(result[step.bookId],step.end)});return result;
+}
+function tandemSafeEntries(source,done=tandemStep()){const read=tandemUnderlyingProgress(done);return ['eos','tod'].flatMap(id=>(source[id]||[]).filter(entry=>entry.safeAt<=read[id]))}
+function renderTandemFrontPanels(){
+ $('#frontCharactersPanel').innerHTML='<h3>Characters in this tandem read</h3>'+groupEntries(tandemSafeEntries(characters));
+ $('#frontPlacesPanel').innerHTML='<h3>Places in this tandem read</h3>'+groupEntries(tandemSafeEntries(places));
+ $('#frontWholeBookPanel').innerHTML=tandemStep()>=tandem.steps.length?'<h3>The tandem read in brief</h3><p>You completed both Empire of Storms and Tower of Dawn in one interwoven reading path. The complete combined recap remains in editorial review.</p>':'<div class="locked-summary"><b>Finish the tandem read to unlock its complete combined recap.</b><p>The spoiler-free overview remains available while you read.</p></div>';
+ $$('.front-inline-panel,.front-panel-button').forEach(x=>x.classList.remove('active'));
+}
+async function saveTandemFront(){const section=Math.max(1,Math.min(tandem.steps.length,Number($('#tandemFrontSection').value||1)));await setTandemStep(section-1);currentChapter=section;renderBookFront()}
+async function toggleTandemEnabled(){const enabling=tandemPreference()!=='yes';state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemPreference:enabling?'yes':'no'}};save();await saveBookSettingsToCloud('tog-plan');renderAll();renderBookFront()}
 async function saveFrontStatus(){const status=$('input[name="frontStatus"]:checked').value;setBookProgress(currentBook,status,status==='not-started'?0:status==='finished'?currentBook.chapters:Math.max(1,Math.min(currentBook.chapters,Number($('#frontChapter').value||1))));state.bookSettings[currentBook.id]={...(state.bookSettings[currentBook.id]||{}),rereading:$('#frontRereading').checked};currentChapter=Math.max(1,progress(currentBook)||1);save();await Promise.all([saveProgressToCloud(currentBook.id),saveBookSettingsToCloud(currentBook.id)]);renderAll();renderBookFront()}
 function renderBook(){
- $('#seriesLabel').textContent=currentBook.collection;$('#bookTitle').textContent=currentBook.title;$('#bookmark').innerHTML=`${esc(state.profile.name)}<br><b>${readingStatus(currentBook)==='finished'?'Finished':`Ch. ${progress(currentBook)||1}`}</b>`;$('#chapterNumber').max=currentBook.chapters;$('#chapterNumber').value=progress(currentBook);
- $('#saveChapterNumber').onclick=async()=>{const chapter=Math.max(0,Math.min(currentBook.chapters,Number($('#chapterNumber').value||0)));setBookProgress(currentBook,chapter===0?'not-started':'reading',chapter);currentChapter=Math.max(1,progress(currentBook)||1);save();await saveProgressToCloud(currentBook.id);renderAll();renderBook()};
- $('#markFinished').onclick=async()=>{setBookProgress(currentBook,'finished',currentBook.chapters);currentChapter=currentBook.chapters;save();await saveProgressToCloud(currentBook.id);renderAll();renderBook()};
+ const tandemMode=isTandem(currentBook),unit=tandemMode?'Section':'Ch.';$('#seriesLabel').textContent=currentBook.collection;$('#bookTitle').textContent=currentBook.title;$('#bookmark').innerHTML=`${esc(state.profile.name)}<br><b>${readingStatus(currentBook)==='finished'?'Finished':`${unit} ${progress(currentBook)||1}`}</b>`;$('#chapterNumber').min=tandemMode?1:0;$('#chapterNumber').max=currentBook.chapters;$('#chapterNumber').value=progress(currentBook);$('#quickProgressLabel').textContent=tandemMode?'Jump to current section':'Jump to current chapter';$('#saveChapterNumber').textContent=tandemMode?'Save section':'Save chapter';$('#markFinished').textContent=tandemMode?'Mark tandem read finished':'Mark book finished';
+ $('#saveChapterNumber').onclick=async()=>{const chapter=Math.max(tandemMode?1:0,Math.min(currentBook.chapters,Number($('#chapterNumber').value||0)));if(tandemMode){await setTandemStep(chapter-1)}else{setBookProgress(currentBook,chapter===0?'not-started':'reading',chapter);save();await saveProgressToCloud(currentBook.id)}currentChapter=Math.max(1,progress(currentBook)||1);renderAll();renderBook()};
+ $('#markFinished').onclick=async()=>{if(tandemMode)await setTandemStep(currentBook.chapters);else{setBookProgress(currentBook,'finished',currentBook.chapters);save();await saveProgressToCloud(currentBook.id)}currentChapter=currentBook.chapters;renderAll();renderBook()};
  const nav=$('#chapterNav');nav.innerHTML='';
  const completed=completedThrough(currentBook),openThrough=readingStatus(currentBook)==='finished'?currentBook.chapters:Math.max(1,progress(currentBook));
- for(let i=1;i<=currentBook.chapters;i++){const b=document.createElement('button');b.className='chapterbtn'+(i===currentChapter?' current':'')+(i>openThrough?' locked':'');b.innerHTML=`<span class="chapter-number">${i}</span><b class="chapter-state">${i<=completed?'Completed':i===progress(currentBook)&&readingStatus(currentBook)==='reading'?'Current chapter':i===1&&readingStatus(currentBook)==='not-started'?'Start here':'Locked'}</b>`;b.onclick=()=>{if(i>openThrough)return alert('This chapter is spoiler-locked.');currentChapter=i;renderBook()};nav.append(b)}
+ for(let i=1;i<=currentBook.chapters;i++){const b=document.createElement('button');b.className='chapterbtn'+(i===currentChapter?' current':'')+(i>openThrough?' locked':'');const currentLabel=tandemMode?'Current section':'Current chapter',stateLabel=i<=completed?'Completed':i===progress(currentBook)&&readingStatus(currentBook)==='reading'?currentLabel:i===1&&readingStatus(currentBook)==='not-started'?'Start here':'Locked',assignment=tandemMode?tandemStepText(tandem.steps[i-1]):null;b.innerHTML=`<span class="chapter-number">${i}</span><b class="chapter-state">${tandemMode?`<span>${esc(assignment.title)}</span><small>${esc(assignment.detail)} · ${esc(stateLabel)}</small>`:esc(stateLabel)}</b>`;b.onclick=()=>{if(i>openThrough)return alert(`This ${tandemMode?'section':'chapter'} is spoiler-locked.`);currentChapter=i;renderBook()};nav.append(b)}
  renderChapter();
  const preferredTab=state.bookSettings[currentBook.id]?.uiPreferences?.lastTab;
  const initialTab=preferredTab&&$('#'+preferredTab)?preferredTab:'charactersTab';
  $$('.tabs button,.tabpane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-tab="${initialTab}"]`)?.classList.add('active');$('#'+initialTab)?.classList.add('active');
 }
 function renderChapter(){
+ if(isTandem(currentBook)){renderTandemChapter();return}
+ $('#complete').textContent='Mark chapter complete';$('#next').textContent='Next chapter →';
  $('#chapterLabel').textContent=`Chapter ${currentChapter}`;const seed=currentBook.id==='tog'?tog.chapters[String(currentChapter)]:null;
  const chapterSafe=currentChapter<=completedThrough(currentBook)||readingStatus(currentBook)==='finished';
  $('#summary').innerHTML=!chapterSafe?'<div class="locked-summary"><b>Finish this chapter to unlock its recap.</b><p>This protects you from seeing the chapter’s events too early.</p></div>':seed?`<ul>${seed.bullets.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>This chapter summary is in editorial production.</p>';
  renderBookDirectoryTabs();renderChapterLore();renderDiscussion();
  $('#complete').onclick=async()=>{if(currentChapter>=currentBook.chapters)setBookProgress(currentBook,'finished',currentBook.chapters);else setBookProgress(currentBook,'reading',Math.max(progress(currentBook),currentChapter+1));save();await saveProgressToCloud(currentBook.id);currentChapter=Math.min(currentBook.chapters,currentChapter+1);renderAll();renderBook()};
+ $('#next').onclick=()=>{if(currentChapter<currentBook.chapters&&currentChapter<Math.max(1,progress(currentBook))){currentChapter++;renderBook()}};
+}
+function renderTandemChapter(){
+ const step=tandem.steps[currentChapter-1],copy=tandemStepText(step),chapterSafe=currentChapter<=tandemStep(),read=tandemUnderlyingProgress(chapterSafe?currentChapter:Math.max(0,currentChapter-1));
+ $('#chapterLabel').textContent=`Section ${currentChapter} of ${tandem.steps.length} · ${copy.title} · ${copy.detail}`;
+ $('#summary').innerHTML=!chapterSafe?'<div class="locked-summary"><b>Finish this section to unlock what you’ll remember.</b><p>The Archive will not reveal events from the assigned chapters early.</p></div>':Array.isArray(step.remember)&&step.remember.length?`<ul>${step.remember.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:`<ul><li>You completed ${esc(copy.title)}, ${esc(copy.detail)}.</li><li>The detailed recap for this tandem section is in editorial review.</li></ul>`;
+ $('#charactersTab').innerHTML=groupEntries(['eos','tod'].flatMap(id=>(characters[id]||[]).filter(entry=>entry.safeAt<=read[id])));
+ $('#placesTab').innerHTML=groupEntries(['eos','tod'].flatMap(id=>(places[id]||[]).filter(entry=>entry.safeAt<=read[id])));
+ const relatedLore=lore.filter(entry=>entry.requires.every(requirementCompleted)&&entry.requires.some(req=>req.bookId==='eos'||req.bookId==='tod'));
+ $('#loreTab').innerHTML=relatedLore.length?relatedLore.map(entry=>`<div class="evidence"><span>${esc(entry.type)}</span><h3>${esc(entry.title)}</h3><p>${esc(entry.summary)}</p></div>`).join(''):'<p>No new lore is safe at this section.</p>';
+ const relatedConnections=connections.filter(entry=>entry.requires.every(requirementCompleted)&&entry.requires.some(req=>req.bookId==='eos'||req.bookId==='tod'));
+ $('#connTab').innerHTML=relatedConnections.length?relatedConnections.map(entry=>`<div class="evidence"><span>${esc(entry.status)}</span><h3>${esc(entry.title)}</h3><p>${esc(entry.summary)}</p><small>${entry.evidence.map(esc).join(' · ')}</small></div>`).join(''):'<p>No verified Connections are unlocked at this section.</p>';
+ renderDiscussion();
+ $('#complete').textContent='Mark section complete';$('#next').textContent='Next section →';
+ $('#complete').onclick=async()=>{await setTandemStep(Math.max(tandemStep(),currentChapter));currentChapter=Math.min(currentBook.chapters,currentChapter+1);renderAll();renderBook()};
  $('#next').onclick=()=>{if(currentChapter<currentBook.chapters&&currentChapter<Math.max(1,progress(currentBook))){currentChapter++;renderBook()}};
 }
 function safeEntries(source,bookId,chapter){return(source[bookId]||[]).filter(x=>x.safeAt<=chapter)}
@@ -315,11 +350,6 @@ function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b cla
 function renderMentions(){$('#mentions').innerHTML=state.mentions.length?state.mentions.map(m=>`<div>${esc(m.from)} mentioned you</div>`).join(''):'<p>No mentions yet.</p>'}
 function tandemStep(){return Math.max(0,Math.min(tandem.steps.length,Number(readingPlan().tandemStep||0)))}
 function tandemStepText(step){const book=byId(step.bookId),range=step.label||(step.start===step.end?`Chapter ${step.start}`:`Chapters ${step.start}–${step.end}`);return {title:book.title,detail:range}}
-function renderTandem(){
- const done=tandemStep(),step=tandem.steps[Math.min(done,tandem.steps.length-1)],copy=tandemStepText(step),finished=done>=tandem.steps.length;
- $('#tandemStepLabel').textContent=finished?'TANDEM COMPLETE':`STEP ${done+1} OF ${tandem.steps.length}`;$('#tandemStepTitle').textContent=finished?'Both books are complete':copy.title;$('#tandemStepDetail').textContent=finished?'Continue to Kingdom of Ash when you are ready.':copy.detail;$('#completeTandemStep').hidden=finished;$('#tandemPrevious').disabled=done===0;$('#tandemPreference').textContent=`Tandem preference: ${tandemPreference()==='yes'?'Yes':tandemPreference()==='no'?'No':'Unsure'}`;
- $('#tandemChecklist').innerHTML=tandem.steps.map((item,index)=>{const label=tandemStepText(item);return `<article class="tandem-row ${index<done?'complete':index===done?'current':''}"><span>${index<done?'✓':index+1}</span><div><b>${esc(label.title)}</b><p>${esc(label.detail)}</p></div></article>`}).join('');
-}
 async function syncTandemBooks(done){
  for(const id of ['eos','tod']){
   const book=byId(id),steps=tandem.steps.slice(0,done).filter(x=>x.bookId===id),last=steps.reduce((max,x)=>Math.max(max,x.end),0);
@@ -327,13 +357,21 @@ async function syncTandemBooks(done){
  }
  save();await Promise.all([saveProgressToCloud('eos'),saveProgressToCloud('tod')]);
 }
-async function setTandemStep(done){state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemStep:Math.max(0,Math.min(tandem.steps.length,done))}};save();await Promise.all([saveBookSettingsToCloud('tog-plan'),syncTandemBooks(done)]);renderAll();renderTandem()}
-async function completeTandemStep(){await setTandemStep(tandemStep()+1)}
-async function previousTandemStep(){if(tandemStep()>0&&window.confirm('Move the tandem tracker back one step and update both books?'))await setTandemStep(tandemStep()-1)}
-async function changeTandemPreference(){const values=['unsure','yes','no'],next=values[(values.indexOf(tandemPreference())+1)%values.length];state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemPreference:next}};save();await saveBookSettingsToCloud('tog-plan');renderAll();renderTandem()}
+async function setTandemStep(done){state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemStep:Math.max(0,Math.min(tandem.steps.length,done))}};save();await Promise.all([saveBookSettingsToCloud('tog-plan'),syncTandemBooks(done)]);renderAll()}
 function renderLore(){$('#loreGrid').innerHTML=lore.map(l=>{const ok=l.requires.every(requirementCompleted);return`<article class="lorecard ${ok?'':'locked'}"><small>${ok?esc(l.type):'LOCKED'}</small><h3>${esc(ok?l.title:'Undiscovered entry')}</h3><p>${ok?esc(l.summary):'Continue reading to unlock this entry safely.'}</p></article>`}).join('')}
 function renderFullCharacterIndex(){
  return Object.entries(characterIndex).map(([series,items])=>`<section class="series-directory locked-summary"><h2>${esc(series)}</h2><p>${items.length} characters are catalogued. Names and biographies appear individually only when your completed chapters make them safe.</p></section>`).join('');
 }
-function renderDirectories(){const allChar=Object.entries(characters).flatMap(([id,arr])=>arr.filter(x=>completedThrough(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));const allPlace=Object.entries(places).flatMap(([id,arr])=>arr.filter(x=>completedThrough(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));$('#archiveCharacters').innerHTML=groupEntries(allChar)+renderFullCharacterIndex();$('#archivePlaces').innerHTML=groupEntries(allPlace);$('#readerList').innerHTML=`<div class="panel"><b>${esc(state.profile.name)}</b><p>${esc(currentProgressText())}</p></div>`}
+function safeCharactersForCollection(collection){
+ const seen=new Set(),entries=[];orderedBooksForCollection(collection).forEach(raw=>{const book=byId(raw[0]);(characters[book.id]||[]).filter(entry=>completedThrough(book)>=entry.safeAt).forEach(entry=>{const key=entry.name.toLowerCase();if(!seen.has(key)){seen.add(key);entries.push(entry)}})});return entries;
+}
+function renderCharacterSeries(){
+ const collections=catalog.collections.filter(collection=>['throne-of-glass','acotar','crescent-city'].includes(collection.id));
+ if(!collections.some(collection=>collection.id===activeCharacterSeries))activeCharacterSeries=collections[0]?.id;
+ const controls=`<div class="character-series-tabs">${collections.map(collection=>`<button data-character-series="${esc(collection.id)}" class="${collection.id===activeCharacterSeries?'active':''}">${esc(collection.title)}</button>`).join('')}</div>`;
+ const collection=collections.find(item=>item.id===activeCharacterSeries),safe=safeCharactersForCollection(collection),indexName=collection.id==='throne-of-glass'?'Throne of Glass':collection.id==='acotar'?'A Court of Thorns and Roses':'Crescent City',catalogued=(characterIndex[indexName]||[]).length;
+ $('#archiveCharacters').innerHTML=controls+`<section class="series-character-heading"><small>SERIES DIRECTORY</small><h2>${esc(collection.title)}</h2><p>${safe.length} spoiler-safe character profiles unlocked · ${catalogued} characters catalogued for continued review</p></section>`+groupEntries(safe);
+ $$('[data-character-series]').forEach(button=>button.onclick=()=>{activeCharacterSeries=button.dataset.characterSeries;renderCharacterSeries()});
+}
+function renderDirectories(){renderCharacterSeries();const allPlace=Object.entries(places).flatMap(([id,arr])=>arr.filter(x=>completedThrough(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));$('#archivePlaces').innerHTML=groupEntries(allPlace);$('#readerList').innerHTML=`<div class="panel"><b>${esc(state.profile.name)}</b><p>${esc(currentProgressText())}</p></div>`}
 boot().catch(error=>{console.error(error);setSyncStatus('App failed to load','error');$('#authMessage').textContent='The Archive could not load its required files. Please refresh or try again shortly.'});

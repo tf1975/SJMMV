@@ -210,6 +210,7 @@
   padding-left: .15rem;
   line-height: 1.25;
 }
+.chapter-state span,.chapter-state small{display:block}.chapter-state small{margin-top:.2rem;color:#78684d;font-size:.7rem;letter-spacing:0}
 
 /* Tabs */
 .tabs button {
@@ -412,3 +413,14 @@
 .profile-settings{display:grid;gap:.75rem}.profile-settings label{display:grid;gap:.35rem}
 .tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important}
 @media(max-width:700px){.tandem-current{display:block}.tandem-current button{width:100%;margin-top:.8rem}.tandem-actions{display:grid}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Tandem Read uses the same book interface as every novel */
+.tandem-spine.tandem-off{opacity:.62;box-shadow:none}.tandem-front-actions{display:flex;gap:.55rem;flex-wrap:wrap}.tandem-front-actions button{flex:1 1 190px}
+
+/* Archive character directory — deliberately separated by series */
+.character-series-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:1rem 0}
+.character-series-tabs button{border:1px solid var(--line);background:var(--panel);color:var(--cream);border-radius:12px;padding:.8rem;font-weight:800}
+.character-series-tabs button.active{background:var(--gold);border-color:var(--gold);color:#281e10}
+.series-character-heading{margin:1rem 0;padding:1rem;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#202b24,#17201b)}
+.series-character-heading h2{margin:.25rem 0}.series-character-heading p{margin:.25rem 0;color:var(--muted)}
+@media(max-width:700px){.character-series-tabs{grid-template-columns:1fr}.tandem-front-actions{display:grid}.tandem-front-actions button{width:100%}}
