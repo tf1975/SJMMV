@@ -45,3 +45,12 @@ The uploaded map files are packaged in `assets/maps/`. The app does not redraw o
 
 ## Test
 Upload to the GitHub `development` branch and open the permanent Netlify development site or a Deploy Preview.
+
+
+## UI polish pass
+- Fixed unreadable onboarding radio-button text.
+- Added strong selected, hover, and keyboard-focus states.
+- Improved form contrast and input focus visibility.
+- Increased spacing between chapter numbers and status text.
+- Standardized button heights and interactions.
+- Improved mobile layout and onboarding scrolling.

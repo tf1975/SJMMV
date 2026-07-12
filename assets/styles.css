@@ -25,3 +25,259 @@
 .maps article{overflow:hidden}.map-open{display:block;border:0;background:transparent;padding:0;width:100%;cursor:zoom-in}.map-open img{width:100%;height:290px;object-fit:contain;background:#ede9df;border-radius:12px}.map-modal{position:fixed;inset:0;z-index:100;background:rgba(6,8,7,.93);padding:1rem;color:white;display:flex;flex-direction:column}.map-modal>button{position:absolute;right:1rem;top:1rem;width:46px;height:46px;border-radius:50%;font-size:2rem;border:1px solid #fff7;background:#111;color:white}.map-modal h2{text-align:center;margin:.4rem 3.5rem 1rem}.map-scroll{overflow:auto;flex:1;display:grid;place-items:start center}.map-scroll img{max-width:none;width:auto;min-width:min(1200px,100%);height:auto;background:white}
 .tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:760px){.front-book{grid-template-columns:1fr}.front-cover{min-height:390px;border-radius:20px 20px 0 0}.front-page{border-radius:0 0 20px 20px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}.map-open img{height:220px}.wizard-actions{flex-direction:column-reverse}.wizard-actions button{width:100%}}
+
+
+/* ---------- Archive 2.0 UI polish ---------- */
+
+/* Onboarding readability */
+.onboarding-card,
+.onboarding-card h1,
+.onboarding-card h2,
+.onboarding-card h3,
+.onboarding-card p,
+.onboarding-card small,
+.onboarding-card label,
+.onboarding-card label *,
+.status-options,
+.status-options label,
+.status-options label *,
+.front-status-options,
+.front-status-options label,
+.front-status-options label * {
+  color: #2b2418 !important;
+}
+
+.onboarding-card {
+  background: #f4ead4;
+  border: 1px solid #c9b992;
+  box-shadow: 0 24px 70px rgba(0,0,0,.42);
+}
+
+.onboarding-card .auth-kicker,
+.onboarding-card #wizardSeries,
+.onboarding-card #wizardStepLabel {
+  color: #755f38 !important;
+}
+
+/* Radio choices */
+.status-options,
+.front-status-options {
+  gap: .7rem;
+}
+
+.status-options label,
+.front-status-options label {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  min-height: 54px;
+  padding: .8rem .95rem;
+  border: 1px solid #c8b99b;
+  border-radius: 14px;
+  background: #fbf4e3;
+  cursor: pointer;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.status-options label:hover,
+.front-status-options label:hover {
+  background: #f3ead3;
+  border-color: #aa8a50;
+  transform: translateY(-1px);
+}
+
+.status-options label:has(input:checked),
+.front-status-options label:has(input:checked) {
+  border: 2px solid #b68b3b;
+  background: #f7efd9;
+  box-shadow: 0 0 0 3px rgba(182,139,59,.12);
+}
+
+.status-options input[type="radio"],
+.front-status-options input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  accent-color: #8b6a2f;
+  transform: none;
+}
+
+/* Inputs and selects */
+.onboarding-card input,
+.onboarding-card select,
+.front-page input,
+.front-page select {
+  min-height: 46px;
+  color: #2b2418;
+  background: #fffaf0;
+  border: 1px solid #bcae8f;
+  border-radius: 11px;
+  padding: .7rem .8rem;
+}
+
+.onboarding-card input:focus,
+.onboarding-card select:focus,
+.front-page input:focus,
+.front-page select:focus {
+  outline: 3px solid rgba(182,139,59,.22);
+  border-color: #9f7732;
+}
+
+/* Buttons */
+.gold,
+.outline,
+.google-signin,
+.reader-pill,
+.icon-btn,
+.account-controls button,
+.wizard-actions button {
+  min-height: 44px;
+}
+
+.gold,
+.outline,
+.google-signin {
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+.gold:hover,
+.outline:hover,
+.google-signin:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.gold:active,
+.outline:active,
+.google-signin:active {
+  transform: translateY(0);
+}
+
+.gold:focus-visible,
+.outline:focus-visible,
+.google-signin:focus-visible,
+.book-spine:focus-visible,
+.chapterbtn:focus-visible,
+.map-open:focus-visible {
+  outline: 3px solid rgba(208,166,87,.45);
+  outline-offset: 3px;
+}
+
+/* Wizard spacing */
+.wizard-page label {
+  display: grid;
+  gap: .4rem;
+  margin-top: .9rem;
+  font-weight: 700;
+}
+
+.wizard-page p {
+  line-height: 1.6;
+}
+
+.wizard-actions {
+  margin-top: 1.25rem;
+}
+
+/* Book front matter */
+.front-page,
+.front-page h1,
+.front-page h2,
+.front-page h3,
+.front-page p,
+.front-page label {
+  color: #2b2418;
+}
+
+.reading-status-card {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+}
+
+/* Chapter navigation readability */
+.chapterbtn {
+  min-height: 58px;
+  grid-template-columns: 58px minmax(0,1fr) !important;
+  column-gap: 1.25rem !important;
+}
+
+.chapter-number {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+}
+
+.chapter-state {
+  padding-left: .15rem;
+  line-height: 1.25;
+}
+
+/* Tabs */
+.tabs button {
+  min-height: 42px;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* Cards */
+.panel,
+.lorecard,
+.directory-group,
+.map-card {
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.feature:hover,
+.lorecard:hover,
+.map-card:hover {
+  transform: translateY(-2px);
+  border-color: #5d6d63;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .onboarding-card {
+    width: calc(100vw - 1rem);
+    max-height: calc(100vh - 1rem);
+    overflow: auto;
+    padding: 1rem;
+  }
+
+  .wizard-progress {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-progress > span {
+    margin-bottom: .25rem;
+  }
+
+  .status-options label,
+  .front-status-options label {
+    min-height: 58px;
+    padding: .85rem;
+  }
+
+  .chapterbtn {
+    grid-template-columns: 50px minmax(0,1fr) !important;
+    column-gap: .9rem !important;
+  }
+
+  .chapter-number {
+    width: 42px;
+    height: 42px;
+  }
+
+  .front-links {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .front-links button,
+  .setup-actions button,
+  .wizard-actions button {
+    width: 100%;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+}
