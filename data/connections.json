@@ -63,5 +63,77 @@
       "House of Sky and Breath, Chapter 78",
       "A Court of Thorns and Roses completed"
     ]
+  },
+  {
+    "id": "walking-dead-across-worlds",
+    "title": "The Walking Dead appears in two worlds",
+    "status": "canon connection",
+    "summary": "A book called The Walking Dead is connected to Wyrdmarks in Throne of Glass and later appears among the rare books in Jesiba’s library. The repeated title is explicit; how the same work crossed worlds remains unexplained.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27},
+      {"bookId": "hoeab", "chapter": 97}
+    ],
+    "evidence": [
+      "Throne of Glass, Chapter 27",
+      "House of Earth and Blood completed"
+    ]
+  },
+  {
+    "id": "wyrd-urd-thread",
+    "title": "Could Wyrd and Urd be the same underlying force?",
+    "status": "fan theory",
+    "summary": "Readers connect Wyrd in Erilea with Urd in Midgard because both ideas are associated with fate, world-shaping power, and similar names. The parallel is compelling, but the books have not confirmed that Wyrd and Urd are identical.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27},
+      {"bookId": "hofas", "chapter": 102}
+    ],
+    "evidence": [
+      "Throne of Glass, Chapter 27",
+      "House of Flame and Shadow completed",
+      "Community theory — not confirmed canon"
+    ]
+  },
+  {
+    "id": "aelin-red-star",
+    "title": "A falling star between Erilea and Prythian",
+    "status": "canon connection",
+    "summary": "Aelin’s fall through worlds passes a winged Fae male and his pregnant mate in a mountain-ringed city. A Court of Silver Flames records a strange red star during the corresponding period, connecting the two scenes.",
+    "requires": [
+      {"bookId": "koa", "chapter": 99},
+      {"bookId": "acosf", "chapter": 62}
+    ],
+    "evidence": [
+      "Kingdom of Ash, Chapter 99",
+      "A Court of Silver Flames, Chapter 62"
+    ]
+  },
+  {
+    "id": "elemental-shifter-fae",
+    "title": "Do Midgard’s shifters descend from Erilea’s Fae?",
+    "status": "strong inference",
+    "summary": "House of Flame and Shadow describes animal-shifting Fae with elemental magic arriving from another world. Fans connect that description to Erilea’s Fae, who combine animal forms with elemental gifts. The source world is strongly suggested but not named outright in the passage.",
+    "requires": [
+      {"bookId": "hof", "chapter": 68},
+      {"bookId": "hofas", "chapter": 102}
+    ],
+    "evidence": [
+      "Heir of Fire completed",
+      "House of Flame and Shadow completed",
+      "Strong inference — source world not explicitly named"
+    ]
+  },
+  {
+    "id": "lidia-brannon-line",
+    "title": "Lidia’s fire and the name Brannon",
+    "status": "canon clue",
+    "summary": "Lidia explains that her son Brannon was named for an ancient Fae king from another world whose bloodline carried fire and was associated with sacred stags. Those details deliberately echo Brannon Galathynius and Terrasen.",
+    "requires": [
+      {"bookId": "koa", "chapter": 121},
+      {"bookId": "hofas", "chapter": 94}
+    ],
+    "evidence": [
+      "Throne of Glass series completed",
+      "House of Flame and Shadow, Chapter 94"
+    ]
   }
 ]

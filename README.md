@@ -107,3 +107,17 @@ Still browser-local:
 - `user_book_settings` now loads and saves reread state and last-opened tabs.
 - The SQL migration lives in `supabase/migrations/20260712_user_book_settings.sql`.
 - Progress semantics have regression tests in `tests/progress-model.test.js`.
+
+## Archive 2.2 reading-plan pass
+- New readers choose Purist, Romantic, or Archivist placement for The Assassin’s Blade; the Throne of Glass shelf follows that choice.
+- New readers choose Yes, No, or Unsure for the Empire of Storms / Tower of Dawn tandem read.
+- A dedicated Tandem Read spine and 50-step tracker sit between Queen of Shadows and Empire of Storms.
+- Completing tandem steps updates both source books automatically.
+- Opening the chapter guide always begins at Chapter 1.
+- Chapter pages now show one “What you’ll remember” recap instead of duplicate summary panels.
+- Whole-book summaries remain on the book overview and were removed from chapter tabs.
+- The character catalog now includes substantially more spoiler-gated characters across all three series.
+- Lore and Connections gained reviewed canon clues, strong inferences, and clearly labeled fan theories.
+- Lunathion was replaced in the Atlas by the supplied Midgard map.
+- Supabase is version-pinned with integrity checking and Netlify now sends baseline security headers.
+- Complete, reproducible RLS migrations are included for profiles, progress, and book settings.

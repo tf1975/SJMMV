@@ -35,7 +35,111 @@
       "group": "Royal Visitors",
       "safeAt": 12,
       "bio": "A princess of Eyllwe visiting the Adarlanian court."
+    },
+    {
+      "name": "Duke Perrington",
+      "group": "Adarlanian Court",
+      "safeAt": 3,
+      "bio": "A powerful duke involved in arranging the Champion competition."
+    },
+    {
+      "name": "Nox Owen",
+      "group": "Champion Contestants",
+      "safeAt": 8,
+      "bio": "A skilled thief competing for the position of King’s Champion."
+    },
+    {
+      "name": "Pelor",
+      "group": "Champion Contestants",
+      "safeAt": 8,
+      "bio": "A young assassin entered in the royal competition."
+    },
+    {
+      "name": "Grave",
+      "group": "Champion Contestants",
+      "safeAt": 8,
+      "bio": "A feared assassin and one of the more dangerous contestants."
+    },
+    {
+      "name": "Kaltain Rompier",
+      "group": "Adarlanian Court",
+      "safeAt": 9,
+      "bio": "A courtier pursuing influence and a royal marriage."
+    },
+    {
+      "name": "Philippa Spindlehead",
+      "group": "Glass Castle Household",
+      "safeAt": 7,
+      "bio": "A member of Celaena’s household staff in the glass castle."
     }
+  ],
+  "com": [
+    {"name":"Celaena Sardothien","group":"The King’s Champion","safeAt":1,"bio":"The king’s newly appointed Champion, carrying out secret assignments for the crown."},
+    {"name":"Chaol Westfall","group":"Royal Guard","safeAt":1,"bio":"Captain of the Guard and one of Celaena’s closest connections at court."},
+    {"name":"Dorian Havilliard","group":"House Havilliard","safeAt":1,"bio":"Crown Prince of Adarlan, increasingly aware that the kingdom holds secrets of its own."},
+    {"name":"Princess Nehemia","group":"Eyllwe","safeAt":1,"bio":"Princess of Eyllwe and Celaena’s trusted friend."},
+    {"name":"Archer Finn","group":"Rifthold","safeAt":2,"bio":"A former acquaintance of Celaena who becomes connected to one of her assignments."},
+    {"name":"Mort","group":"The Castle","safeAt":5,"bio":"A talking bronze door knocker guarding an old passage beneath the castle."}
+  ],
+  "tab": [
+    {"name":"Celaena Sardothien","group":"Assassin’s Guild","safeAt":1,"bio":"A gifted teenage assassin beginning to question the life chosen for her."},
+    {"name":"Sam Cortland","group":"Assassin’s Guild","safeAt":1,"bio":"Celaena’s fellow assassin and longtime rival within the Guild."},
+    {"name":"Arobynn Hamel","group":"Assassin’s Guild","safeAt":1,"bio":"King of the Assassins and the controlling head of Celaena’s guild."},
+    {"name":"Captain Rolfe","group":"Skull’s Bay","safeAt":2,"bio":"The Pirate Lord who controls Skull’s Bay and its trade."},
+    {"name":"Ansel of Briarcliff","group":"The Silent Assassins","safeAt":14,"bio":"A young assassin Celaena befriends while training in the Red Desert."},
+    {"name":"The Mute Master","group":"The Silent Assassins","safeAt":13,"bio":"The respected leader of the Silent Assassins."},
+    {"name":"Yrene Towers","group":"Innish","safeAt":25,"bio":"A young healer whose plans have stalled far from home."},
+    {"name":"Lysandra","group":"Rifthold","safeAt":35,"bio":"A courtesan from Celaena’s past whose path intersects with the Guild."}
+  ],
+  "hof": [
+    {"name":"Celaena Sardothien","group":"Wendlyn","safeAt":1,"bio":"An assassin sent to Wendlyn while carrying grief and secrets she can no longer avoid."},
+    {"name":"Rowan Whitethorn","group":"Maeve’s Cadre","safeAt":3,"bio":"A powerful Fae warrior ordered to train Celaena."},
+    {"name":"Maeve","group":"Doranelle","safeAt":3,"bio":"Queen of the Fae in Doranelle and Rowan’s ruler."},
+    {"name":"Emrys","group":"Mistward","safeAt":8,"bio":"A warmhearted storyteller and cook at Mistward."},
+    {"name":"Luca","group":"Mistward","safeAt":8,"bio":"A young demi-Fae living and working at Mistward."},
+    {"name":"Manon Blackbeak","group":"Blackbeak Clan","safeAt":1,"bio":"Heir to the Blackbeak witch clan and leader of the Thirteen."},
+    {"name":"Asterin Blackbeak","group":"The Thirteen","safeAt":2,"bio":"Manon’s second-in-command and a member of the Thirteen."},
+    {"name":"Aedion Ashryver","group":"Adarlan","safeAt":1,"bio":"A celebrated general known as the Wolf of the North."},
+    {"name":"Sorscha","group":"Glass Castle","safeAt":4,"bio":"A healer serving within the royal castle."}
+  ],
+  "qos": [
+    {"name":"Aelin Galathynius","group":"Terrasen","safeAt":1,"bio":"The heir of Terrasen returns to Rifthold with unfinished plans and debts."},
+    {"name":"Aedion Ashryver","group":"Terrasen","safeAt":1,"bio":"The Wolf of the North and a key figure in Terrasen’s resistance."},
+    {"name":"Rowan Whitethorn","group":"Terrasen’s Allies","safeAt":1,"bio":"A Fae warrior bound to Aelin by loyalty and shared purpose."},
+    {"name":"Lysandra","group":"Rifthold","safeAt":4,"bio":"A courtesan with a complicated history involving Aelin and Arobynn."},
+    {"name":"Manon Blackbeak","group":"The Thirteen","safeAt":1,"bio":"Wing Leader of the Ironteeth witches at Morath."},
+    {"name":"Elide Lochan","group":"Morath","safeAt":8,"bio":"A young woman held at Morath who watches its growing horrors closely."},
+    {"name":"Nesryn Faliq","group":"Royal Guard","safeAt":2,"bio":"A skilled guard and archer working alongside Chaol."},
+    {"name":"Arobynn Hamel","group":"Assassin’s Guild","safeAt":1,"bio":"King of the Assassins and a dangerous figure from Aelin’s past."}
+  ],
+  "eos": [
+    {"name":"Aelin Galathynius","group":"Terrasen","safeAt":1,"bio":"Queen of Terrasen, seeking allies and armies for the war ahead."},
+    {"name":"Rowan Whitethorn","group":"Terrasen","safeAt":1,"bio":"Aelin’s Fae ally and a member of her growing court."},
+    {"name":"Aedion Ashryver","group":"Terrasen","safeAt":1,"bio":"General of the Bane and member of Aelin’s court."},
+    {"name":"Lysandra","group":"Terrasen","safeAt":1,"bio":"A shapeshifter allied with Aelin and Terrasen."},
+    {"name":"Manon Blackbeak","group":"The Thirteen","safeAt":1,"bio":"Leader of the Thirteen, confronting new questions about witches and loyalty."},
+    {"name":"Elide Lochan","group":"Perranth","safeAt":1,"bio":"Lady of Perranth, attempting to escape Morath and find Aelin."},
+    {"name":"Lorcan Salvaterre","group":"Maeve’s Cadre","safeAt":1,"bio":"A formidable Fae warrior pursuing his own mission."},
+    {"name":"Dorian Havilliard","group":"Adarlan","safeAt":1,"bio":"King of Adarlan, learning to control his magic while joining the wider fight."}
+  ],
+  "tod": [
+    {"name":"Chaol Westfall","group":"Adarlan","safeAt":1,"bio":"The former Captain of the Guard travels to Antica seeking healing and an alliance."},
+    {"name":"Nesryn Faliq","group":"Adarlan","safeAt":1,"bio":"A skilled archer returning to the Southern Continent as part of the diplomatic mission."},
+    {"name":"Yrene Towers","group":"Torre Cesme","safeAt":2,"bio":"A gifted healer of the Torre Cesme assigned to evaluate Chaol."},
+    {"name":"Sartaq","group":"Khaganate","safeAt":3,"bio":"A ruk-riding prince of the khaganate."},
+    {"name":"Hasar","group":"Khaganate","safeAt":2,"bio":"A politically sharp princess of the khaganate."},
+    {"name":"Kashin","group":"Khaganate","safeAt":2,"bio":"A prince of the khaganate and member of the royal family."},
+    {"name":"Nesryn’s family","group":"Antica","safeAt":5,"bio":"Relatives who reconnect Nesryn with her family’s life in the Southern Continent."}
+  ],
+  "koa": [
+    {"name":"Aelin Galathynius","group":"Terrasen","safeAt":1,"bio":"Queen of Terrasen as the final war for Erilea begins."},
+    {"name":"Rowan Whitethorn","group":"Terrasen","safeAt":1,"bio":"Aelin’s mate and one of the leaders searching for her."},
+    {"name":"Aedion Ashryver","group":"The Bane","safeAt":1,"bio":"Commander defending Terrasen against invasion."},
+    {"name":"Lysandra","group":"Terrasen","safeAt":1,"bio":"A shapeshifter fighting beside the armies of Terrasen."},
+    {"name":"Manon Blackbeak","group":"Witches","safeAt":1,"bio":"Leader of the Thirteen, seeking a future for the witch clans."},
+    {"name":"Dorian Havilliard","group":"Adarlan","safeAt":1,"bio":"King of Adarlan, using his magic and political judgment in the final campaign."},
+    {"name":"Elide Lochan","group":"Perranth","safeAt":1,"bio":"Lady of Perranth and member of Aelin’s court."},
+    {"name":"Yrene Towers","group":"Southern Continent Allies","safeAt":1,"bio":"A powerful healer joining the war against Erawan."}
   ],
   "acotar1": [
     {
@@ -67,7 +171,42 @@
       "group": "Spring Court",
       "safeAt": 6,
       "bio": "A sharp-tongued member of the Spring Court."
-    }
+    },
+    {"name":"Feyre’s father","group":"House Archeron","safeAt":1,"bio":"The Archeron sisters’ father, whose lost fortune left the family in poverty."},
+    {"name":"Andras","group":"Spring Court","safeAt":1,"bio":"The wolf Feyre kills while hunting near the wall."},
+    {"name":"Alis","group":"Spring Court","safeAt":5,"bio":"A servant in Tamlin’s household who helps Feyre understand life in Prythian."},
+    {"name":"The Suriel","group":"Prythian","safeAt":14,"bio":"A dangerous faerie creature known for answering questions when trapped."},
+    {"name":"Rhysand","group":"Night Court","safeAt":20,"bio":"A mysterious High Fae male from the Night Court."},
+    {"name":"Amarantha","group":"Prythian","safeAt":32,"bio":"A powerful figure connected to the curse afflicting Prythian."}
+  ],
+  "acomaf": [
+    {"name":"Feyre Archeron","group":"Prythian","safeAt":1,"bio":"A newly Made High Fae struggling with trauma and the life awaiting her."},
+    {"name":"Rhysand","group":"Night Court","safeAt":1,"bio":"High Lord of the Night Court and holder of a bargain with Feyre."},
+    {"name":"Morrigan","group":"Night Court","safeAt":5,"bio":"A powerful member of Rhysand’s inner circle, commonly called Mor."},
+    {"name":"Cassian","group":"Night Court","safeAt":5,"bio":"An Illyrian warrior and commander in the Night Court."},
+    {"name":"Azriel","group":"Night Court","safeAt":5,"bio":"The Night Court’s shadowsinger and spymaster."},
+    {"name":"Amren","group":"Night Court","safeAt":5,"bio":"An ancient and formidable member of Rhysand’s inner circle."}
+  ],
+  "acowar": [
+    {"name":"Feyre Archeron","group":"Night Court","safeAt":1,"bio":"A central member of the Night Court preparing for war."},
+    {"name":"Rhysand","group":"Night Court","safeAt":1,"bio":"High Lord of the Night Court working to unite Prythian."},
+    {"name":"Lucien","group":"Prythian","safeAt":1,"bio":"A former Spring Court emissary navigating divided loyalties."},
+    {"name":"Nesta Archeron","group":"House Archeron","safeAt":1,"bio":"Feyre’s eldest sister, changed by the events of the previous book."},
+    {"name":"Elain Archeron","group":"House Archeron","safeAt":1,"bio":"Feyre’s sister, also changed by the events of the previous book."},
+    {"name":"Tarquin","group":"Summer Court","safeAt":10,"bio":"High Lord of the Summer Court."}
+  ],
+  "acofas": [
+    {"name":"Feyre Archeron","group":"Night Court","safeAt":1,"bio":"Helping rebuild Velaris while preparing for the Winter Solstice."},
+    {"name":"Rhysand","group":"Night Court","safeAt":1,"bio":"High Lord of the Night Court during the postwar recovery."},
+    {"name":"Nesta Archeron","group":"House Archeron","safeAt":1,"bio":"Living apart from much of the Inner Circle after the war."},
+    {"name":"Cassian","group":"Night Court","safeAt":1,"bio":"An Illyrian commander concerned about both recovery and unfinished tensions."}
+  ],
+  "acosf": [
+    {"name":"Nesta Archeron","group":"House Archeron","safeAt":1,"bio":"At the center of a difficult journey through trauma, anger, and recovery."},
+    {"name":"Cassian","group":"Night Court","safeAt":1,"bio":"An Illyrian general tasked with overseeing Nesta’s training."},
+    {"name":"Gwyneth Berdara","group":"Valkyries","safeAt":10,"bio":"A priestess in the library beneath the House of Wind."},
+    {"name":"Emerie","group":"Valkyries","safeAt":15,"bio":"An Illyrian shopkeeper who becomes part of Nesta’s growing circle."},
+    {"name":"Clotho","group":"Library","safeAt":5,"bio":"A priestess who oversees the library beneath the House of Wind."}
   ],
   "hoeab": [
     {
@@ -87,6 +226,34 @@
       "group": "33rd Imperial Legion",
       "safeAt": 5,
       "bio": "A powerful angel assigned to work with Bryce."
-    }
+    },
+    {"name":"Fury Axtar","group":"Bryce’s Friends","safeAt":1,"bio":"A formidable mercenary and one of Bryce’s closest friends."},
+    {"name":"Juniper Andromeda","group":"Bryce’s Friends","safeAt":1,"bio":"A talented dancer and one of Bryce’s closest friends."},
+    {"name":"Connor Holstrom","group":"Pack of Devils","safeAt":1,"bio":"A wolf-shifter in Danika’s pack with a longstanding connection to Bryce."},
+    {"name":"Ithan Holstrom","group":"Wolves","safeAt":2,"bio":"Connor’s younger brother and a promising sunball player."},
+    {"name":"Ruhn Danaan","group":"House of Valbaran Fae","safeAt":2,"bio":"Bryce’s Fae half-brother and a prince of the Valbaran Fae."},
+    {"name":"Jesiba Roga","group":"Griffin Antiquities","safeAt":2,"bio":"A powerful sorceress and Bryce’s demanding employer."},
+    {"name":"Lehabah","group":"Griffin Antiquities","safeAt":2,"bio":"A fire sprite who works in the antiquities gallery with Bryce."},
+    {"name":"Syrinx","group":"Griffin Antiquities","safeAt":2,"bio":"Bryce’s affectionate chimera companion."},
+    {"name":"Micah Domitus","group":"33rd Imperial Legion","safeAt":5,"bio":"The Archangel governing Lunathion."},
+    {"name":"Isaiah Tiberian","group":"33rd Imperial Legion","safeAt":5,"bio":"An angel and commander serving in Lunathion."},
+    {"name":"Sabine Fendyr","group":"Wolves","safeAt":1,"bio":"Danika’s mother and the Prime Apparent of the wolves."}
+  ],
+  "hosab": [
+    {"name":"Bryce Quinlan","group":"Lunathion","safeAt":1,"bio":"Trying to build a quieter life while new conflicts gather around her."},
+    {"name":"Hunt Athalar","group":"Lunathion","safeAt":1,"bio":"An angel seeking freedom and a future with Bryce."},
+    {"name":"Ruhn Danaan","group":"Valbaran Fae","safeAt":1,"bio":"Bryce’s brother and a prince drawn into the growing rebellion."},
+    {"name":"Ithan Holstrom","group":"Wolves","safeAt":1,"bio":"A wolf-shifter searching for purpose after the events of the first book."},
+    {"name":"Tharion Ketos","group":"River Queen’s Court","safeAt":1,"bio":"A mer warrior and investigator serving the River Queen."},
+    {"name":"Cormac Donnall","group":"Avallen Fae","safeAt":2,"bio":"An Avallen prince whose arrival complicates Bryce’s plans."},
+    {"name":"Lidia Cervos","group":"Asteri Command","safeAt":8,"bio":"The Hind, a feared officer serving the Asteri."}
+  ],
+  "hofas": [
+    {"name":"Bryce Quinlan","group":"Midgard","safeAt":1,"bio":"Separated from her home and searching for a path back to Midgard."},
+    {"name":"Hunt Athalar","group":"Midgard","safeAt":1,"bio":"Facing the consequences of the group’s rebellion against the Asteri."},
+    {"name":"Ruhn Danaan","group":"Midgard","safeAt":1,"bio":"A captive prince of the Valbaran Fae."},
+    {"name":"Lidia Cervos","group":"Midgard","safeAt":1,"bio":"The Hind, whose loyalties and history carry major consequences."},
+    {"name":"Nesta Archeron","group":"Prythian","safeAt":2,"bio":"A warrior Bryce encounters after crossing into another world."},
+    {"name":"Azriel","group":"Prythian","safeAt":2,"bio":"A shadowsinger who encounters Bryce in Prythian."}
   ]
 }

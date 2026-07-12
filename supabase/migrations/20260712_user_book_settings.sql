@@ -16,6 +16,7 @@ create table if not exists public.user_book_settings (
 
 alter table public.user_book_settings enable row level security;
 grant usage on schema public to authenticated;
+revoke all on public.user_book_settings from anon;
 grant select, insert, update, delete on public.user_book_settings to authenticated;
 
 drop policy if exists "Users can read their own book settings" on public.user_book_settings;

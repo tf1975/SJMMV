@@ -78,5 +78,31 @@
         "note": "She is introduced to the other competitors under the false name."
       }
     ]
+  },
+  {
+    "id": "walking-dead-grimoire",
+    "title": "The Walking Dead",
+    "type": "canon",
+    "category": "artifact",
+    "summary": "An ancient book associated with Wyrdmarks and knowledge that ordinary court histories do not explain.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27}
+    ],
+    "evidence": [
+      {"bookId": "tog", "chapter": 27, "note": "Celaena encounters the book and its unfamiliar marks."}
+    ]
+  },
+  {
+    "id": "wyrdmarks",
+    "title": "Wyrdmarks",
+    "type": "canon",
+    "category": "magic and language",
+    "summary": "Ancient symbols tied to a deeper form of power. At this point in the story, their complete rules and origins remain deliberately unclear.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27}
+    ],
+    "evidence": [
+      {"bookId": "tog", "chapter": 27, "note": "The marks become identifiable as part of the mystery surrounding The Walking Dead."}
+    ]
   }
 ]
