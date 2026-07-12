@@ -192,7 +192,7 @@
       <small id="chapterLabel"></small><h2>What you’ll remember</h2><div id="summary"></div>
       <div class="tabs"><button data-tab="charactersTab" class="active">Characters</button><button data-tab="placesTab">Places</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="discTab">Discussion</button></div>
       <div id="charactersTab" class="tabpane active"></div><div id="placesTab" class="tabpane"></div><div id="loreTab" class="tabpane"></div><div id="connTab" class="tabpane"></div>
-      <div id="discTab" class="tabpane"><div id="discussionFeed"></div><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..."></textarea><button id="postDiscussion" class="gold">Post</button></div>
+      <div id="discTab" class="tabpane"><div id="discussionFeed"></div><div class="mention-composer"><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..." aria-autocomplete="list" aria-controls="mentionSuggestions"></textarea><div id="mentionSuggestions" class="mention-suggestions hidden" role="listbox" aria-label="Readers to mention"></div></div><button id="postDiscussion" class="gold">Post</button></div>
       <div class="actions"><button id="complete" class="gold">Mark chapter complete</button><button id="next" class="outline">Next chapter →</button></div>
     </div></section>
   </div>

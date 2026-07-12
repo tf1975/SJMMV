@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false;
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false,mentionCandidates=[],mentionActiveIndex=-1,mentionMatch=null;
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -47,6 +47,7 @@ function bind(){
  $$('.archive-tabs button').forEach(b=>b.onclick=()=>openArchivePane(b.dataset.archive));
  $$('.map-open').forEach(b=>b.onclick=()=>openMap(b.dataset.src,b.dataset.title));$('#closeMap').onclick=()=>$('#mapModal').classList.add('hidden');$('#mapModal').onclick=e=>{if(e.target.id==='mapModal')$('#mapModal').classList.add('hidden')};
  $('#saveTandemFront').onclick=saveTandemFront;$('#toggleTandemFront').onclick=toggleTandemEnabled;
+ $('#discussionText').addEventListener('input',updateMentionSuggestions);$('#discussionText').addEventListener('focus',async()=>{await loadMentionCandidates();updateMentionSuggestions()});$('#discussionText').addEventListener('keydown',handleMentionKeys);document.addEventListener('click',event=>{if(!event.target.closest('.mention-composer'))hideMentionSuggestions()});
 }
 function openArchivePane(id){$$('.archive-tabs button,.archive-pane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-archive="${id}"]`)?.classList.add('active');$('#'+id).classList.add('active')}
 function openMap(src,title){$('#mapModalImage').src=src;$('#mapModalTitle').textContent=title;$('#mapModal').classList.remove('hidden')}
@@ -73,7 +74,7 @@ async function runAuthRequest(form,operation){
 function friendlySignupError(error){const message=String(error?.message||'').toLowerCase();if(message.includes('rate limit'))return'Too many email attempts were made. Please wait before trying again.';if(message.includes('signup')&&message.includes('disabled'))return'Email account creation is not enabled yet.';if(message.includes('password'))return'That password does not meet the security requirements.';return'We could not create the account. Check the email and password, then try again.'}
 async function applySession(session){
  const loadId=++sessionLoadId;
- authUser=session?.user||null;
+ const previousUserId=authUser?.id;authUser=session?.user||null;if(previousUserId!==authUser?.id)mentionCandidates=[];
  if(!authUser){
   cloudLoaded=false;
   cloudProfileExists=false;
@@ -398,6 +399,35 @@ async function createMentionsForPost(postId,text){
  if(mentionError)console.error('Mention save failed:',mentionError);
 }
 function escapeRegex(value){return String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+async function loadMentionCandidates(){
+ if(!authUser||mentionCandidates.length)return;
+ const {data,error}=await supabaseClient.from('profiles').select('id,nickname').order('nickname',{ascending:true});
+ if(error){console.error('Mention suggestions failed:',error);return}
+ mentionCandidates=(data||[]).filter(profile=>profile.id!==authUser.id&&profile.nickname);
+}
+function currentMentionMatch(){
+ const textarea=$('#discussionText'),before=textarea.value.slice(0,textarea.selectionStart),match=before.match(/(^|\s)@([^@\n]{0,30})$/);
+ if(!match)return null;
+ return{start:before.length-match[2].length-1,end:textarea.selectionStart,query:match[2].trim().toLowerCase()};
+}
+function updateMentionSuggestions(){
+ mentionMatch=currentMentionMatch();
+ if(!mentionMatch){hideMentionSuggestions();return}
+ const matches=mentionCandidates.filter(profile=>profile.nickname.toLowerCase().startsWith(mentionMatch.query)).slice(0,6);
+ if(!matches.length){hideMentionSuggestions();return}
+ mentionActiveIndex=0;const list=$('#mentionSuggestions');list.innerHTML=matches.map((profile,index)=>`<button type="button" role="option" data-nickname="${esc(profile.nickname)}" class="${index===0?'active':''}">@${esc(profile.nickname)}</button>`).join('');list.classList.remove('hidden');
+ list.querySelectorAll('button').forEach(button=>button.onclick=()=>insertMention(button.dataset.nickname));
+}
+function handleMentionKeys(event){
+ const list=$('#mentionSuggestions');if(list.classList.contains('hidden'))return;const buttons=[...list.querySelectorAll('button')];if(!buttons.length)return;
+ if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();mentionActiveIndex=(mentionActiveIndex+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;buttons.forEach((button,index)=>button.classList.toggle('active',index===mentionActiveIndex));return}
+ if(event.key==='Enter'){event.preventDefault();insertMention(buttons[mentionActiveIndex].dataset.nickname);return}
+ if(event.key==='Escape'){event.preventDefault();hideMentionSuggestions()}
+}
+function insertMention(nickname){
+ const textarea=$('#discussionText'),match=mentionMatch||currentMentionMatch();if(!match)return;textarea.setRangeText(`@${nickname} `,match.start,match.end,'end');hideMentionSuggestions();textarea.focus();
+}
+function hideMentionSuggestions(){mentionActiveIndex=-1;mentionMatch=null;$('#mentionSuggestions').classList.add('hidden');$('#mentionSuggestions').innerHTML=''}
 function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b class="reader-name">${esc(state.profile.name)}</b><span class="reader-progress">${esc(currentProgressText())}</span></div>`}
 async function renderMentions(){
  const container=$('#mentions');
