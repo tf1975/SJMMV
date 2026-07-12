@@ -35,9 +35,10 @@
       <h2>Create an Archive account</h2>
       <form id="emailSignupForm">
         <label>Book Club nickname<input id="signupNickname" maxlength="30" autocomplete="nickname" required></label>
+        <span id="signupNicknameMessage" class="inline-auth-message" role="alert"></span>
         <label>Email<input id="signupEmail" type="email" autocomplete="email" required></label>
-        <label>Password<input id="signupPassword" type="password" minlength="12" autocomplete="new-password" required></label>
-        <small>Use at least 12 characters. Your email stays private.</small>
+        <label>Password<input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></label>
+        <small>Use at least 8 characters. Your email stays private.</small>
         <button class="gold wide" type="submit">Create account</button>
       </form>
       <button class="text-link auth-back" type="button">← Back</button>
@@ -53,7 +54,7 @@
     <div id="passwordUpdateStep" class="auth-step" hidden>
       <h2>Choose a new password</h2>
       <form id="passwordUpdateForm">
-        <label>New password<input id="newPassword" type="password" minlength="12" autocomplete="new-password" required></label>
+        <label>New password<input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></label>
         <button class="gold wide" type="submit">Save new password</button>
       </form>
     </div>
@@ -66,15 +67,16 @@
     <div class="wizard-progress"><span id="wizardStepLabel">Step 1</span><div><i id="wizardBar"></i></div></div>
     <div id="wizardIntro" class="wizard-page">
       <div class="auth-crest">✦</div>
-      <p class="auth-kicker">Your Book Club identity</p>
-      <h1>What should readers call you?</h1>
-      <label>Nickname<input id="onboardName" maxlength="30" placeholder="Rosetta"></label>
+      <p id="onboardKicker" class="auth-kicker">Your Book Club identity</p>
+      <h1 id="onboardTitle">What should readers call you?</h1>
+      <label id="onboardNameWrap">Nickname<input id="onboardName" maxlength="30" placeholder="Rosetta"></label>
+      <div id="onboardNicknameSummary" class="nickname-summary" hidden><small>BOOK CLUB NICKNAME</small><b id="onboardNicknameValue"></b><span>This nickname is attached to your Archive account.</span></div>
       <p id="nicknameMessage" class="field-message" role="alert"></p>
       <label>Reading mode<select id="onboardMode"><option value="first">First Read</option><option value="reread">Reread</option></select></label>
-      <label>Where do you want to read <em>The Assassin’s Blade</em>?
+      <label><span>Where do you want to read <em>The Assassin’s Blade</em>?</span>
         <select id="onboardAssassinsBlade"><option value="archivist">Archivist — third, before Heir of Fire</option><option value="romantic">Romantic — fourth, after Heir of Fire</option><option value="purist">Purist — at the beginning</option></select>
       </label>
-      <label>Are you planning to tandem read <em>Empire of Storms</em> and <em>Tower of Dawn</em>?
+      <label><span>Are you planning to tandem read <em>Empire of Storms</em> and <em>Tower of Dawn</em>?</span>
         <select id="onboardTandem"><option value="unsure">I’m not sure yet</option><option value="yes">Yes</option><option value="no">No</option></select>
       </label>
       <button id="wizardBeginBooks" class="gold wide">Set my books</button>

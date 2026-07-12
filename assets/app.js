@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass';
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false;
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -51,13 +51,13 @@ function bind(){
 function openArchivePane(id){$$('.archive-tabs button,.archive-pane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-archive="${id}"]`)?.classList.add('active');$('#'+id).classList.add('active')}
 function openMap(src,title){$('#mapModalImage').src=src;$('#mapModalTitle').textContent=title;$('#mapModal').classList.remove('hidden')}
 async function toggleMode(){state.profile.mode=state.profile.mode==='reread'?'first':'reread';if(currentBook){state.bookSettings[currentBook.id]={...(state.bookSettings[currentBook.id]||{}),rereading:state.profile.mode==='reread'};await saveBookSettingsToCloud(currentBook.id)}save();await saveProfileToCloud();renderAll()}
-function showAuthPanel(id){['authHome','emailLoginStep','emailSignupStep','passwordResetStep','passwordUpdateStep'].forEach(panelId=>{const panel=$('#'+panelId);if(panel)panel.hidden=panelId!==id});$('#authMessage').textContent=''}
+function showAuthPanel(id){['authHome','emailLoginStep','emailSignupStep','passwordResetStep','passwordUpdateStep'].forEach(panelId=>{const panel=$('#'+panelId);if(panel)panel.hidden=panelId!==id});$('#authMessage').textContent='';$('#signupNicknameMessage').textContent=''}
 async function initAuth(){
  $('#googleSignIn').onclick=async()=>{const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+'/'}});if(error)$('#authMessage').textContent=error.message};
  $('#emailLoginForm').onsubmit=async event=>{event.preventDefault();const result=await runAuthRequest(event.currentTarget,()=>supabaseClient.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value}));if(!result)return;if(result.error)$('#authMessage').textContent='We could not log you in. Check your email and password and try again.'};
- $('#emailSignupForm').onsubmit=async event=>{event.preventDefault();const nickname=$('#signupNickname').value.trim(),password=$('#signupPassword').value;if(!nickname){$('#authMessage').textContent='Choose a Book Club nickname.';return}if(password.length<12){$('#authMessage').textContent='Your password must contain at least 12 characters.';return}const result=await runAuthRequest(event.currentTarget,async()=>{const {data:available,error:checkError}=await supabaseClient.rpc('nickname_available',{candidate:nickname});if(checkError)return{data:null,error:checkError,nicknameCheckFailed:true};if(!available)return{data:null,error:null,nicknameTaken:true};return supabaseClient.auth.signUp({email:$('#signupEmail').value.trim(),password,options:{emailRedirectTo:window.location.origin+'/',data:{nickname}}})});if(!result)return;if(result.nicknameTaken){$('#authMessage').textContent='That nickname is already being used. Please choose another.';return}if(result.nicknameCheckFailed){$('#authMessage').textContent='The Archive could not check that nickname. Please try again.';return}const {data,error}=result;if(error){$('#authMessage').textContent=friendlySignupError(error);return}if(!data.session){showAuthPanel('authHome');$('#authMessage').textContent='Check your email and confirm your account, then return here to log in.'}};
+ $('#emailSignupForm').onsubmit=async event=>{event.preventDefault();$('#signupNicknameMessage').textContent='';const nickname=$('#signupNickname').value.trim(),password=$('#signupPassword').value;if(!nickname){$('#signupNicknameMessage').textContent='Choose a Book Club nickname.';return}if(password.length<8){$('#authMessage').textContent='Your password must contain at least 8 characters.';return}const result=await runAuthRequest(event.currentTarget,async()=>{const {data:available,error:checkError}=await supabaseClient.rpc('nickname_available',{candidate:nickname});if(checkError)return{data:null,error:checkError,nicknameCheckFailed:true};if(!available)return{data:null,error:null,nicknameTaken:true};return supabaseClient.auth.signUp({email:$('#signupEmail').value.trim(),password,options:{emailRedirectTo:window.location.origin+'/',data:{nickname}}})});if(!result)return;if(result.nicknameTaken){$('#signupNicknameMessage').textContent='That nickname is already being used. Please choose another.';$('#signupNickname').focus();return}if(result.nicknameCheckFailed){$('#signupNicknameMessage').textContent='The Archive could not check that nickname. Please try again.';return}const {data,error}=result;if(error){$('#authMessage').textContent=friendlySignupError(error);return}if(!data.session){showAuthPanel('authHome');$('#authMessage').textContent='Check your email and confirm your account, then return here to log in.'}};
  $('#passwordResetForm').onsubmit=async event=>{event.preventDefault();const result=await runAuthRequest(event.currentTarget,()=>supabaseClient.auth.resetPasswordForEmail($('#resetEmail').value.trim(),{redirectTo:window.location.origin+'/'}));if(!result)return;showAuthPanel('authHome');$('#authMessage').textContent='If an Archive account uses that email, a password-reset message is on its way.'};
- $('#passwordUpdateForm').onsubmit=async event=>{event.preventDefault();const password=$('#newPassword').value;if(password.length<12){$('#authMessage').textContent='Your password must contain at least 12 characters.';return}const result=await runAuthRequest(event.currentTarget,()=>supabaseClient.auth.updateUser({password}));if(!result)return;if(result.error){$('#authMessage').textContent='We could not update the password. Please request a new reset link.';return}$('#authMessage').textContent='Password updated.';$('#entryGate').classList.add('hidden');const {data:{session}}=await supabaseClient.auth.getSession();await applySession(session)};
+ $('#passwordUpdateForm').onsubmit=async event=>{event.preventDefault();const password=$('#newPassword').value;if(password.length<8){$('#authMessage').textContent='Your password must contain at least 8 characters.';return}const result=await runAuthRequest(event.currentTarget,()=>supabaseClient.auth.updateUser({password}));if(!result)return;if(result.error){$('#authMessage').textContent='We could not update the password. Please request a new reset link.';return}$('#authMessage').textContent='Password updated.';$('#entryGate').classList.add('hidden');const {data:{session}}=await supabaseClient.auth.getSession();await applySession(session)};
  $('#signOutBtn').onclick=async()=>{await supabaseClient.auth.signOut();authUser=null;activeCacheKey=null;state=DEFAULT_STATE();cloudLoaded=false;setSyncStatus('Not signed in');showAuthPanel('authHome');$('#entryGate').classList.remove('hidden');$('#signOutBtn').hidden=true;renderAll()};
  window.addEventListener('offline',()=>setSyncStatus('Offline — changes cached','offline'));
  window.addEventListener('online',()=>{setSyncStatus('Back online','saving');if(authUser)saveCloudState()});
@@ -76,6 +76,7 @@ async function applySession(session){
  authUser=session?.user||null;
  if(!authUser){
   cloudLoaded=false;
+  cloudProfileExists=false;
   activeCacheKey=null;
   state=DEFAULT_STATE();
   setSyncStatus('Not signed in');
@@ -120,12 +121,16 @@ async function loadCloudState(defaultName,expectedUserId,loadId){
  if(settingsError) console.error('Book settings load failed:',settingsError);
  if(profileError||progressError||settingsError){setSyncStatus('Could not load cloud data','error');return false}
 
+ const signupNickname=String(authUser?.user_metadata?.nickname||'').trim();
+ cloudProfileExists=!!profile;
  if(profile){
-  state.profile.name=profile.nickname||defaultName;
+  const shouldUseSignupNickname=!profile.onboarding_complete&&signupNickname&&profile.nickname!==signupNickname;
+  state.profile.name=shouldUseSignupNickname?signupNickname:(profile.nickname||defaultName);
   state.profile.mode=profile.reading_mode||'first';
   state.profile.onboarded=!!profile.onboarding_complete;
+  if(shouldUseSignupNickname)await saveProfileToCloud();
  }else{
-  state.profile.name=state.profile.name&&state.profile.name!=='Reader'?state.profile.name:defaultName;
+  state.profile.name=signupNickname||defaultName;
   await saveProfileToCloud();
  }
 
@@ -226,8 +231,12 @@ async function saveCloudState(){
 
 function startWizard(){
  wizardBooks=allBooks().filter(b=>!b.upcoming);wizardIndex=-1;$('#onboardName').value=state.profile.name||'';$('#onboardMode').value=state.profile.mode||'first';$('#onboardTandem').value=tandemPreference();$('#onboardAssassinsBlade').value=assassinsBladeOrder();
+ const signupNickname=String(authUser?.user_metadata?.nickname||'').trim(),shouldAskNickname=!state.profile.onboarded&&!signupNickname&&!cloudProfileExists;
+ $('#onboardNameWrap').hidden=!shouldAskNickname;$('#onboardNicknameSummary').hidden=shouldAskNickname;$('#onboardNicknameValue').textContent=shouldAskNickname?'':state.profile.name;
+ $('#onboardKicker').textContent=shouldAskNickname?'Your Book Club identity':'Your reading profile';$('#onboardTitle').textContent=shouldAskNickname?'What should readers call you?':'Set up your reading journey';
  $('#nicknameMessage').textContent='';
  $('#wizardIntro').classList.remove('hidden');$('#wizardBook').classList.add('hidden');$('#onboardingGate').classList.remove('hidden');updateWizardProgress();
+ requestAnimationFrame(()=>{$('.onboarding-card').scrollTop=0;$('#wizardIntro').scrollTop=0});
 }
 async function beginBookWizard(){
  state.profile.name=$('#onboardName').value.trim()||'Reader';state.profile.mode=$('#onboardMode').value;$('#nicknameMessage').textContent='';
