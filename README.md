@@ -20,3 +20,13 @@ Google authentication is live, but profile progress, discussions, posts, and men
 
 ## Testing
 Upload to the development branch first. Test both entry choices, onboarding, direct chapter entry, Reread Mode, chapter art, map buttons, book summary, and lore unlocks before merging into main.
+
+
+## Visibility correction
+This build makes the previously hidden features obvious:
+- A homepage “Update books & chapters” button opens onboarding at any time.
+- A labeled First Read/Reread control replaces the ambiguous arrow-only experience.
+- Whole-book summaries use a “Whole Book” tab.
+- Atlas and Archive cards have visible action buttons.
+- Chapter art clearly distinguishes completed artwork from in-production placeholders.
+- Fixed chapter-list styling.
