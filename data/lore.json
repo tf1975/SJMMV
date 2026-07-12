@@ -3,23 +3,39 @@
     "id": "endovier",
     "title": "Endovier",
     "type": "canon",
+    "category": "location",
     "summary": "A brutal salt-mine prison camp used by Adarlan for forced labor.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 1
       }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 1,
+        "note": "Celaena’s imprisonment and survival in Endovier are established."
+      }
     ]
   },
   {
-    "id": "champion",
-    "title": "The King\u2019s Champion",
+    "id": "kings-champion",
+    "title": "The King’s Champion",
     "type": "canon",
-    "summary": "A covert agent chosen to carry out the king\u2019s missions.",
+    "category": "title",
+    "summary": "A covert operative selected through a royal competition to carry out missions for the King of Adarlan.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 3
+      }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 3,
+        "note": "Dorian explains the competition, service term, and promise of freedom."
       }
     ]
   },
@@ -27,28 +43,182 @@
     "id": "glass-castle",
     "title": "The Glass Castle",
     "type": "canon",
-    "summary": "The royal seat in Rifthold, built partly of glass and visible above the city.",
+    "category": "location",
+    "summary": "The royal seat in Rifthold, built partly from glass and rising above the city.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 5
       }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 5,
+        "note": "Celaena sees and recalls the castle while approaching Rifthold."
+      }
     ]
   },
   {
-    "id": "crossing",
-    "title": "World-Crossing Thread",
-    "type": "connection",
-    "summary": "A cross-world link that appears only after every required chapter is complete.",
+    "id": "celaena-alias",
+    "title": "Lady Lillian Gordaina",
+    "type": "canon",
+    "category": "identity",
+    "summary": "The alias assigned to Celaena during the Champion competition to conceal that Dorian’s contestant is Adarlan’s Assassin.",
     "requires": [
       {
         "bookId": "tog",
-        "chapter": 55
-      },
+        "chapter": 8
+      }
+    ],
+    "evidence": [
       {
-        "bookId": "hofas",
-        "chapter": 102
+        "bookId": "tog",
+        "chapter": 8,
+        "note": "She is introduced to the other competitors under the false name."
       }
     ]
-  }
+  },
+  {
+    "id": "walking-dead-grimoire",
+    "title": "The Walking Dead",
+    "type": "canon",
+    "category": "artifact",
+    "summary": "An ancient book associated with Wyrdmarks and knowledge that ordinary court histories do not explain.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27}
+    ],
+    "evidence": [
+      {"bookId": "tog", "chapter": 27, "note": "Celaena encounters the book and its unfamiliar marks."}
+    ]
+  },
+  {
+    "id": "wyrdmarks",
+    "title": "Wyrdmarks",
+    "type": "canon",
+    "category": "magic and language",
+    "summary": "Ancient symbols tied to a deeper form of power. At this point in the story, their complete rules and origins remain deliberately unclear.",
+    "requires": [
+      {"bookId": "tog", "chapter": 27}
+    ],
+    "evidence": [
+      {"bookId": "tog", "chapter": 27, "note": "The marks become identifiable as part of the mystery surrounding The Walking Dead."}
+    ]
+  },
+  {
+    "id": "wyrdgates",
+    "title": "Wyrdgates",
+    "type": "canon",
+    "category": "world-walking",
+    "summary": "Celaena’s research links Wyrd to gates between the living world and other realms, though she does not yet understand how those gates operate.",
+    "requires": [{"bookId":"tog","chapter":27}],
+    "evidence": [{"bookId":"tog","chapter":27,"note":"Her library research introduces competing ideas about Wyrd and Wyrdgates."}]
+  },
+  {
+    "id": "elena-and-gavin",
+    "title": "Elena and Gavin’s tomb",
+    "type": "canon",
+    "category": "history",
+    "summary": "A hidden tomb beneath the castle preserves the memory of Queen Elena and King Gavin alongside maps of the earth, stars, and ancient Wyrdmarks.",
+    "requires": [{"bookId":"tog","chapter":25}],
+    "evidence": [{"bookId":"tog","chapter":25,"note":"Celaena finds the tomb through the passage behind her rooms."}]
+  },
+  {
+    "id": "eye-of-elena",
+    "title": "The Eye of Elena",
+    "type": "canon",
+    "category": "artifact",
+    "summary": "A protective amulet associated with Elena and Gavin. Elena gives it to Celaena while warning her about the evil inside the castle.",
+    "requires": [{"bookId":"tog","chapter":25}],
+    "evidence": [{"bookId":"tog","chapter":25,"note":"Celaena awakens from the tomb encounter holding the amulet."}]
+  },
+  {
+    "id": "deannas-arrow",
+    "title": "Deanna’s golden arrow",
+    "type": "canon",
+    "category": "gods and symbols",
+    "summary": "During Yulemas rites, Celaena receives the token of Deanna, goddess of the hunt and protection of the young.",
+    "requires": [{"bookId":"tog","chapter":37}],
+    "evidence": [{"bookId":"tog","chapter":37,"note":"A child in the ceremonial procession presents Celaena with the arrow."}]
+  },
+  {
+    "id": "ridderak",
+    "title": "The ridderak",
+    "type": "canon",
+    "category": "creatures and summoning",
+    "summary": "A predatory creature summoned through Wyrdmarks and fed with human sacrifices. Its victims’ strength can be transferred to the person controlling it.",
+    "requires": [{"bookId":"tog","chapter":41}],
+    "evidence": [{"bookId":"tog","chapter":41,"note":"Celaena identifies the ritual and discovers Cain performing it."}]
+  },
+  {
+    "id": "damaris",
+    "title": "Damaris",
+    "type": "canon",
+    "category": "artifact",
+    "summary": "The legendary sword of Gavin Havilliard, preserved in the hidden tomb and used by Celaena against the ridderak.",
+    "requires": [{"bookId":"tog","chapter":42}],
+    "evidence": [{"bookId":"tog","chapter":42,"note":"Celaena takes Gavin’s sword from the tomb during the ridderak attack."}]
+  },
+  {
+    "id": "elentiya",
+    "title": "Elentiya",
+    "type": "canon",
+    "category": "names and identity",
+    "summary": "An Eyllwe name Nehemia gives Celaena after learning her identity. It means Spirit That Could Not Be Broken.",
+    "requires": [{"bookId":"tog","chapter":43}],
+    "evidence": [{"bookId":"tog","chapter":43,"note":"Nehemia gives Celaena the name as the friends reconcile."}]
+  },
+  {
+    "id": "bloodbane",
+    "title": "Bloodbane",
+    "type": "canon",
+    "category": "poisons",
+    "summary": "A poison that weakens Celaena during the final duel while also making the supernatural forces around the clock tower visible to her.",
+    "requires": [{"bookId":"tog","chapter":48}],
+    "evidence": [{"bookId":"tog","chapter":48,"note":"Celaena recognizes the poisoning as her perception expands beyond the ordinary world."}]
+  },
+  {
+    "id": "clock-tower-wyrdgate",
+    "title": "The clock tower Wyrdgate",
+    "type": "canon",
+    "category": "world-walking",
+    "summary": "The black clock tower is more than architecture: its marks form a gate through which Cain’s shadow creatures can reach the duel.",
+    "requires": [{"bookId":"tog","chapter":48}],
+    "evidence": [{"bookId":"tog","chapter":48,"note":"The bloodbane allows Celaena to recognize the tower’s supernatural function."}]
+  },
+  {
+    "id": "black-rings",
+    "title": "The black rings",
+    "type": "canon",
+    "category": "artifacts and control",
+    "summary": "Matching black rings are associated with the king, Perrington, and Cain. Perrington uses their power to alter Cain’s body and manipulate Kaltain’s mind.",
+    "requires": [{"bookId":"tog","chapter":52}],
+    "evidence": [{"bookId":"tog","chapter":52,"note":"The king and Perrington discuss the rings’ influence over Cain and Kaltain."}]
+  },
+  {
+    "id": "eyllwe-wyrd-practice",
+    "title": "Wyrd practice in Eyllwe",
+    "type": "canon",
+    "category": "magic and resistance",
+    "summary": "Nehemia reveals that members of Eyllwe’s royal family still practice Wyrd magic in secret despite Adarlan’s suppression of magic.",
+    "requires": [{"bookId":"tog","chapter":51}],
+    "evidence": [{"bookId":"tog","chapter":51,"note":"Nehemia explains her healing, protective marks, and efforts against Cain’s summons."}]
+  },
+  {
+    "id": "elena-blood-tie",
+    "title": "Elena’s blood tie",
+    "type": "canon clue",
+    "category": "lineage",
+    "summary": "Elena tells Celaena that their bond is one of blood. The exact family history and its consequences remain unrevealed at this point.",
+    "requires": [{"bookId":"tog","chapter":54}],
+    "evidence": [{"bookId":"tog","chapter":54,"note":"Elena explicitly describes their connection as a blood tie."}]
+  },
+  {"id":"mort-ancient-magic","title":"Mort and surviving ancient magic","type":"canon","category":"magic beneath the castle","summary":"Mort’s awareness proves that old enchantments can continue functioning even after ordinary magic vanished from Adarlan.","requires":[{"bookId":"com","chapter":6}],"evidence":[{"bookId":"com","chapter":6,"note":"Mort speaks and explains that ancient magic and spells can endure."}]},
+  {"id":"dorian-raw-magic","title":"Dorian’s raw magic","type":"canon","category":"magic","summary":"Dorian possesses untrained power even though magic has been absent from Adarlan for a decade. Its survival makes him both unusual and vulnerable.","requires":[{"bookId":"com","chapter":18}],"evidence":[{"bookId":"com","chapter":18,"note":"Dorian can no longer dismiss the uncontrolled manifestations around him."}]},
+  {"id":"wyrdkeys","title":"The three Wyrdkeys","type":"canon","category":"artifacts and world-walking","summary":"Three fragments of the Wyrd were made into keys capable of opening gates between worlds and granting enormous power when reunited.","requires":[{"bookId":"com","chapter":40}],"evidence":[{"bookId":"com","chapter":40,"note":"Baba Yellowlegs explains their origin, purpose, and danger."}]},
+  {"id":"valg-first-explanation","title":"The Valg","type":"canon","category":"worlds and creatures","summary":"The Valg are beings from another realm who once sought the Wyrdkeys. At this point, their full history and connection to current events remain unknown.","requires":[{"bookId":"com","chapter":40}],"evidence":[{"bookId":"com","chapter":40,"note":"Baba Yellowlegs names the Valg while recounting the Wyrdkeys’ history."}]},
+  {"id":"ironteeth-witch-marks","title":"Ironteeth witch marks","type":"canon","category":"witches","summary":"The scars left by Baba Yellowlegs identify Celaena as the killer of a powerful Ironteeth witch and could draw retaliation from her kind.","requires":[{"bookId":"com","chapter":42}],"evidence":[{"bookId":"com","chapter":42,"note":"Mort identifies the meaning of the scars."}]},
+  {"id":"king-magic-suppression","title":"How magic was suppressed","type":"canon revelation","category":"Wyrdkeys","summary":"Evidence beneath the castle indicates that the king used a Wyrdkey in the larger act that drove ordinary magic from his conquered lands.","requires":[{"bookId":"com","chapter":46}],"evidence":[{"bookId":"com","chapter":46,"note":"The empty hiding place and Mort’s explanation connect the lost key to the king."}]},
+  {"id":"celaena-fae-form","title":"Celaena’s Fae form","type":"canon revelation","category":"lineage and magic","summary":"Beyond the portal, Celaena takes on Fae features and wields fire, revealing that the ancestry she concealed has a living magical expression.","requires":[{"bookId":"com","chapter":49}],"evidence":[{"bookId":"com","chapter":49,"note":"Chaol witnesses the transformation and blue fire."}]},
+  {"id":"celaena-aelin","title":"Celaena is Aelin Galathynius","type":"canon revelation","category":"identity","summary":"Chaol’s research confirms that Celaena Sardothien is Aelin Galathynius, the surviving heir of Terrasen.","requires":[{"bookId":"com","chapter":56}],"evidence":[{"bookId":"com","chapter":56,"note":"The date, ancestry, transformation, and royal records lead Chaol to the truth."}]}
 ]

@@ -8,7 +8,11 @@
         "Chaol Westfall escorts her to meet Crown Prince Dorian.",
         "Celaena immediately studies the people and surroundings for possible escape routes."
       ],
-      "art": "A bleak salt mine at dawn, chains in pale dust, a distant black-cloaked guard, cinematic fantasy landscape, no visible faces."
+      "art": "A bleak salt mine at dawn, chains in pale dust, a distant black-cloaked guard, cinematic fantasy landscape, no visible faces.",
+      "image": "assets/chapter-art/tog/chapter-01.svg",
+      "reread": [
+        "Celaena\u2019s instinct to assess exits and threats establishes a pattern that continues throughout the series."
+      ]
     },
     "2": {
       "bullets": [
@@ -16,7 +20,9 @@
         "She clashes with Dorian and Chaol while hiding how physically weakened she has become.",
         "Dorian hints that he has an offer that could remove her from Endovier."
       ],
-      "art": "A cold stone chamber lit by narrow winter light, three silhouetted figures facing one another."
+      "art": "A cold stone chamber lit by narrow winter light, three silhouetted figures facing one another.",
+      "image": "assets/chapter-art/tog/chapter-02.svg",
+      "reread": []
     },
     "3": {
       "bullets": [
@@ -24,7 +30,11 @@
         "Dorian wants Celaena as his candidate under an alias.",
         "If she wins and serves for four years, Dorian promises to secure her freedom."
       ],
-      "art": "A black chessboard beside a sealed royal contract, one gold piece facing many dark pieces."
+      "art": "A black chessboard beside a sealed royal contract, one gold piece facing many dark pieces.",
+      "image": "assets/chapter-art/tog/chapter-03.svg",
+      "reread": [
+        "The bargain over service and freedom frames one of the novel\u2019s central conflicts: survival inside a system she despises."
+      ]
     },
     "4": {
       "bullets": [
@@ -32,7 +42,9 @@
         "She is washed, dressed, and prepared to leave Endovier with the royal party.",
         "The suffering in the mines remains impossible for her to ignore as she departs."
       ],
-      "art": "A prison gate opening toward a snowy road and a waiting carriage at sunrise."
+      "art": "A prison gate opening toward a snowy road and a waiting carriage at sunrise.",
+      "image": "assets/chapter-art/tog/chapter-04.svg",
+      "reread": []
     },
     "5": {
       "bullets": [
@@ -40,7 +52,11 @@
         "She sees the glass castle above the city and remembers seeing it years earlier.",
         "She tells Chaol she believes another assassin\u2019s betrayal led to her capture."
       ],
-      "art": "A glass castle above a walled winter city, viewed from a distant ridge."
+      "art": "A glass castle above a walled winter city, viewed from a distant ridge.",
+      "image": "assets/chapter-art/tog/chapter-05.svg",
+      "reread": [
+        "The glass castle\u2019s beauty and unnatural construction become more meaningful as its hidden history is uncovered."
+      ]
     },
     "6": {
       "bullets": [
@@ -48,7 +64,9 @@
         "The comfort sharply contrasts with Endovier, but she remains wary of being watched.",
         "Chaol makes clear that her training will begin immediately."
       ],
-      "art": "An ornate bedchamber, folded silk clothing, a guarded door, winter city lights beyond."
+      "art": "An ornate bedchamber, folded silk clothing, a guarded door, winter city lights beyond.",
+      "image": "assets/chapter-art/tog/chapter-06.svg",
+      "reread": []
     },
     "7": {
       "bullets": [
@@ -56,7 +74,9 @@
         "She resents how much endurance she lost but refuses to appear defeated.",
         "Their competitive hostility starts to shape their daily routine."
       ],
-      "art": "A frost-covered castle training yard before sunrise, two distant figures running."
+      "art": "A frost-covered castle training yard before sunrise, two distant figures running.",
+      "image": "assets/chapter-art/tog/chapter-07.svg",
+      "reread": []
     },
     "8": {
       "bullets": [
@@ -64,13 +84,410 @@
         "She is introduced as Lady Lillian Gordaina to conceal her identity.",
         "Cain stands out as one of the most dangerous contenders."
       ],
-      "art": "A torchlit training hall filled with shadowed competitors and weapons."
+      "art": "A torchlit training hall filled with shadowed competitors and weapons.",
+      "image": "assets/chapter-art/tog/chapter-08.svg",
+      "reread": []
+    },
+    "9": {
+      "bullets": [
+        "Celaena is dressed for her first formal appearance before the king and struggles to hide her fear.",
+        "Chaol escorts her to the throne room and briefly compliments her appearance.",
+        "The coming competition becomes real as she prepares to face the ruler who sentenced her to Endovier."
+      ],
+      "image": null
+    },
+    "10": {
+      "bullets": [
+        "The king explains that twenty-four competitors will face tests over thirteen weeks until four remain for the final duel.",
+        "Dorian assigns Celaena the false identity Lillian Gordaina, a wealthy merchant\u2019s daughter and jewel thief.",
+        "Celaena meets Lady Kaltain Rompier and immediately distrusts her."
+      ],
+      "image": null
+    },
+    "11": {
+      "bullets": [
+        "The competitors begin formal training under Weapons Master Theodus Brullo.",
+        "Celaena studies the other contestants while continuing to hide her true skill.",
+        "Cain and several criminals emerge as notable rivals."
+      ],
+      "image": null
+    },
+    "12": {
+      "bullets": [
+        "The contestants introduce themselves and their specialties during training.",
+        "Celaena identifies Nox Owen as a capable thief and potential ally.",
+        "She remains careful not to reveal how dangerous she truly is."
+      ],
+      "image": null
+    },
+    "13": {
+      "bullets": [
+        "Celaena meets Princess Nehemia of Eyllwe and surprises her by speaking the Eyllwe language.",
+        "The two women quickly form a connection despite the tension between their countries.",
+        "Nehemia explains that she is at court to learn Adarlanian customs."
+      ],
+      "image": null
+    },
+    "14": {
+      "bullets": [
+        "Competitor Bill Chastain is found brutally murdered inside the castle.",
+        "Celaena begins quietly helping Nox improve during training.",
+        "Chaol and Celaena exchange personal details about their families and childhoods."
+      ],
+      "image": null
+    },
+    "15": {
+      "bullets": [
+        "The first elimination test is an archery competition.",
+        "Celaena performs well but deliberately avoids drawing too much attention.",
+        "The scars from Endovier and the physical cost of imprisonment remain visible."
+      ],
+      "image": null
+    },
+    "16": {
+      "bullets": [
+        "The competition eliminates weaker contestants while Celaena maintains her disguise.",
+        "One competitor attempts to escape and is killed by the guards.",
+        "The brutality surrounding the contest becomes impossible to ignore."
+      ],
+      "image": null
+    },
+    "17": {
+      "bullets": [
+        "Celaena continues rebuilding her strength and observing her rivals.",
+        "Her conversations with Dorian grow more comfortable and personal.",
+        "The contrast between courtly life and the danger beneath it continues to sharpen."
+      ],
+      "image": null
+    },
+    "18": {
+      "bullets": [
+        "The contestants prepare for another test while rumors about the murders spread.",
+        "Celaena remains alert to both the competition and the unexplained danger in the castle.",
+        "Her growing friendships complicate her original plan to remain emotionally detached."
+      ],
+      "image": null
+    },
+    "19": {
+      "bullets": [
+        "Kaltain becomes increasingly determined to secure Dorian\u2019s attention and views Celaena as a threat.",
+        "She looks to Duke Perrington for help advancing her position at court.",
+        "Court politics begin to intersect more directly with Celaena\u2019s presence."
+      ],
+      "image": null
+    },
+    "20": {
+      "bullets": [
+        "Celaena plays the piano, reconnecting with something she loved before Endovier.",
+        "Dorian hears her and learns about Sam, the person Celaena loved and lost.",
+        "The conversation reveals a more vulnerable side of Celaena\u2019s past."
+      ],
+      "image": null
+    },
+    "21": {
+      "bullets": [
+        "The Champions race up the castle’s outer wall in their second major test.",
+        "Celaena gives up her chance to win when she sees Grave sabotage Nox’s rope.",
+        "She throws herself after Nox rather than let him fall."
+      ],
+      "image": null
+    },
+    "22": {
+      "bullets": [
+        "Celaena catches Nox during the fall and saves his life, while Cain claims first place.",
+        "Another missing Champion is found murdered in the same brutal manner as the first victim.",
+        "As the tests continue, Celaena worries that hiding her strength may cost her the competition."
+      ],
+      "image": null
+    },
+    "23": {
+      "bullets": [
+        "Samhuinn brings memories of Endovier and the dead back to the surface for Celaena.",
+        "Celaena, Chaol, and Nehemia find Cain drawing a strange symbol in the dirt; Nehemia identifies it as a Wyrdmark.",
+        "Celaena and Nehemia agree to exchange language lessons."
+      ],
+      "image": null
+    },
+    "24": {
+      "bullets": [
+        "Celaena discovers a hidden passage behind the tapestry in her rooms and traces it beneath the castle.",
+        "She finds a possible route to freedom but refuses to use it because escape would endanger Chaol.",
+        "After the feast, Chaol leaves her a Samhuinn ring."
+      ],
+      "image": null
+    },
+    "25": {
+      "bullets": [
+        "The hidden passages lead Celaena to the tomb of Elena and Gavin, surrounded by ancient Wyrdmarks.",
+        "Queen Elena’s spirit warns that an old evil is active inside the castle and insists Celaena must win the competition.",
+        "Celaena awakens carrying Elena’s protective amulet."
+      ],
+      "image": null
+    },
+    "26": {
+      "bullets": [
+        "The day’s test is canceled after another Champion, Xavier, is found mutilated.",
+        "Celaena sees Wyrdmarks arranged around the body and realizes the murders are connected to Elena’s warning.",
+        "Chaol and Dorian separately question each other’s growing concern for Celaena."
+      ],
+      "image": null
+    },
+    "27": {
+      "bullets": [
+        "Cain reveals that he knows Celaena’s true identity, forcing her to restrain herself in front of Nehemia.",
+        "Celaena begins researching Wyrdmarks, Wyrdgates, and the connection between the living world and other realms.",
+        "Nox continues training with Celaena while Dorian and Chaol observe her returning strength."
+      ],
+      "image": null
+    },
+    "28": {
+      "bullets": [
+        "Dorian finds Celaena struggling to teach herself billiards and shows her how to play.",
+        "Their playful evening deepens their comfort with one another.",
+        "Dorian begins imagining that their relationship could become something more."
+      ],
+      "image": null
+    },
+    "29": {
+      "bullets": [
+        "Celaena finally stops pretending to be weak and defeats Verin almost immediately during a sparring test.",
+        "The stag of Terrasen reminds her that her conquered homeland remains part of her identity.",
+        "Kaltain maneuvers for Queen Georgina’s approval while hiding worsening headaches and opium use."
+      ],
+      "image": null
+    },
+    "30": {
+      "bullets": [
+        "Verin becomes the latest murdered Champion, and Celaena finds claw marks and Wyrdmarks at the scene.",
+        "She concludes that a creature is killing contestants with help from someone inside the castle.",
+        "Chaol notices disturbing changes in Duke Perrington and the black ring he wears."
+      ],
+      "image": null
+    },
+    "31": {
+      "bullets": [
+        "Elena’s spirit gives Celaena a cryptic direction before the next elimination test.",
+        "The Champions must identify and rank poisons, then drink from the cup they believe is safest.",
+        "Pelor’s subtle assistance helps Celaena recognize the hidden danger and survive the test."
+      ],
+      "image": null
+    },
+    "32": {
+      "bullets": [
+        "Celaena persuades Dorian to spare a puppy that does not fit the kennel master’s expectations.",
+        "Nehemia teases Celaena about her growing feelings for Dorian.",
+        "Cain’s increasingly unnatural size, speed, and behavior deepen Celaena’s suspicions."
+      ],
+      "image": null
+    },
+    "33": {
+      "bullets": [
+        "Perrington encourages Kaltain’s jealousy while she suffers another disturbing episode.",
+        "Nehemia learns that Adarlanian forces massacred hundreds of Eyllwe rebels and civilians.",
+        "Celaena can offer her friend only comfort as the consequences of the king’s rule become personal."
+      ],
+      "image": null
+    },
+    "34": {
+      "bullets": [
+        "Celaena’s recovering body experiences its first menstrual cycle since the starvation and abuse of Endovier.",
+        "Chaol awkwardly tries to help before Dorian arrives and speaks honestly about the Eyllwe massacre.",
+        "Dorian admits his shame over his father’s legacy, and Celaena assures him she does not blame him for the king’s actions."
+      ],
+      "image": null
+    },
+    "35": {
+      "bullets": [
+        "Chaol realizes that his respect for Celaena has grown into genuine trust.",
+        "Dorian recognizes her amulet as resembling the legendary Eye of Elena.",
+        "Wyrdmarks beneath Celaena’s bed and Nehemia’s hidden fluency make Celaena fear that her friend may be tied to the murders."
+      ],
+      "image": null
+    },
+    "36": {
+      "bullets": [
+        "Dorian gives Celaena the unwanted kennel puppy as a Yulemas gift.",
+        "Still suspicious of Nehemia, Celaena decides to disobey orders and attend the masquerade ball.",
+        "Her plan is to watch the princess and prevent an attack if her fears are correct."
+      ],
+      "image": null
+    },
+    "37": {
+      "bullets": [
+        "Celaena and Chaol attend Yulemas services and briefly fall asleep leaning against one another.",
+        "During the ceremonial procession, Celaena receives a golden arrow associated with Deanna, goddess of the hunt.",
+        "The token feels like a blessing of protection before the competition’s final stage."
+      ],
+      "image": null
+    },
+    "38": {
+      "bullets": [
+        "Celaena talks her way past her guards and enters the masquerade despite Chaol’s orders.",
+        "Chaol confronts her, but she convinces him to let her remain while she watches Nehemia.",
+        "Nehemia shows no sign of threatening the court, leaving Celaena ashamed of her suspicions."
+      ],
+      "image": null
+    },
+    "39": {
+      "bullets": [
+        "Dorian and Celaena dance while Chaol struggles to watch their growing closeness.",
+        "Kaltain decides Celaena must be removed before Perrington can claim her own future.",
+        "Later, Dorian and Celaena kiss in her rooms, though Celaena remains conflicted about trusting a Havilliard."
+      ],
+      "image": null
+    },
+    "40": {
+      "bullets": [
+        "Celaena names her puppy Fleetfoot while she and Dorian tease each other about their kiss.",
+        "Perrington reveals Celaena’s true identity to Kaltain and draws her into a plan against the assassin.",
+        "Kaltain agrees to poison Celaena’s ceremonial drink before the final duel."
+      ],
+      "image": null
+    },
+    "41": {
+      "bullets": [
+        "Celaena identifies the creature behind the murders as a ridderak summoned through Wyrdmarks.",
+        "She realizes another killing is likely before the next test and enters the secret tunnels to investigate.",
+        "In the darkness beneath the castle, she discovers Cain performing the ritual."
+      ],
+      "image": null
+    },
+    "42": {
+      "bullets": [
+        "Cain admits that the ridderak has been killing Champions so he can take their strength.",
+        "He traps Celaena with the creature, but she reaches Elena and Gavin’s tomb and takes Damaris.",
+        "Celaena kills the ridderak, returns badly wounded, and finds Nehemia waiting to heal her with Wyrdmarks."
+      ],
+      "image": null
+    },
+    "43": {
+      "bullets": [
+        "Celaena awakens to find the ridderak wound healed and finally tells Nehemia her true identity and purpose at court.",
+        "Nehemia condemns service to the king, but accepts that Endovier left Celaena no real alternative.",
+        "Nehemia names her Elentiya—Spirit That Could Not Be Broken—and the friends reconcile before the king returns to Rifthold."
+      ],
+      "image": null
+    },
+    "44": {
+      "bullets": [
+        "The king’s return fills Celaena with an instinctive fear she cannot explain.",
+        "Chaol worries about the king’s distrust, Celaena’s chances in the final contest, and the danger of sending her back to Endovier.",
+        "He privately recognizes how much he wants her to remain in Rifthold."
+      ],
+      "image": null
+    },
+    "45": {
+      "bullets": [
+        "Celaena warns Nox that Cain and the castle are dangerous, reveals who she really is, and urges him to leave while he can.",
+        "Nox withdraws, canceling the final elimination test and leaving four competitors for the championship duels.",
+        "Celaena hides the truth about Cain from Dorian because she fears what the king could do with Wyrd magic."
+      ],
+      "image": null
+    },
+    "46": {
+      "bullets": [
+        "Dorian and Celaena separately confront their fear that the final duel may end in her death.",
+        "Celaena prepares to exploit Cain’s weaknesses while questioning what service as the king’s assassin will cost her.",
+        "She realizes that Dorian, Chaol, and Nehemia have given her reasons to want a life in Rifthold as well as freedom."
+      ],
+      "image": null
+    },
+    "47": {
+      "bullets": [
+        "Kaltain secretly poisons Celaena’s ceremonial wine with bloodbane while Perrington shields her actions.",
+        "Cain defeats Renault, revealing the unnatural strength gained from the murdered competitors.",
+        "Nehemia asks Celaena to fight Grave with an Eyllwe staff, turning the duel into a quiet act of resistance against Adarlan."
+      ],
+      "image": null
+    },
+    "48": {
+      "bullets": [
+        "Celaena defeats Grave, drinks the poisoned toast, and immediately begins her final duel with Cain.",
+        "Bloodbane slows and disorients her while Cain breaks Nehemia’s staff and wounds her repeatedly.",
+        "Chaol’s encouragement gets Celaena back on her feet, and the poison lets her perceive the clock tower as a Wyrdgate surrounded by shadow creatures."
+      ],
+      "image": null
+    },
+    "49": {
+      "bullets": [
+        "Nehemia secretly opens a path for Elena while the spectators remain unable to see the supernatural attack.",
+        "Elena drives back the shadow creatures, removes the bloodbane, and sends part of Nehemia’s broken staff to Celaena.",
+        "Celaena rises with clear vision as Cain is forced more fully into the mortal world."
+      ],
+      "image": null
+    },
+    "50": {
+      "bullets": [
+        "Celaena exploits Cain’s exposed side and wins the duel without killing him, becoming the King’s Champion.",
+        "Cain attempts to murder her after the contest, and Chaol kills him to save her.",
+        "Perrington blames the poisoning entirely on Kaltain, who realizes she has been manipulated as she is taken to the dungeons."
+      ],
+      "image": null
+    },
+    "51": {
+      "bullets": [
+        "Dorian cannot prove the king or Perrington arranged the poisoning, but successfully defends Celaena’s victory and Chaol’s actions.",
+        "He persuades the king not to use Nehemia as leverage against Eyllwe, marking a quiet act of resistance.",
+        "Nehemia explains her protective Wyrdmarks, her role in stopping Cain’s summons, and her secret work for the Eyllwe rebellion."
+      ],
+      "image": null
+    },
+    "52": {
+      "bullets": [
+        "Dorian visits the recovering Celaena, and their gratitude and affection lead to another kiss.",
+        "The king reveals that he understands Wyrdmarks and shares Perrington’s interest in the unexplained mark that appeared on Celaena.",
+        "Perrington’s black ring is confirmed to have amplified Cain physically and manipulated Kaltain mentally."
+      ],
+      "image": null
+    },
+    "53": {
+      "bullets": [
+        "Chaol finally visits Celaena, and she thanks him for saving her while he struggles with having killed Cain.",
+        "Their emotional embrace is interrupted by Dorian.",
+        "Celaena ends her romance with Dorian because she will not sacrifice her independence or build a secret relationship while bound to the king."
+      ],
+      "image": null
+    },
+    "54": {
+      "bullets": [
+        "Chaol joins Celaena for dinner after learning that she and Dorian have ended their relationship.",
+        "In a dream, Elena rejects the helpless version of her remembered by history and tells Celaena she can become a force for others.",
+        "Elena says their blood connection cannot be broken and promises that her guidance will continue."
+      ],
+      "image": null
+    },
+    "55": {
+      "bullets": [
+        "Celaena signs the four-year contract and formally becomes the King’s Champion.",
+        "The king demands complete obedience and threatens Chaol, Nehemia, and their families if Celaena defies him.",
+        "Celaena leaves the throne room with Chaol, postponing the details of her first assignment until the next day."
+      ],
+      "image": null
     }
   },
   "sources": [
     "SparkNotes Chapters 1\u20134",
     "SparkNotes Chapters 5\u20138",
     "SuperSummary Chapters 1\u20135",
-    "Reviews From a Bookworm recap"
+    "Reviews From a Bookworm recap",
+    "SparkNotes Chapters 21–40",
+    "SuperSummary Chapters 29–35",
+    "SuperSummary Chapters 36–43",
+    "SuperSummary Chapters 44–50",
+    "SuperSummary Chapters 51–55",
+    "SparkNotes Chapters 53–55",
+    "BookRags Chapters 41–50"
+  ],
+  "title": "Throne of Glass",
+  "summary": [
+    "After surviving a year in the Endovier salt mines, Celaena Sardothien accepts Crown Prince Dorian's offer to compete for the position of the King\u2019s Champion. The contest offers a path to eventual freedom, but it also places her inside the court of the ruler whose empire destroyed so much of her life.",
+    "At the glass castle, Celaena trains under Captain Chaol Westfall, grows closer to Dorian, and befriends Princess Nehemia. As competitors are murdered, she discovers that the contest is tied to forbidden magic, ancient symbols, and a threat hidden beneath the castle.",
+    "Celaena survives the final confrontation and becomes the king\u2019s Champion. Her victory secures a future chance at freedom, but it also binds her to the king\u2019s service and opens the door to much larger mysteries."
+  ],
+  "whatChanged": [
+    "Celaena moves from prisoner to the King\u2019s Champion.",
+    "Her relationships with Dorian, Chaol, and Nehemia become central to her new life at court.",
+    "Ancient magic and Wyrdmarks emerge as forces that still operate despite the king\u2019s ban on magic.",
+    "The castle and championship are revealed to hide dangers beyond the public competition."
   ]
 }

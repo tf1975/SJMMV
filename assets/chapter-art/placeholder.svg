@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#16241e"/><stop offset="1" stop-color="#5d4930"/></linearGradient></defs>
+<rect width="1200" height="500" fill="url(#g)"/>
+<circle cx="980" cy="115" r="58" fill="#e2c98d" opacity=".8"/>
+<path d="M0 390 Q260 280 500 380 T1200 350 V500 H0Z" fill="#0f1814" opacity=".9"/>
+<path d="M515 360 V170 L600 105 L685 170 V360Z" fill="#1c211e"/>
+<text x="55" y="445" fill="#f2e5c9" font-family="Georgia,serif" font-size="34">Chapter artwork in production</text>
+</svg>
