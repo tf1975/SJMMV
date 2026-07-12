@@ -422,7 +422,12 @@
 .tandem-row>span{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-weight:900;color:var(--muted)}
 .tandem-row b{font-family:Georgia,serif}.tandem-row p{margin:.2rem 0;color:var(--muted);font-size:.85rem}.tandem-row.complete{opacity:.68}.tandem-row.complete>span{background:#315a43;color:#d9f1df}.tandem-row.current{border-color:var(--gold);box-shadow:0 0 0 2px rgba(208,166,87,.18)}
 .profile-settings{display:grid;gap:.75rem}.profile-settings label{display:grid;gap:.35rem}
-.tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:.35rem!important;padding:.35rem!important}
+.tabs button{min-width:0;padding:.65rem .25rem!important;font-size:clamp(.72rem,1vw,.9rem);line-height:1.15;white-space:normal;overflow-wrap:anywhere;border-radius:9px}
+.tabs button:focus{outline:none}
+.tabs button:focus-visible{outline:2px solid #9a742d;outline-offset:1px}
+.tabs+.tabpane,.tabs~.tabpane{margin-top:.85rem}
+@media(max-width:1050px) and (min-width:761px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:700px){.tandem-current{display:block}.tandem-current button{width:100%;margin-top:.8rem}.tandem-actions{display:grid}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 
 /* Tandem Read uses the same book interface as every novel */
