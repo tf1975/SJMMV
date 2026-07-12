@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false,mentionCandidates=[],mentionActiveIndex=-1,mentionMatch=null;
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass',cloudProfileExists=false,mentionCandidates=[],mentionActiveIndex=-1,mentionMatch=null,mentionLoadState='idle';
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -74,7 +74,7 @@ async function runAuthRequest(form,operation){
 function friendlySignupError(error){const message=String(error?.message||'').toLowerCase();if(message.includes('rate limit'))return'Too many email attempts were made. Please wait before trying again.';if(message.includes('signup')&&message.includes('disabled'))return'Email account creation is not enabled yet.';if(message.includes('password'))return'That password does not meet the security requirements.';return'We could not create the account. Check the email and password, then try again.'}
 async function applySession(session){
  const loadId=++sessionLoadId;
- const previousUserId=authUser?.id;authUser=session?.user||null;if(previousUserId!==authUser?.id)mentionCandidates=[];
+ const previousUserId=authUser?.id;authUser=session?.user||null;if(previousUserId!==authUser?.id){mentionCandidates=[];mentionLoadState='idle'}
  if(!authUser){
   cloudLoaded=false;
   cloudProfileExists=false;
@@ -390,7 +390,7 @@ async function renderDiscussion(){
  };
 }
 async function createMentionsForPost(postId,text){
- const {data:profiles,error}=await supabaseClient.from('profiles').select('id,nickname');
+ const {data:profiles,error}=await supabaseClient.rpc('list_mentionable_readers');
  if(error){console.error('Mention lookup failed:',error);return}
  const recipients=(profiles||[]).filter(profile=>profile.id!==authUser.id&&new RegExp(`(^|[^A-Za-z0-9_])@${escapeRegex(profile.nickname)}(?=$|[^A-Za-z0-9_])`,'i').test(text));
  if(!recipients.length)return;
@@ -400,10 +400,11 @@ async function createMentionsForPost(postId,text){
 }
 function escapeRegex(value){return String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 async function loadMentionCandidates(){
- if(!authUser||mentionCandidates.length)return;
- const {data,error}=await supabaseClient.from('profiles').select('id,nickname').order('nickname',{ascending:true});
- if(error){console.error('Mention suggestions failed:',error);return}
- mentionCandidates=(data||[]).filter(profile=>profile.id!==authUser.id&&profile.nickname);
+ if(!authUser||mentionLoadState==='loading'||mentionLoadState==='loaded')return;
+ mentionLoadState='loading';updateMentionSuggestions();
+ const {data,error}=await supabaseClient.rpc('list_mentionable_readers');
+ if(error){console.error('Mention suggestions failed:',error);mentionLoadState='error';updateMentionSuggestions();return}
+ mentionCandidates=(data||[]).filter(profile=>profile.id!==authUser.id&&profile.nickname);mentionLoadState='loaded';updateMentionSuggestions();
 }
 function currentMentionMatch(){
  const textarea=$('#discussionText'),before=textarea.value.slice(0,textarea.selectionStart),match=before.match(/(^|\s)@([^@\n]{0,30})$/);
@@ -413,11 +414,15 @@ function currentMentionMatch(){
 function updateMentionSuggestions(){
  mentionMatch=currentMentionMatch();
  if(!mentionMatch){hideMentionSuggestions();return}
+ if(mentionLoadState==='idle'){void loadMentionCandidates();return}
+ if(mentionLoadState==='loading'){showMentionStatus('Loading readers…');return}
+ if(mentionLoadState==='error'){showMentionStatus('Reader list unavailable. Please refresh and try again.');return}
  const matches=mentionCandidates.filter(profile=>profile.nickname.toLowerCase().startsWith(mentionMatch.query)).slice(0,6);
- if(!matches.length){hideMentionSuggestions();return}
+ if(!matches.length){showMentionStatus(mentionCandidates.length?'No matching readers.':'No other readers are available yet.');return}
  mentionActiveIndex=0;const list=$('#mentionSuggestions');list.innerHTML=matches.map((profile,index)=>`<button type="button" role="option" data-nickname="${esc(profile.nickname)}" class="${index===0?'active':''}">@${esc(profile.nickname)}</button>`).join('');list.classList.remove('hidden');
  list.querySelectorAll('button').forEach(button=>button.onclick=()=>insertMention(button.dataset.nickname));
 }
+function showMentionStatus(message){const list=$('#mentionSuggestions');mentionActiveIndex=-1;list.innerHTML=`<p class="mention-status">${esc(message)}</p>`;list.classList.remove('hidden')}
 function handleMentionKeys(event){
  const list=$('#mentionSuggestions');if(list.classList.contains('hidden'))return;const buttons=[...list.querySelectorAll('button')];if(!buttons.length)return;
  if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();mentionActiveIndex=(mentionActiveIndex+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;buttons.forEach((button,index)=>button.classList.toggle('active',index===mentionActiveIndex));return}
