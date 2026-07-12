@@ -16,14 +16,46 @@
     <p class="auth-kicker">Welcome to</p>
     <h1>The Archive</h1>
     <p>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</p>
-    <div id="entryChoices" class="entry-choices">
-      <button id="returningReader" class="gold wide">I’ve been here before</button>
-      <button id="newReaderStart" class="outline wide">I’m new to The Archive</button>
-    </div>
-    <div id="googleStep" hidden>
-      <p id="googleStepText"></p>
+    <div id="authHome" class="entry-choices">
       <button id="googleSignIn" class="google-signin"><span class="google-mark">G</span><span>Continue with Google</span></button>
-      <button id="backToEntry" class="text-link">← Back</button>
+      <button id="emailLoginStart" class="outline wide">Continue with email</button>
+      <button id="emailSignupStart" class="text-link">New here? Create an Archive account</button>
+    </div>
+    <div id="emailLoginStep" class="auth-step" hidden>
+      <h2>Log in to The Archive</h2>
+      <form id="emailLoginForm">
+        <label>Email<input id="loginEmail" type="email" autocomplete="email" required></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+        <button class="gold wide" type="submit">Log in</button>
+      </form>
+      <button id="forgotPasswordStart" class="text-link">Forgot your password?</button>
+      <button class="text-link auth-back" type="button">← Back</button>
+    </div>
+    <div id="emailSignupStep" class="auth-step" hidden>
+      <h2>Create an Archive account</h2>
+      <form id="emailSignupForm">
+        <label>Book Club nickname<input id="signupNickname" maxlength="30" autocomplete="nickname" required></label>
+        <label>Email<input id="signupEmail" type="email" autocomplete="email" required></label>
+        <label>Password<input id="signupPassword" type="password" minlength="12" autocomplete="new-password" required></label>
+        <small>Use at least 12 characters. Your email stays private.</small>
+        <button class="gold wide" type="submit">Create account</button>
+      </form>
+      <button class="text-link auth-back" type="button">← Back</button>
+    </div>
+    <div id="passwordResetStep" class="auth-step" hidden>
+      <h2>Reset your password</h2>
+      <form id="passwordResetForm">
+        <label>Email<input id="resetEmail" type="email" autocomplete="email" required></label>
+        <button class="gold wide" type="submit">Send reset email</button>
+      </form>
+      <button class="text-link auth-back" type="button">← Back</button>
+    </div>
+    <div id="passwordUpdateStep" class="auth-step" hidden>
+      <h2>Choose a new password</h2>
+      <form id="passwordUpdateForm">
+        <label>New password<input id="newPassword" type="password" minlength="12" autocomplete="new-password" required></label>
+        <button class="gold wide" type="submit">Save new password</button>
+      </form>
     </div>
     <p id="authMessage" class="auth-message"></p>
   </div>
@@ -37,6 +69,7 @@
       <p class="auth-kicker">Your Book Club identity</p>
       <h1>What should readers call you?</h1>
       <label>Nickname<input id="onboardName" maxlength="30" placeholder="Rosetta"></label>
+      <p id="nicknameMessage" class="field-message" role="alert"></p>
       <label>Reading mode<select id="onboardMode"><option value="first">First Read</option><option value="reread">Reread</option></select></label>
       <label>Where do you want to read <em>The Assassin’s Blade</em>?
         <select id="onboardAssassinsBlade"><option value="archivist">Archivist — third, before Heir of Fire</option><option value="romantic">Romantic — fourth, after Heir of Fire</option><option value="purist">Purist — at the beginning</option></select>
@@ -82,10 +115,10 @@
   <div id="library"></div>
   <div class="grid">
     <article class="panel"><small>BOOK CLUB</small><h3>Readers</h3><div id="readers"></div></article>
-    <article class="panel"><small>LETTERS</small><h3>Mentions</h3><div id="mentions"></div><p class="fine-print">Shared cloud Book Club data is the next database phase.</p></article>
+    <article class="panel"><small>LETTERS</small><h3>Mentions</h3><div id="mentions"></div><p class="fine-print">Mentions are synced securely to your Archive account.</p></article>
   </div>
   <div class="grid">
-    <article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>View the uploaded maps of Erilea, Prythian, and Lunathion.</p><button class="outline">Open the Atlas</button></div></article>
+    <article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>Explore Erilea, Prythian, and Midgard.</p><button class="outline">Open the Atlas</button></div></article>
     <article id="archiveCard" class="panel feature"><span>✦</span><div><small>DISCOVER SAFELY</small><h3>The Archive</h3><p>Lore, characters, places, and connections unlock with your reading progress.</p><button class="outline">Enter the Archive</button></div></article>
   </div>
   <div class="grid future-grid">

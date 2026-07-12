@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,pendingNewUser=false,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass';
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,tandem,currentBook,currentChapter=1,wizardBooks=[],wizardIndex=-1,activeCharacterSeries='throne-of-glass';
 const KEY='archive-2-alpha';
 const DEFAULT_STATE=()=>({profile:{name:'Reader',mode:'first',onboarded:false},progress:{},bookSettings:{},discussions:{},mentions:[]});
 const parseState=value=>{try{const raw=JSON.parse(value||'{}'),base=DEFAULT_STATE();return {...base,...raw,profile:{...base.profile,...(raw.profile||{})},progress:raw.progress&&typeof raw.progress==='object'?raw.progress:{},bookSettings:raw.bookSettings&&typeof raw.bookSettings==='object'?raw.bookSettings:{},discussions:raw.discussions&&typeof raw.discussions==='object'?raw.discussions:{},mentions:Array.isArray(raw.mentions)?raw.mentions:[]}}catch{return DEFAULT_STATE()}};
@@ -36,7 +36,7 @@ async function boot(){
 function bind(){
  $('#homeBtn').onclick=()=>view('home');$$('[data-home]').forEach(b=>b.onclick=()=>view('home'));$('#readerBtn').onclick=()=>view('reader');
  $('#atlasCard').onclick=()=>view('atlas');$('#archiveCard').onclick=()=>view('archive');$('#frontBack').onclick=()=>view('home');$('#backToFront').onclick=()=>renderBookFront();
- $('#returningReader').onclick=()=>showGoogle(false);$('#newReaderStart').onclick=()=>showGoogle(true);$('#backToEntry').onclick=()=>{$('#googleStep').hidden=true;$('#entryChoices').hidden=false};
+ $('#emailLoginStart').onclick=()=>showAuthPanel('emailLoginStep');$('#emailSignupStart').onclick=()=>showAuthPanel('emailSignupStep');$('#forgotPasswordStart').onclick=()=>showAuthPanel('passwordResetStep');$$('.auth-back').forEach(button=>button.onclick=()=>showAuthPanel('authHome'));
  $('#modeBtn').onclick=toggleMode;$('#visibleModeToggle').onclick=toggleMode;$('#editProgress').onclick=startWizard;
  $('#saveMode').onclick=async()=>{state.profile.mode=$('#settingsMode').value;state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemPreference:$('#settingsTandem').value,assassinsBladeOrder:$('#settingsAssassinsBlade').value}};save();await Promise.all([saveProfileToCloud(),saveBookSettingsToCloud('tog-plan')]);renderAll();view('home')};
  $('#wizardBeginBooks').onclick=beginBookWizard;$('#wizardNext').onclick=advanceWizard;$('#wizardBack').onclick=retreatWizard;
@@ -51,14 +51,19 @@ function bind(){
 function openArchivePane(id){$$('.archive-tabs button,.archive-pane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-archive="${id}"]`)?.classList.add('active');$('#'+id).classList.add('active')}
 function openMap(src,title){$('#mapModalImage').src=src;$('#mapModalTitle').textContent=title;$('#mapModal').classList.remove('hidden')}
 async function toggleMode(){state.profile.mode=state.profile.mode==='reread'?'first':'reread';if(currentBook){state.bookSettings[currentBook.id]={...(state.bookSettings[currentBook.id]||{}),rereading:state.profile.mode==='reread'};await saveBookSettingsToCloud(currentBook.id)}save();await saveProfileToCloud();renderAll()}
-function showGoogle(isNew){pendingNewUser=isNew;sessionStorage.setItem('archive_pending_new',isNew?'1':'0');$('#entryChoices').hidden=true;$('#googleStep').hidden=false;$('#googleStepText').textContent=isNew?'Create your secure account, then tell us where you are in every book.':'Sign in with the Google account you used before.'}
+function showAuthPanel(id){['authHome','emailLoginStep','emailSignupStep','passwordResetStep','passwordUpdateStep'].forEach(panelId=>{const panel=$('#'+panelId);if(panel)panel.hidden=panelId!==id});$('#authMessage').textContent=''}
 async function initAuth(){
  $('#googleSignIn').onclick=async()=>{const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+'/'}});if(error)$('#authMessage').textContent=error.message};
- $('#signOutBtn').onclick=async()=>{await supabaseClient.auth.signOut();authUser=null;activeCacheKey=null;state=DEFAULT_STATE();cloudLoaded=false;setSyncStatus('Not signed in');$('#entryGate').classList.remove('hidden');$('#signOutBtn').hidden=true;renderAll()};
+ $('#emailLoginForm').onsubmit=async event=>{event.preventDefault();setAuthBusy(event.currentTarget,true);const {error}=await supabaseClient.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value});setAuthBusy(event.currentTarget,false);if(error)$('#authMessage').textContent='We could not log you in. Check your email and password and try again.'};
+ $('#emailSignupForm').onsubmit=async event=>{event.preventDefault();const nickname=$('#signupNickname').value.trim(),password=$('#signupPassword').value;if(!nickname){$('#authMessage').textContent='Choose a Book Club nickname.';return}if(password.length<12){$('#authMessage').textContent='Your password must contain at least 12 characters.';return}setAuthBusy(event.currentTarget,true);const {data,error}=await supabaseClient.auth.signUp({email:$('#signupEmail').value.trim(),password,options:{emailRedirectTo:window.location.origin+'/',data:{nickname}}});setAuthBusy(event.currentTarget,false);if(error){$('#authMessage').textContent='We could not create that account. Try a different email or password.';return}if(!data.session){showAuthPanel('authHome');$('#authMessage').textContent='Check your email and confirm your account, then return here to log in.'}};
+ $('#passwordResetForm').onsubmit=async event=>{event.preventDefault();setAuthBusy(event.currentTarget,true);await supabaseClient.auth.resetPasswordForEmail($('#resetEmail').value.trim(),{redirectTo:window.location.origin+'/'});setAuthBusy(event.currentTarget,false);showAuthPanel('authHome');$('#authMessage').textContent='If an Archive account uses that email, a password-reset message is on its way.'};
+ $('#passwordUpdateForm').onsubmit=async event=>{event.preventDefault();const password=$('#newPassword').value;if(password.length<12){$('#authMessage').textContent='Your password must contain at least 12 characters.';return}setAuthBusy(event.currentTarget,true);const {error}=await supabaseClient.auth.updateUser({password});setAuthBusy(event.currentTarget,false);if(error){$('#authMessage').textContent='We could not update the password. Please request a new reset link.';return}$('#authMessage').textContent='Password updated.';$('#entryGate').classList.add('hidden');const {data:{session}}=await supabaseClient.auth.getSession();await applySession(session)};
+ $('#signOutBtn').onclick=async()=>{await supabaseClient.auth.signOut();authUser=null;activeCacheKey=null;state=DEFAULT_STATE();cloudLoaded=false;setSyncStatus('Not signed in');showAuthPanel('authHome');$('#entryGate').classList.remove('hidden');$('#signOutBtn').hidden=true;renderAll()};
  window.addEventListener('offline',()=>setSyncStatus('Offline — changes cached','offline'));
  window.addEventListener('online',()=>{setSyncStatus('Back online','saving');if(authUser)saveCloudState()});
- const {data:{session}}=await supabaseClient.auth.getSession();await applySession(session);supabaseClient.auth.onAuthStateChange((_e,s)=>{void applySession(s)});
+ const {data:{session}}=await supabaseClient.auth.getSession();await applySession(session);supabaseClient.auth.onAuthStateChange((event,s)=>{if(event==='PASSWORD_RECOVERY'){$('#entryGate').classList.remove('hidden');showAuthPanel('passwordUpdateStep');return}void applySession(s)});
 }
+function setAuthBusy(form,busy){form.querySelectorAll('button,input').forEach(element=>element.disabled=busy)}
 async function applySession(session){
  const loadId=++sessionLoadId;
  authUser=session?.user||null;
@@ -68,6 +73,7 @@ async function applySession(session){
   state=DEFAULT_STATE();
   setSyncStatus('Not signed in');
   $('#entryGate').classList.remove('hidden');
+  showAuthPanel('authHome');
   $('#signOutBtn').hidden=true;
   return;
  }
@@ -77,14 +83,13 @@ async function applySession(session){
  state=parseState(localStorage.getItem(activeCacheKey));
  setSyncStatus('Loading…','saving');
 
- const googleName=authUser.user_metadata?.full_name||authUser.user_metadata?.name||authUser.email||'Reader';
+ const googleName=authUser.user_metadata?.nickname||authUser.user_metadata?.full_name||authUser.user_metadata?.name||authUser.email||'Reader';
  const defaultName=String(googleName).trim().split(/\s+/)[0]||'Reader';
 
  const loaded=await loadCloudState(defaultName,authUser.id,loadId);
  if(!loaded||loadId!==sessionLoadId)return;
 
- const isNew=sessionStorage.getItem('archive_pending_new')==='1'||!state.profile.onboarded;
- sessionStorage.removeItem('archive_pending_new');
+ const isNew=!state.profile.onboarded;
 
  if(isNew) startWizard();
  else $('#onboardingGate').classList.add('hidden');
@@ -154,7 +159,7 @@ async function saveProfileToCloud(){
   updated_at:new Date().toISOString()
  };
  const {error}=await supabaseClient.from('profiles').upsert(payload,{onConflict:'id'});
- if(error){console.error('Profile save failed:',error);setSyncStatus('Sync failed','error');return false}
+ if(error){console.error('Profile save failed:',error);setSyncStatus('Sync failed','error');if(error.code==='23505'){const message='That nickname is already being used. Please choose another.';$('#nicknameMessage').textContent=message;$('#authMessage').textContent=message}return false}
  setSyncStatus('Saved','saved');return true;
 }
 
@@ -214,13 +219,14 @@ async function saveCloudState(){
 
 function startWizard(){
  wizardBooks=allBooks().filter(b=>!b.upcoming);wizardIndex=-1;$('#onboardName').value=state.profile.name||'';$('#onboardMode').value=state.profile.mode||'first';$('#onboardTandem').value=tandemPreference();$('#onboardAssassinsBlade').value=assassinsBladeOrder();
+ $('#nicknameMessage').textContent='';
  $('#wizardIntro').classList.remove('hidden');$('#wizardBook').classList.add('hidden');$('#onboardingGate').classList.remove('hidden');updateWizardProgress();
 }
 async function beginBookWizard(){
- state.profile.name=$('#onboardName').value.trim().split(/\s+/)[0]||'Reader';state.profile.mode=$('#onboardMode').value;
+ state.profile.name=$('#onboardName').value.trim()||'Reader';state.profile.mode=$('#onboardMode').value;$('#nicknameMessage').textContent='';
  state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...(state.bookSettings['tog-plan']?.uiPreferences||{}),tandemPreference:$('#onboardTandem').value,assassinsBladeOrder:$('#onboardAssassinsBlade').value,tandemStep:Number(state.bookSettings['tog-plan']?.uiPreferences?.tandemStep||0)}};
  const togOrder=orderedTogIds();wizardBooks=allBooks().filter(b=>!b.upcoming).sort((a,b)=>{if(a.collectionId!=='throne-of-glass'||b.collectionId!=='throne-of-glass')return 0;return togOrder.indexOf(a.id)-togOrder.indexOf(b.id)});
- save();await Promise.all([saveProfileToCloud(),saveBookSettingsToCloud('tog-plan')]);wizardIndex=0;$('#wizardIntro').classList.add('hidden');$('#wizardBook').classList.remove('hidden');renderWizardBook();
+ save();const profileSaved=await saveProfileToCloud();if(!profileSaved)return;await saveBookSettingsToCloud('tog-plan');wizardIndex=0;$('#wizardIntro').classList.add('hidden');$('#wizardBook').classList.remove('hidden');renderWizardBook();
 }
 function renderWizardBook(){
  const b=wizardBooks[wizardIndex], fm=frontMatter[b.id]||{};
@@ -240,7 +246,7 @@ function renderAll(){
  $('#readerBtn').textContent=state.profile.name;$('#settingsMode').value=state.profile.mode;$('#settingsTandem').value=tandemPreference();$('#settingsAssassinsBlade').value=assassinsBladeOrder();const reread=state.profile.mode==='reread';
  $('#modeBtn').textContent=reread?'Reread':'First Read';$('#visibleModeToggle').textContent=reread?'Switch to First Read':'Switch to Reread Mode';
  $('#modeStatus').textContent=reread?'Reread Mode is ON — later significance appears only when safe.':'First Read is ON — future context remains hidden.';
- $('#setupHeadline').textContent=`${state.profile.name}’s books and chapters`;$('#setupSummary').textContent=currentProgressText()+(authUser?' · Synced to your Google account':' · Saved only in this browser');
+ $('#setupHeadline').textContent=`${state.profile.name}’s books and chapters`;$('#setupSummary').textContent=currentProgressText()+(authUser?' · Synced to your Archive account':' · Saved only in this browser');
  document.body.classList.toggle('reread',reread);$('#notice').textContent=catalog.platform.notice;renderReleases();renderLibrary();renderReaders();renderMentions();renderLore();renderDirectories();
 }
 function currentProgressText(){const active=allBooks().filter(b=>readingStatus(b)==='reading');if(!active.length)return'No current book selected. Use Update books & chapters to set your place.';return active.map(b=>`${b.title}: Chapter ${progress(b)}`).join(' · ')}
@@ -345,9 +351,50 @@ const requirementCompleted=req=>{const book=byId(req.bookId);return !!book&&comp
 function safeAtChapter(entry){return entry.requires.every(req=>requirementCompleted(req)&&(req.bookId!==currentBook.id||req.chapter<=currentChapter))}
 function renderChapterLore(){const available=lore.filter(l=>safeAtChapter(l)&&l.requires.some(req=>req.bookId===currentBook.id));$('#loreTab').innerHTML=available.length?available.map(l=>`<div class="evidence"><span>${esc(l.type)}</span><h3>${esc(l.title)}</h3><p>${esc(l.summary)}</p></div>`).join(''):'<p>No new lore is safe at this point.</p>';const unlockedConnections=connections.filter(c=>safeAtChapter(c)&&c.requires.some(req=>req.bookId===currentBook.id));
  $('#connTab').innerHTML=unlockedConnections.length?unlockedConnections.map(c=>`<div class="evidence"><span>${esc(c.status)}</span><h3>${esc(c.title)}</h3><p>${esc(c.summary)}</p><small>${c.evidence.map(esc).join(' · ')}</small></div>`).join(''):'<p>No verified Connections are unlocked at your current reading progress.</p>'}
-function renderDiscussion(){const key=`${currentBook.id}-${currentChapter}`,posts=state.discussions[key]||[];$('#discussionFeed').innerHTML=posts.map(p=>`<article class="discussion-post"><b>${esc(p.author)}</b><p>${esc(p.text)}</p></article>`).join('')||'<p>No posts yet.</p>';$('#postDiscussion').onclick=()=>{const text=$('#discussionText').value.trim();if(!text)return;state.discussions[key]=state.discussions[key]||[];state.discussions[key].push({author:state.profile.name,text});save();$('#discussionText').value='';renderDiscussion()}}
+async function renderDiscussion(){
+ const key=`${currentBook.id}-${currentChapter}`,feed=$('#discussionFeed');
+ let posts=state.discussions[key]||[];
+ if(authUser){
+  const {data,error}=await supabaseClient.from('chapter_posts').select('id,author_nickname,body,created_at').eq('book_id',currentBook.id).eq('chapter_number',currentChapter).order('created_at',{ascending:true});
+  if(!error)posts=(data||[]).map(post=>({id:post.id,author:post.author_nickname,text:post.body,createdAt:post.created_at}));
+  else console.error('Discussion load failed:',error);
+ }
+ feed.innerHTML=posts.map(post=>`<article class="discussion-post"><b>${esc(post.author)}</b><p>${esc(post.text)}</p></article>`).join('')||'<p>No posts yet.</p>';
+ $('#postDiscussion').onclick=async()=>{
+  const text=$('#discussionText').value.trim();if(!text)return;
+  $('#postDiscussion').disabled=true;
+  if(!authUser){state.discussions[key]=state.discussions[key]||[];state.discussions[key].push({author:state.profile.name,text});save()}
+  else{
+   const {data:post,error}=await supabaseClient.from('chapter_posts').insert({author_id:authUser.id,author_nickname:state.profile.name,book_id:currentBook.id,chapter_number:currentChapter,body:text}).select('id').single();
+   if(error){console.error('Post save failed:',error);$('#authMessage').textContent='Your post could not be saved. Please try again.';$('#postDiscussion').disabled=false;return}
+   await createMentionsForPost(post.id,text);
+  }
+  $('#discussionText').value='';$('#postDiscussion').disabled=false;await renderDiscussion();await renderMentions();
+ };
+}
+async function createMentionsForPost(postId,text){
+ const {data:profiles,error}=await supabaseClient.from('profiles').select('id,nickname');
+ if(error){console.error('Mention lookup failed:',error);return}
+ const recipients=(profiles||[]).filter(profile=>profile.id!==authUser.id&&new RegExp(`(^|[^A-Za-z0-9_])@${escapeRegex(profile.nickname)}(?=$|[^A-Za-z0-9_])`,'i').test(text));
+ if(!recipients.length)return;
+ const rows=recipients.map(profile=>({post_id:postId,mentioned_user_id:profile.id}));
+ const {error:mentionError}=await supabaseClient.from('mentions').upsert(rows,{onConflict:'post_id,mentioned_user_id'});
+ if(mentionError)console.error('Mention save failed:',mentionError);
+}
+function escapeRegex(value){return String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b class="reader-name">${esc(state.profile.name)}</b><span class="reader-progress">${esc(currentProgressText())}</span></div>`}
-function renderMentions(){$('#mentions').innerHTML=state.mentions.length?state.mentions.map(m=>`<div>${esc(m.from)} mentioned you</div>`).join(''):'<p>No mentions yet.</p>'}
+async function renderMentions(){
+ const container=$('#mentions');
+ if(!authUser){container.innerHTML=state.mentions.length?state.mentions.map(m=>`<div>${esc(m.from)} mentioned you</div>`).join(''):'<p>No mentions yet.</p>';return}
+ const {data:mentionRows,error}=await supabaseClient.from('mentions').select('id,post_id,created_at,read_at').eq('mentioned_user_id',authUser.id).order('created_at',{ascending:false}).limit(8);
+ if(error){console.error('Mention load failed:',error);container.innerHTML='<p>Mentions could not be loaded.</p>';return}
+ if(!mentionRows?.length){container.innerHTML='<p>No mentions yet.</p>';return}
+ const {data:posts,error:postError}=await supabaseClient.from('chapter_posts').select('id,author_nickname,book_id,chapter_number,body').in('id',mentionRows.map(row=>row.post_id));
+ if(postError){console.error('Mention post load failed:',postError);container.innerHTML='<p>Mentions could not be loaded.</p>';return}
+ const postMap=new Map((posts||[]).map(post=>[post.id,post]));
+ container.innerHTML=mentionRows.map(row=>{const post=postMap.get(row.post_id);if(!post)return'';const book=byId(post.book_id);return`<button class="mention-item ${row.read_at?'':'unread'}" data-mention-id="${esc(row.id)}" data-book-id="${esc(post.book_id)}" data-chapter="${post.chapter_number}"><b>${esc(post.author_nickname)} mentioned you</b><span>${esc(book?.title||'Book')} · Chapter ${post.chapter_number}</span><small>${esc(post.body)}</small></button>`}).join('');
+ $$('.mention-item').forEach(button=>button.onclick=async()=>{const book=byId(button.dataset.bookId);if(!book)return;await supabaseClient.from('mentions').update({read_at:new Date().toISOString()}).eq('id',button.dataset.mentionId).eq('mentioned_user_id',authUser.id);currentBook=book;currentChapter=Number(button.dataset.chapter);view('book');renderBook()});
+}
 function tandemStep(){return Math.max(0,Math.min(tandem.steps.length,Number(readingPlan().tandemStep||0)))}
 function tandemStepText(step){const book=byId(step.bookId),range=step.label||(step.start===step.end?`Chapter ${step.start}`:`Chapters ${step.start}–${step.end}`);return {title:book.title,detail:range}}
 async function syncTandemBooks(done){
