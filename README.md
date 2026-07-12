@@ -95,3 +95,15 @@ Still browser-local:
 - reactions
 - notes
 - quotes
+
+## Archive 2.1 stability and spoiler-safety pass
+- Browser caches are isolated by authenticated Google user ID.
+- Signing out clears the active in-memory reader state, preventing account crossover.
+- "Current chapter" now means the chapter being read; only earlier chapters are completed.
+- Chapter recaps stay locked until that chapter is completed.
+- Whole-book recaps stay locked until the book is finished or reread mode is enabled.
+- Unreviewed character names no longer bypass spoiler protection.
+- Cloud operations display real saving, saved, offline, and error states.
+- `user_book_settings` now loads and saves reread state and last-opened tabs.
+- The SQL migration lives in `supabase/migrations/20260712_user_book_settings.sql`.
+- Progress semantics have regression tests in `tests/progress-model.test.js`.

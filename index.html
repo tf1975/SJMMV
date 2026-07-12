@@ -62,7 +62,7 @@
 
 <header>
   <button id="homeBtn" class="brand"><span>✦</span><div><b>The Archive</b><small>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</small></div></button>
-  <div class="account-controls"><button id="readerBtn">Reader</button><button id="modeBtn">First Read</button><button id="signOutBtn" class="sign-out" hidden>Sign out</button></div>
+  <div class="account-controls"><span id="syncStatus" class="sync-status" role="status" aria-live="polite">Not signed in</span><button id="readerBtn">Reader</button><button id="modeBtn">First Read</button><button id="signOutBtn" class="sign-out" hidden>Sign out</button></div>
 </header>
 
 <main>
@@ -113,6 +113,7 @@
           <label><input type="radio" name="frontStatus" value="finished"> Finished</label>
         </div>
         <label id="frontChapterWrap">Current chapter <input id="frontChapter" type="number" min="1"></label>
+        <label class="book-reread"><input id="frontRereading" type="checkbox"> I’m rereading this book</label>
         <button id="saveFrontStatus" class="gold">Save status</button>
       </div>
       <div class="front-links">
@@ -175,6 +176,7 @@
 <div id="bookTransition" class="book-transition hidden"><div class="transition-spine"></div><div class="transition-cover"><span>✦</span><b></b></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/progress-model.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

@@ -306,6 +306,11 @@
 .reader-row{display:grid!important;grid-template-columns:minmax(110px,.35fr) minmax(0,1fr);gap:1.4rem!important;align-items:start}
 .reader-name{padding-right:.4rem}
 .reader-progress{color:var(--muted);line-height:1.45}
+.sync-status{font-size:.72rem;color:var(--muted);padding:.35rem .55rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.sync-status[data-state="saving"]{color:#e8c77a}
+.sync-status[data-state="saved"]{color:#9ed3a8}
+.sync-status[data-state="offline"],.sync-status[data-state="error"]{color:#f0a69a}
+.locked-summary{border:1px solid #c8b99b;border-radius:12px;padding:1rem;background:#efe6d3;color:#3d3325}
 .future-card{display:flex;gap:1rem;align-items:flex-start}
 .future-icon{width:48px;height:48px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:1.4rem;flex:0 0 48px}
 .locked-feature{position:relative;overflow:hidden}
