@@ -1,0 +1,92 @@
+{
+  "tog": [
+    {
+      "name": "Celaena Sardothien",
+      "group": "Dorian\u2019s Champion",
+      "safeAt": 1,
+      "bio": "A renowned assassin imprisoned in Endovier and chosen to compete for the position of King\u2019s Champion."
+    },
+    {
+      "name": "Chaol Westfall",
+      "group": "Royal Guard",
+      "safeAt": 1,
+      "bio": "Captain of the Guard and the officer responsible for escorting and training Celaena."
+    },
+    {
+      "name": "Dorian Havilliard",
+      "group": "House Havilliard",
+      "safeAt": 1,
+      "bio": "Crown Prince of Adarlan and Celaena\u2019s sponsor in the Champion competition."
+    },
+    {
+      "name": "The King of Adarlan",
+      "group": "House Havilliard",
+      "safeAt": 3,
+      "bio": "The ruler of Adarlan and the person seeking a new Champion."
+    },
+    {
+      "name": "Cain",
+      "group": "Champion Contestants",
+      "safeAt": 8,
+      "bio": "A powerful competitor who quickly appears to be one of Celaena\u2019s greatest physical threats."
+    },
+    {
+      "name": "Princess Nehemia",
+      "group": "Royal Visitors",
+      "safeAt": 12,
+      "bio": "A princess of Eyllwe visiting the Adarlanian court."
+    }
+  ],
+  "acotar1": [
+    {
+      "name": "Feyre Archeron",
+      "group": "House Archeron",
+      "safeAt": 1,
+      "bio": "A human huntress supporting her family near the wall."
+    },
+    {
+      "name": "Nesta Archeron",
+      "group": "House Archeron",
+      "safeAt": 1,
+      "bio": "Feyre\u2019s eldest sister."
+    },
+    {
+      "name": "Elain Archeron",
+      "group": "House Archeron",
+      "safeAt": 1,
+      "bio": "Feyre\u2019s sister, known for her gentler disposition."
+    },
+    {
+      "name": "Tamlin",
+      "group": "Spring Court",
+      "safeAt": 4,
+      "bio": "A powerful faerie lord associated with the Spring Court."
+    },
+    {
+      "name": "Lucien",
+      "group": "Spring Court",
+      "safeAt": 6,
+      "bio": "A sharp-tongued member of the Spring Court."
+    }
+  ],
+  "hoeab": [
+    {
+      "name": "Bryce Quinlan",
+      "group": "Crescent City",
+      "safeAt": 1,
+      "bio": "A young woman living in Lunathion whose life is transformed by a devastating crime."
+    },
+    {
+      "name": "Danika Fendyr",
+      "group": "Pack of Devils",
+      "safeAt": 1,
+      "bio": "Bryce\u2019s closest friend and leader of the Pack of Devils."
+    },
+    {
+      "name": "Hunt Athalar",
+      "group": "33rd Imperial Legion",
+      "safeAt": 5,
+      "bio": "A powerful angel assigned to work with Bryce."
+    }
+  ]
+}

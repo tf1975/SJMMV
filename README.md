@@ -1,32 +1,47 @@
-# The Archive — Onboarding, Reread, Maps & Summaries Update
+# The Archive 2.0 Alpha
 
-## Included
-- Returning-reader versus new-reader entry choice
-- Google authentication preserved
-- First-time onboarding after Google sign-in
-- Direct chapter number entry; entering Chapter 38 marks earlier chapters complete
-- Mark-book-finished controls
-- First Read and real Reread profile modes
-- Reread insight area for seeded chapters
-- Whole-book summary and “What Changed” section for Throne of Glass
-- Actual lightweight original chapter banner art for TOG Chapters 1–8
-- Actual original schematic maps for Erilea, Prythian, and Midgard
-- Always-open maps with progress-aware location details
-- Lore audit: removed the fake generic crossover placeholder and added evidence-backed early TOG lore
-- Connections explicitly show that verified connection content has not yet been populated
+This build begins the product redesign requested after the 1.0 prototype.
 
-## Important current limitation
-Google authentication is live, but profile progress, discussions, posts, and mentions still persist in browser storage. The next Supabase database step is required for cross-device synchronization.
+## Included in this alpha
+- Uses the three uploaded maps exactly as supplied:
+  - Erilea
+  - Prythian
+  - Lunathion / Crescent City
+- Full-size scrollable Atlas viewer
+- Smooth shelf → pulled book → opening cover transition
+- New book front-matter page before chapter navigation
+- Spoiler-free overview and reading-status controls on every book
+- Direct chapter entry, Haven’t Started, Reading, and Finished controls
+- Step-by-step first-time setup:
+  1. Book Club nickname
+  2. First Read or Reread
+  3. Every published book, one at a time
+- Clearer chapter number / Completed spacing
+- Characters and Places tabs inside books
+- Archive directories grouped into courts, houses, factions, and regions where seeded
+- Honest content-status labels
+- Whole-book summary structure
+- Existing Google authentication retained
 
-## Testing
-Upload to the development branch first. Test both entry choices, onboarding, direct chapter entry, Reread Mode, chapter art, map buttons, book summary, and lore unlocks before merging into main.
+## Content status
+This is a functional product alpha, not the completed editorial library.
 
+Currently populated:
+- Throne of Glass Chapters 1–8
+- Throne of Glass whole-book summary
+- Early spoiler-safe character and place entries for selected first books
+- Early verified Lore entries
 
-## Visibility correction
-This build makes the previously hidden features obvious:
-- A homepage “Update books & chapters” button opens onboarding at any time.
-- A labeled First Read/Reread control replaces the ambiguous arrow-only experience.
-- Whole-book summaries use a “Whole Book” tab.
-- Atlas and Archive cards have visible action buttons.
-- Chapter art clearly distinguishes completed artwork from in-production placeholders.
-- Fixed chapter-list styling.
+Still in production:
+- All remaining chapter summaries
+- Complete character and location directories
+- Full Lore and Canon audit
+- Cross-series Connections
+- Chapter artwork beyond the current concept banners
+- Supabase cloud tables for shared progress, Book Clubs, mentions, posts, and reactions
+
+## Maps
+The uploaded map files are packaged in `assets/maps/`. The app does not redraw or replace them.
+
+## Test
+Upload to the GitHub `development` branch and open the permanent Netlify development site or a Deploy Preview.

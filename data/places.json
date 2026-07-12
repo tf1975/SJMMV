@@ -1,0 +1,68 @@
+{
+  "tog": [
+    {
+      "name": "Endovier",
+      "group": "Adarlan",
+      "safeAt": 1,
+      "bio": "A salt-mine prison camp where Celaena is held."
+    },
+    {
+      "name": "Rifthold",
+      "group": "Adarlan",
+      "safeAt": 5,
+      "bio": "The capital city of Adarlan."
+    },
+    {
+      "name": "The Glass Castle",
+      "group": "Rifthold",
+      "safeAt": 5,
+      "bio": "The royal seat rising above Rifthold."
+    },
+    {
+      "name": "Terrasen",
+      "group": "Northern Kingdoms",
+      "safeAt": 5,
+      "bio": "A northern kingdom referenced in the wider history of Erilea."
+    }
+  ],
+  "acotar1": [
+    {
+      "name": "The Mortal Lands",
+      "group": "South of the Wall",
+      "safeAt": 1,
+      "bio": "The human territory where Feyre and her family live."
+    },
+    {
+      "name": "The Wall",
+      "group": "Border",
+      "safeAt": 1,
+      "bio": "The boundary separating the mortal lands from Prythian."
+    },
+    {
+      "name": "Spring Court",
+      "group": "Prythian",
+      "safeAt": 4,
+      "bio": "One of Prythian\u2019s seasonal courts."
+    }
+  ],
+  "hoeab": [
+    {
+      "name": "Lunathion",
+      "group": "Valbara",
+      "safeAt": 1,
+      "bio": "The metropolis commonly called Crescent City."
+    },
+    {
+      "name": "Moonwood",
+      "group": "Lunathion",
+      "safeAt": 1,
+      "bio": "A district associated with wolves and shifters."
+    },
+    {
+      "name": "The Bone Quarter",
+      "group": "Lunathion",
+      "safeAt": 1,
+      "bio": "A district beyond the Istros associated with the dead."
+    }
+  ]
+}

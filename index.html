@@ -1,22 +1,166 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111713"><title>The Archive</title><link rel="stylesheet" href="assets/styles.css"></head><body><div class="dust"></div>
-<div id="entryGate" class="auth-gate" aria-live="polite"><div class="auth-card"><div class="auth-crest">✦</div><p class="auth-kicker">Welcome to</p><h1>The Archive</h1><p>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</p><div id="entryChoices" class="entry-choices"><button id="returningReader" class="gold wide">I’ve been here before</button><button id="newReaderStart" class="outline wide">I’m new to The Archive</button></div><div id="googleStep" hidden><p id="googleStepText"></p><button id="googleSignIn" class="google-signin"><span class="google-mark">G</span><span>Continue with Google</span></button><button id="backToEntry" class="text-link">← Back</button></div><p id="authMessage" class="auth-message"></p></div></div>
-<div id="onboardingGate" class="auth-gate hidden"><div class="onboarding-card"><div class="auth-crest">✦</div><p class="auth-kicker">First visit</p><h1>Set your bookmarks</h1><p>Enter where you are now. Earlier chapters will be marked complete automatically.</p><label>Display name<input id="onboardName" maxlength="30"></label><label>Reading mode<select id="onboardMode"><option value="first">First Read</option><option value="reread">Reread</option></select></label><div id="onboardBooks" class="onboard-books"></div><button id="saveOnboarding" class="gold wide">Open my bookshelves</button><p class="fine-print">You can change any book or chapter later.</p></div></div>
-<header><button id="homeBtn" class="brand"><span>✦</span><div><b>The Archive</b><small>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</small></div></button><div class="account-controls"><button id="readerBtn">Reader</button><button id="modeBtn" title="First Read / Reread">↻</button><button id="signOutBtn" class="sign-out" hidden>Sign out</button></div></header><main>
-<section id="home" class="view active"><section class="countdown"><div><small>OFFICIAL RELEASE COUNTDOWN</small><h2>Return to Prythian</h2></div><div id="releases"></div></section><section class="welcome"><small>THE LIBRARY</small><h1>Your worlds are waiting.</h1><p>Choose a shelf. Pull out a book. The Archive reveals only what you have safely unlocked.</p><div id="modeStatus" class="mode-status"></div></section>
-    <section class="setup-panel panel">
-      <div>
-        <small>YOUR READING SETUP</small>
-        <h3 id="setupHeadline">Books and chapters</h3>
-        <p id="setupSummary">Set or update your current place without clicking through chapters one by one.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111713">
+  <title>The Archive</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="dust"></div>
+
+<div id="entryGate" class="auth-gate">
+  <div class="auth-card">
+    <div class="auth-crest">✦</div>
+    <p class="auth-kicker">Welcome to</p>
+    <h1>The Archive</h1>
+    <p>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</p>
+    <div id="entryChoices" class="entry-choices">
+      <button id="returningReader" class="gold wide">I’ve been here before</button>
+      <button id="newReaderStart" class="outline wide">I’m new to The Archive</button>
+    </div>
+    <div id="googleStep" hidden>
+      <p id="googleStepText"></p>
+      <button id="googleSignIn" class="google-signin"><span class="google-mark">G</span><span>Continue with Google</span></button>
+      <button id="backToEntry" class="text-link">← Back</button>
+    </div>
+    <p id="authMessage" class="auth-message"></p>
+  </div>
+</div>
+
+<div id="onboardingGate" class="auth-gate hidden">
+  <div class="onboarding-card">
+    <div class="wizard-progress"><span id="wizardStepLabel">Step 1</span><div><i id="wizardBar"></i></div></div>
+    <div id="wizardIntro" class="wizard-page">
+      <div class="auth-crest">✦</div>
+      <p class="auth-kicker">Your Book Club identity</p>
+      <h1>What should readers call you?</h1>
+      <label>Nickname<input id="onboardName" maxlength="30" placeholder="Rosetta"></label>
+      <label>Reading mode<select id="onboardMode"><option value="first">First Read</option><option value="reread">Reread</option></select></label>
+      <button id="wizardBeginBooks" class="gold wide">Set my books</button>
+    </div>
+    <div id="wizardBook" class="wizard-page hidden">
+      <small id="wizardSeries"></small>
+      <h1 id="wizardBookTitle"></h1>
+      <p id="wizardBookSummary"></p>
+      <div class="status-options">
+        <label><input type="radio" name="wizardStatus" value="not-started" checked> Haven’t started</label>
+        <label><input type="radio" name="wizardStatus" value="reading"> Currently reading</label>
+        <label><input type="radio" name="wizardStatus" value="finished"> Finished</label>
       </div>
-      <div class="setup-actions">
-        <button id="editProgress" class="gold">Update books & chapters</button>
-        <button id="visibleModeToggle" class="outline">Switch to Reread Mode</button>
+      <label id="wizardChapterWrap" class="hidden">Current chapter
+        <input id="wizardChapter" type="number" min="1">
+      </label>
+      <div class="wizard-actions">
+        <button id="wizardBack" class="outline">← Previous</button>
+        <button id="wizardNext" class="gold">Next book →</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<header>
+  <button id="homeBtn" class="brand"><span>✦</span><div><b>The Archive</b><small>A spoiler-safe, chapter-by-chapter reading companion<br>for the worlds of Sarah J. Maas.</small></div></button>
+  <div class="account-controls"><button id="readerBtn">Reader</button><button id="modeBtn">First Read</button><button id="signOutBtn" class="sign-out" hidden>Sign out</button></div>
+</header>
+
+<main>
+<section id="home" class="view active">
+  <section class="countdown"><div><small>OFFICIAL RELEASE COUNTDOWN</small><h2>Return to Prythian</h2></div><div id="releases"></div></section>
+  <section class="welcome"><small>THE LIBRARY</small><h1>Your worlds are waiting.</h1><p>Choose a shelf. Pull out a book. The Archive reveals only what you have safely unlocked.</p><div id="modeStatus" class="mode-status"></div></section>
+  <section class="setup-panel panel">
+    <div><small>YOUR READING SETUP</small><h3 id="setupHeadline">Books and chapters</h3><p id="setupSummary"></p></div>
+    <div class="setup-actions"><button id="editProgress" class="gold">Update books & chapters</button><button id="visibleModeToggle" class="outline">Switch to Reread Mode</button></div>
+  </section>
+  <div id="library"></div>
+  <div class="grid">
+    <article class="panel"><small>BOOK CLUB</small><h3>Readers</h3><div id="readers"></div></article>
+    <article class="panel"><small>LETTERS</small><h3>Mentions</h3><div id="mentions"></div><p class="fine-print">Shared cloud Book Club data is the next database phase.</p></article>
+  </div>
+  <div class="grid">
+    <article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>View the uploaded maps of Erilea, Prythian, and Lunathion.</p><button class="outline">Open the Atlas</button></div></article>
+    <article id="archiveCard" class="panel feature"><span>✦</span><div><small>DISCOVER SAFELY</small><h3>The Archive</h3><p>Lore, characters, places, and connections unlock with your reading progress.</p><button class="outline">Enter the Archive</button></div></article>
+  </div>
+  <footer id="notice"></footer>
+</section>
+
+<section id="bookFront" class="view">
+  <button class="back" id="frontBack">← Return to library</button>
+  <div class="front-book">
+    <section class="front-cover"><div id="frontCoverSeries"></div><h1 id="frontCoverTitle"></h1><div class="cover-mark">✦</div></section>
+    <section class="front-page">
+      <small id="frontSeries"></small>
+      <h1 id="frontTitle"></h1>
+      <p id="frontTagline" class="front-tagline"></p>
+      <h3>Spoiler-free overview</h3>
+      <p id="frontSummary"></p>
+      <div class="reading-status-card">
+        <h3>Your reading status</h3>
+        <div class="front-status-options">
+          <label><input type="radio" name="frontStatus" value="not-started"> Haven’t started</label>
+          <label><input type="radio" name="frontStatus" value="reading"> Reading</label>
+          <label><input type="radio" name="frontStatus" value="finished"> Finished</label>
+        </div>
+        <label id="frontChapterWrap">Current chapter <input id="frontChapter" type="number" min="1"></label>
+        <button id="saveFrontStatus" class="gold">Save status</button>
+      </div>
+      <div class="front-links">
+        <button id="openCharacters" class="outline">Characters</button>
+        <button id="openPlaces" class="outline">Places</button>
+        <button id="openBookSummary" class="outline">Whole-book summary</button>
+      </div>
+      <p id="frontContentStatus" class="fine-print"></p>
+      <button id="continueIntoBook" class="gold wide">Open chapter guide →</button>
     </section>
-    <div id="library"></div><div class="grid"><article class="panel"><div class="head"><div><small>BOOK CLUB</small><h3>Readers</h3></div></div><div id="readers"></div></article><article class="panel"><small>LETTERS</small><h3>Mentions</h3><div id="mentions"></div><p class="fine-print">Cloud syncing for Book Club posts and mentions is the next database step.</p></article></div><div class="grid"><article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>Maps are visible from the beginning. Story markers remain spoiler-safe.</p><button class="outline card-action">Open all maps</button></div></article><article id="archiveCard" class="panel feature"><span>✦</span><div><small>DISCOVER SAFELY</small><h3>The Archive</h3><p>Lore and connections unlock the moment all required chapters are complete.</p><button class="outline card-action">View unlocked lore</button></div></article></div><footer id="notice"></footer></section>
-<section id="book" class="view"><button class="back" id="backHome">← Return to library</button><div class="openbook"><section class="page left"><div class="pad"><small id="seriesLabel"></small><h1 id="bookTitle"></h1><div id="bookmark" class="bookmark"></div><div class="quick-progress"><label>Jump to current chapter<input id="chapterNumber" type="number" min="0"></label><button id="saveChapterNumber" class="outline">Save chapter</button><button id="markFinished" class="text-link">Mark book finished</button></div><div id="chapterNav" class="chapters"></div></div></section><section class="page right"><div class="pad"><img id="art" class="art" alt="Chapter artwork"><p id="artStatus" class="art-status"></p><small id="chapterLabel"></small><h2>What you’ll remember</h2><div id="summary"></div><div class="tabs"><button data-tab="sumTab" class="active">Summary</button><button data-tab="bookSummaryTab">Whole Book</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="discTab">Discussion</button></div><div id="sumTab" class="tabpane active"></div><div id="bookSummaryTab" class="tabpane"></div><div id="loreTab" class="tabpane"></div><div id="connTab" class="tabpane"></div><div id="discTab" class="tabpane"><div id="discussionFeed"></div><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..."></textarea><button id="postDiscussion" class="gold">Post</button></div><div class="actions"><button id="complete" class="gold">Mark chapter complete</button><button id="next" class="outline">Next chapter →</button></div></div></section></div></section>
-<section id="archive" class="view"><button class="back" data-home>← Home</button><h1>The Archive</h1><p>Every entry checks your exact chapter progress.</p><div class="archive-filter"><button data-kind="all" class="active">All</button><button data-kind="canon">Canon</button><button data-kind="connection">Connections</button></div><div id="loreGrid" class="loregrid"></div></section>
-<section id="atlas" class="view"><button class="back" data-home>← Home</button><h1>The Atlas</h1><p>Geography is always open. Story events and routes will unlock separately.</p><div class="maps"><article><img src="assets/maps/erilea.svg" alt="Original schematic map of Erilea"><h2>Erilea</h2><button class="outline map-detail" data-map="erilea">Explore locations</button></article><article><img src="assets/maps/prythian.svg" alt="Original schematic map of Prythian"><h2>Prythian</h2><button class="outline map-detail" data-map="prythian">Explore locations</button></article><article><img src="assets/maps/midgard.svg" alt="Original schematic map of Midgard"><h2>Midgard</h2><button class="outline map-detail" data-map="midgard">Explore locations</button></article></div><div id="mapDetails" class="panel map-details">Choose a map to see its currently safe locations.</div></section>
+  </div>
+</section>
+
+<section id="book" class="view">
+  <button class="back" id="backToFront">← Book overview</button>
+  <div class="openbook">
+    <section class="page left"><div class="pad">
+      <small id="seriesLabel"></small><h1 id="bookTitle"></h1><div id="bookmark" class="bookmark"></div>
+      <div class="quick-progress"><label>Jump to current chapter<input id="chapterNumber" type="number" min="0"></label><button id="saveChapterNumber" class="outline">Save chapter</button><button id="markFinished" class="text-link">Mark book finished</button></div>
+      <div id="chapterNav" class="chapters"></div>
+    </div></section>
+    <section class="page right"><div class="pad">
+      <div class="chapter-visual"><img id="art" class="art" alt="Chapter artwork"><div id="artStatus" class="art-status"></div></div>
+      <small id="chapterLabel"></small><h2>What you’ll remember</h2><div id="summary"></div>
+      <div class="tabs"><button data-tab="sumTab" class="active">Summary</button><button data-tab="bookSummaryTab">Whole Book</button><button data-tab="charactersTab">Characters</button><button data-tab="placesTab">Places</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="discTab">Discussion</button></div>
+      <div id="sumTab" class="tabpane active"></div><div id="bookSummaryTab" class="tabpane"></div><div id="charactersTab" class="tabpane"></div><div id="placesTab" class="tabpane"></div><div id="loreTab" class="tabpane"></div><div id="connTab" class="tabpane"></div>
+      <div id="discTab" class="tabpane"><div id="discussionFeed"></div><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..."></textarea><button id="postDiscussion" class="gold">Post</button></div>
+      <div class="actions"><button id="complete" class="gold">Mark chapter complete</button><button id="next" class="outline">Next chapter →</button></div>
+    </div></section>
+  </div>
+</section>
+
+<section id="archive" class="view">
+  <button class="back" data-home>← Home</button><h1>The Archive</h1><p>Browse only what your reading progress makes safe.</p>
+  <div class="archive-tabs"><button data-archive="lorePanel" class="active">Lore & Canon</button><button data-archive="charactersPanel">Characters</button><button data-archive="placesPanel">Places</button><button data-archive="connectionsPanel">Connections</button></div>
+  <div id="lorePanel" class="archive-pane active"><div id="loreGrid" class="loregrid"></div></div>
+  <div id="charactersPanel" class="archive-pane"><div id="archiveCharacters" class="directory"></div></div>
+  <div id="placesPanel" class="archive-pane"><div id="archivePlaces" class="directory"></div></div>
+  <div id="connectionsPanel" class="archive-pane"><div class="panel"><h3>Verified connections</h3><p>Connection entries will appear only after their evidence and chapter requirements are reviewed. No placeholder theories are presented as fact.</p></div></div>
+</section>
+
+<section id="atlas" class="view">
+  <button class="back" data-home>← Home</button><h1>The Atlas</h1><p>These are the maps you supplied. Click any map to view it at full size.</p>
+  <div class="maps">
+    <article><button class="map-open" data-src="assets/maps/erilea.webp" data-title="Erilea"><img src="assets/maps/erilea.webp" alt="Map of Erilea"></button><h2>Erilea</h2></article>
+    <article><button class="map-open" data-src="assets/maps/prythian.jpeg" data-title="Prythian"><img src="assets/maps/prythian.jpeg" alt="Map of Prythian"></button><h2>Prythian</h2></article>
+    <article><button class="map-open" data-src="assets/maps/lunathion.webp" data-title="Lunathion"><img src="assets/maps/lunathion.webp" alt="Map of Lunathion, Crescent City"></button><h2>Lunathion</h2></article>
+  </div>
+</section>
+
+<div id="mapModal" class="map-modal hidden"><button id="closeMap" aria-label="Close map">×</button><h2 id="mapModalTitle"></h2><div class="map-scroll"><img id="mapModalImage" alt=""></div></div>
+
 <section id="reader" class="view"><button class="back" data-home>← Home</button><h1>Your reader profile</h1><div id="readerList"></div><div class="panel"><label>Reading mode<select id="settingsMode"><option value="first">First Read</option><option value="reread">Reread</option></select></label><button id="saveMode" class="gold">Save mode</button></div></section>
-</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/app.js"></script></body></html>
+</main>
+
+<div id="bookTransition" class="book-transition hidden"><div class="transition-spine"></div><div class="transition-cover"><span>✦</span><b></b></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
