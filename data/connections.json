@@ -1,0 +1,67 @@
+[
+  {
+    "id": "tog-endovier-champion",
+    "title": "Endovier and the Champion bargain",
+    "status": "canon",
+    "summary": "Celaena\u2019s release from Endovier is conditional: winning the competition would bind her to the king before eventually earning freedom.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 3
+      }
+    ],
+    "evidence": [
+      "Throne of Glass, Chapter 3"
+    ]
+  },
+  {
+    "id": "tog-clocktower-marks",
+    "title": "The clock tower\u2019s strange markings",
+    "status": "possible connection",
+    "summary": "The unusual marks near the clock tower establish an early mystery connected to the hidden forces inside the castle.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 8
+      }
+    ],
+    "evidence": [
+      "Throne of Glass, Chapter 8"
+    ]
+  },
+  {
+    "id": "tog-competition-murders",
+    "title": "The competition and the murders",
+    "status": "canon",
+    "summary": "The Champion competition and the violent deaths occurring inside the castle are not separate problems.",
+    "requires": [
+      {
+        "bookId": "tog",
+        "chapter": 14
+      }
+    ],
+    "evidence": [
+      "Throne of Glass, Chapters 10\u201314"
+    ]
+  },
+  {
+    "id": "cc-acotar-crossworld",
+    "title": "A path between worlds",
+    "status": "canon",
+    "summary": "Events in Crescent City establish a direct connection to the world of A Court of Thorns and Roses.",
+    "requires": [
+      {
+        "bookId": "hosab",
+        "chapter": 78
+      },
+      {
+        "bookId": "acotar1",
+        "chapter": 46
+      }
+    ],
+    "evidence": [
+      "House of Sky and Breath, Chapter 78",
+      "A Court of Thorns and Roses completed"
+    ]
+  }
+]

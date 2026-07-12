@@ -11,7 +11,7 @@
       "art": "A bleak salt mine at dawn, chains in pale dust, a distant black-cloaked guard, cinematic fantasy landscape, no visible faces.",
       "image": "assets/chapter-art/tog/chapter-01.svg",
       "reread": [
-        "Celaena’s instinct to assess exits and threats establishes a pattern that continues throughout the series."
+        "Celaena\u2019s instinct to assess exits and threats establishes a pattern that continues throughout the series."
       ]
     },
     "2": {
@@ -33,7 +33,7 @@
       "art": "A black chessboard beside a sealed royal contract, one gold piece facing many dark pieces.",
       "image": "assets/chapter-art/tog/chapter-03.svg",
       "reread": [
-        "The bargain over service and freedom frames one of the novel’s central conflicts: survival inside a system she despises."
+        "The bargain over service and freedom frames one of the novel\u2019s central conflicts: survival inside a system she despises."
       ]
     },
     "4": {
@@ -50,12 +50,12 @@
       "bullets": [
         "Celaena travels toward Rifthold with Dorian, Chaol, and the royal company.",
         "She sees the glass castle above the city and remembers seeing it years earlier.",
-        "She tells Chaol she believes another assassin’s betrayal led to her capture."
+        "She tells Chaol she believes another assassin\u2019s betrayal led to her capture."
       ],
       "art": "A glass castle above a walled winter city, viewed from a distant ridge.",
       "image": "assets/chapter-art/tog/chapter-05.svg",
       "reread": [
-        "The glass castle’s beauty and unnatural construction become more meaningful as its hidden history is uncovered."
+        "The glass castle\u2019s beauty and unnatural construction become more meaningful as its hidden history is uncovered."
       ]
     },
     "6": {
@@ -70,7 +70,7 @@
     },
     "7": {
       "bullets": [
-        "Chaol begins rebuilding Celaena’s strength through early training and running.",
+        "Chaol begins rebuilding Celaena\u2019s strength through early training and running.",
         "She resents how much endurance she lost but refuses to appear defeated.",
         "Their competitive hostility starts to shape their daily routine."
       ],
@@ -87,24 +87,120 @@
       "art": "A torchlit training hall filled with shadowed competitors and weapons.",
       "image": "assets/chapter-art/tog/chapter-08.svg",
       "reread": []
+    },
+    "9": {
+      "bullets": [
+        "Celaena is dressed for her first formal appearance before the king and struggles to hide her fear.",
+        "Chaol escorts her to the throne room and briefly compliments her appearance.",
+        "The coming competition becomes real as she prepares to face the ruler who sentenced her to Endovier."
+      ],
+      "image": null
+    },
+    "10": {
+      "bullets": [
+        "The king explains that twenty-four competitors will face tests over thirteen weeks until four remain for the final duel.",
+        "Dorian assigns Celaena the false identity Lillian Gordaina, a wealthy merchant\u2019s daughter and jewel thief.",
+        "Celaena meets Lady Kaltain Rompier and immediately distrusts her."
+      ],
+      "image": null
+    },
+    "11": {
+      "bullets": [
+        "The competitors begin formal training under Weapons Master Theodus Brullo.",
+        "Celaena studies the other contestants while continuing to hide her true skill.",
+        "Cain and several criminals emerge as notable rivals."
+      ],
+      "image": null
+    },
+    "12": {
+      "bullets": [
+        "The contestants introduce themselves and their specialties during training.",
+        "Celaena identifies Nox Owen as a capable thief and potential ally.",
+        "She remains careful not to reveal how dangerous she truly is."
+      ],
+      "image": null
+    },
+    "13": {
+      "bullets": [
+        "Celaena meets Princess Nehemia of Eyllwe and surprises her by speaking the Eyllwe language.",
+        "The two women quickly form a connection despite the tension between their countries.",
+        "Nehemia explains that she is at court to learn Adarlanian customs."
+      ],
+      "image": null
+    },
+    "14": {
+      "bullets": [
+        "Competitor Bill Chastain is found brutally murdered inside the castle.",
+        "Celaena begins quietly helping Nox improve during training.",
+        "Chaol and Celaena exchange personal details about their families and childhoods."
+      ],
+      "image": null
+    },
+    "15": {
+      "bullets": [
+        "The first elimination test is an archery competition.",
+        "Celaena performs well but deliberately avoids drawing too much attention.",
+        "The scars from Endovier and the physical cost of imprisonment remain visible."
+      ],
+      "image": null
+    },
+    "16": {
+      "bullets": [
+        "The competition eliminates weaker contestants while Celaena maintains her disguise.",
+        "One competitor attempts to escape and is killed by the guards.",
+        "The brutality surrounding the contest becomes impossible to ignore."
+      ],
+      "image": null
+    },
+    "17": {
+      "bullets": [
+        "Celaena continues rebuilding her strength and observing her rivals.",
+        "Her conversations with Dorian grow more comfortable and personal.",
+        "The contrast between courtly life and the danger beneath it continues to sharpen."
+      ],
+      "image": null
+    },
+    "18": {
+      "bullets": [
+        "The contestants prepare for another test while rumors about the murders spread.",
+        "Celaena remains alert to both the competition and the unexplained danger in the castle.",
+        "Her growing friendships complicate her original plan to remain emotionally detached."
+      ],
+      "image": null
+    },
+    "19": {
+      "bullets": [
+        "Kaltain becomes increasingly determined to secure Dorian\u2019s attention and views Celaena as a threat.",
+        "She looks to Duke Perrington for help advancing her position at court.",
+        "Court politics begin to intersect more directly with Celaena\u2019s presence."
+      ],
+      "image": null
+    },
+    "20": {
+      "bullets": [
+        "Celaena plays the piano, reconnecting with something she loved before Endovier.",
+        "Dorian hears her and learns about Sam, the person Celaena loved and lost.",
+        "The conversation reveals a more vulnerable side of Celaena\u2019s past."
+      ],
+      "image": null
     }
   },
   "sources": [
-    "SparkNotes Chapters 1–4",
-    "SparkNotes Chapters 5–8",
-    "SuperSummary Chapters 1–5",
+    "SparkNotes Chapters 1\u20134",
+    "SparkNotes Chapters 5\u20138",
+    "SuperSummary Chapters 1\u20135",
     "Reviews From a Bookworm recap"
   ],
   "title": "Throne of Glass",
   "summary": [
-    "After surviving a year in the Endovier salt mines, Celaena Sardothien accepts Crown Prince Dorian's offer to compete for the position of the King’s Champion. The contest offers a path to eventual freedom, but it also places her inside the court of the ruler whose empire destroyed so much of her life.",
+    "After surviving a year in the Endovier salt mines, Celaena Sardothien accepts Crown Prince Dorian's offer to compete for the position of the King\u2019s Champion. The contest offers a path to eventual freedom, but it also places her inside the court of the ruler whose empire destroyed so much of her life.",
     "At the glass castle, Celaena trains under Captain Chaol Westfall, grows closer to Dorian, and befriends Princess Nehemia. As competitors are murdered, she discovers that the contest is tied to forbidden magic, ancient symbols, and a threat hidden beneath the castle.",
-    "Celaena survives the final confrontation and becomes the king’s Champion. Her victory secures a future chance at freedom, but it also binds her to the king’s service and opens the door to much larger mysteries."
+    "Celaena survives the final confrontation and becomes the king\u2019s Champion. Her victory secures a future chance at freedom, but it also binds her to the king\u2019s service and opens the door to much larger mysteries."
   ],
   "whatChanged": [
-    "Celaena moves from prisoner to the King’s Champion.",
+    "Celaena moves from prisoner to the King\u2019s Champion.",
     "Her relationships with Dorian, Chaol, and Nehemia become central to her new life at court.",
-    "Ancient magic and Wyrdmarks emerge as forces that still operate despite the king’s ban on magic.",
+    "Ancient magic and Wyrdmarks emerge as forces that still operate despite the king\u2019s ban on magic.",
     "The castle and championship are revealed to hide dangers beyond the public competition."
   ]
 }

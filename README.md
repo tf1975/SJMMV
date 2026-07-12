@@ -54,3 +54,15 @@ Upload to the GitHub `development` branch and open the permanent Netlify develop
 - Increased spacing between chapter numbers and status text.
 - Standardized button heights and interactions.
 - Improved mobile layout and onboarding scrolling.
+
+
+## Content expansion pass
+- Removed chapter artwork from the reading layout.
+- Made onboarding fit within one viewport with a compact book-by-book wizard.
+- Front-page Characters, Places, and Whole Book buttons now open inline.
+- Expanded spoiler-free book overviews.
+- Added chapter-based Connection unlocks.
+- Expanded character directory and separated it by series.
+- Added Throne of Glass chapter summaries for Chapters 9–20.
+- Improved Book Club reader/progress spacing.
+- Added Global Connect and More to Come premium-preview cards.

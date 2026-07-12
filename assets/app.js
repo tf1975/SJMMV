@@ -2,7 +2,7 @@ const SUPABASE_URL='https://ikvwfkmyyynyicxqqqlf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_RnPfgxV1K7HBLaFLfzoSLg_K-fOMyGO';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let authUser=null,catalog,tog,lore,frontMatter,characters,places,currentBook,currentChapter=1,pendingNewUser=false,wizardBooks=[],wizardIndex=-1;
+let authUser=null,catalog,tog,lore,frontMatter,characters,places,characterIndex,connections,currentBook,currentChapter=1,pendingNewUser=false,wizardBooks=[],wizardIndex=-1;
 const KEY='archive-2-alpha';
 let state=JSON.parse(localStorage.getItem(KEY)||'{"profile":{"name":"Reader","mode":"first","onboarded":false},"progress":{},"discussions":{},"mentions":[]}');
 const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
@@ -12,8 +12,8 @@ const byId=id=>allBooks().find(b=>b.id===id);
 const progress=b=>Math.min(b.chapters,Number(state.progress[b.id]||0));
 function view(id){$$('.view').forEach(v=>v.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 async function boot(){
- [catalog,tog,lore,frontMatter,characters,places]=await Promise.all([
-  'data/catalog.json','content/tog.json','data/lore.json','data/front-matter.json','data/characters.json','data/places.json'
+ [catalog,tog,lore,frontMatter,characters,places,characterIndex,connections]=await Promise.all([
+  'data/catalog.json','content/tog.json','data/lore.json','data/front-matter.json','data/characters.json','data/places.json','data/character-index.json','data/connections.json'
  ].map(u=>fetch(u).then(r=>r.json())));
  bind();await initAuth();renderAll();
 }
@@ -26,7 +26,7 @@ function bind(){
  $('#wizardBeginBooks').onclick=beginBookWizard;$('#wizardNext').onclick=advanceWizard;$('#wizardBack').onclick=retreatWizard;
  $$('input[name="wizardStatus"]').forEach(r=>r.onchange=()=>$('#wizardChapterWrap').classList.toggle('hidden',r.value!=='reading'||!r.checked));
  $('#continueIntoBook').onclick=()=>{view('book');renderBook()};$('#saveFrontStatus').onclick=saveFrontStatus;
- $('#openCharacters').onclick=()=>{view('archive');openArchivePane('charactersPanel')};$('#openPlaces').onclick=()=>{view('archive');openArchivePane('placesPanel')};$('#openBookSummary').onclick=()=>{view('book');renderBook();document.querySelector('[data-tab="bookSummaryTab"]').click()};
+ $$('.front-panel-button').forEach(b=>b.onclick=()=>toggleFrontPanel(b.dataset.frontPanel));
  $$('.tabs button').forEach(b=>b.onclick=()=>{$$('.tabs button,.tabpane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.tab).classList.add('active')});
  $$('.archive-tabs button').forEach(b=>b.onclick=()=>openArchivePane(b.dataset.archive));
  $$('.map-open').forEach(b=>b.onclick=()=>openMap(b.dataset.src,b.dataset.title));$('#closeMap').onclick=()=>$('#mapModal').classList.add('hidden');$('#mapModal').onclick=e=>{if(e.target.id==='mapModal')$('#mapModal').classList.add('hidden')};
@@ -92,11 +92,25 @@ function animateBookOpen(spine,b){
  overlay.classList.remove('hidden');requestAnimationFrame(()=>overlay.classList.add('playing'));
  setTimeout(()=>{currentBook=b;currentChapter=Math.max(1,progress(b)||1);renderBookFront();overlay.classList.remove('playing');overlay.classList.add('hidden')},820);
 }
+function toggleFrontPanel(id){
+ $$('.front-inline-panel').forEach(p=>p.classList.toggle('active',p.id===id&&!p.classList.contains('active')));
+ $$('.front-panel-button').forEach(b=>b.classList.toggle('active',b.dataset.frontPanel===id&&$('#'+id).classList.contains('active')));
+}
 function renderBookFront(){
  view('bookFront');const fm=frontMatter[currentBook.id]||{};
  $('#frontCoverSeries').textContent=currentBook.collection;$('#frontCoverTitle').textContent=currentBook.title;$('#frontSeries').textContent=currentBook.collection;$('#frontTitle').textContent=currentBook.title;$('#frontTagline').textContent=fm.tagline||'';$('#frontSummary').textContent=fm.summary||'Spoiler-free summary in editorial production.';$('#frontContentStatus').textContent=fm.contentStatus||'Content in editorial production.';
  const p=progress(currentBook),status=p===0?'not-started':p>=currentBook.chapters?'finished':'reading';$$('input[name="frontStatus"]').forEach(r=>r.checked=r.value===status);$('#frontChapter').max=currentBook.chapters;$('#frontChapter').value=Math.max(1,p||1);$('#frontChapterWrap').classList.toggle('hidden',status!=='reading');
  $$('input[name="frontStatus"]').forEach(r=>r.onchange=()=>$('#frontChapterWrap').classList.toggle('hidden',r.value!=='reading'||!r.checked));
+ renderFrontPanels();
+}
+function renderFrontPanels(){
+ const p=Math.max(1,progress(currentBook)||1);
+ $('#frontCharactersPanel').innerHTML='<h3>Characters in this book</h3>'+groupEntries(safeEntries(characters,currentBook.id,p));
+ $('#frontPlacesPanel').innerHTML='<h3>Places in this book</h3>'+groupEntries(safeEntries(places,currentBook.id,p));
+ const fm=frontMatter[currentBook.id]||{};
+ const full=currentBook.id==='tog'&&tog.summary?tog.summary.map(x=>`<p>${esc(x)}</p>`).join(''):`<p>${esc(fm.summary||'Full summary in editorial production.')}</p><p class="fine-print">A spoiler-filled complete recap is still being reviewed.</p>`;
+ $('#frontWholeBookPanel').innerHTML='<h3>Whole-book summary</h3>'+full;
+ $$('.front-inline-panel,.front-panel-button').forEach(x=>x.classList.remove('active'));
 }
 function saveFrontStatus(){const status=$('input[name="frontStatus"]:checked').value;state.progress[currentBook.id]=status==='not-started'?0:status==='finished'?currentBook.chapters:Math.max(1,Math.min(currentBook.chapters,Number($('#frontChapter').value||1)));currentChapter=Math.max(1,progress(currentBook)||1);save();renderAll();renderBookFront()}
 function renderBook(){
@@ -109,7 +123,6 @@ function renderBook(){
 }
 function renderChapter(){
  $('#chapterLabel').textContent=`Chapter ${currentChapter}`;const seed=currentBook.id==='tog'?tog.chapters[String(currentChapter)]:null;
- if(seed?.image){$('#art').src=seed.image;$('#artStatus').textContent='Original concept banner';}else{$('#art').src='assets/chapter-art/placeholder.svg';$('#artStatus').textContent='Chapter artwork is still in production';}
  $('#summary').innerHTML=seed?`<ul>${seed.bullets.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>This chapter summary is in editorial production.</p>';
  $('#sumTab').innerHTML=seed?'<div class="evidence"><b>Chapter summary</b><p>Short, original recap based on cross-checked public sources.</p></div>':'<p>Content in production.</p>';
  const fm=frontMatter[currentBook.id]||{};$('#bookSummaryTab').innerHTML=currentBook.id==='tog'&&tog.summary?`<h3>The book in brief</h3>${tog.summary.map(p=>`<p>${esc(p)}</p>`).join('')}<h3>What changed</h3><ul>${tog.whatChanged.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:`<h3>Spoiler-free overview</h3><p>${esc(fm.summary||'In production.')}</p><p class="fine-print">The full spoiler-filled book recap is in editorial production.</p>`;
@@ -120,10 +133,14 @@ function renderChapter(){
 function safeEntries(source,bookId,chapter){return(source[bookId]||[]).filter(x=>x.safeAt<=chapter)}
 function groupEntries(entries){const groups={};entries.forEach(x=>(groups[x.group]??=[]).push(x));return Object.entries(groups).map(([g,items])=>`<section class="directory-group"><h3>${esc(g)}</h3>${items.map(x=>`<article><b>${esc(x.name)}</b><p>${esc(x.bio)}</p></article>`).join('')}</section>`).join('')||'<p>No entries are safe yet.</p>'}
 function renderBookDirectoryTabs(){$('#charactersTab').innerHTML=groupEntries(safeEntries(characters,currentBook.id,currentChapter));$('#placesTab').innerHTML=groupEntries(safeEntries(places,currentBook.id,currentChapter))}
-function renderChapterLore(){const available=lore.filter(l=>l.requires.every(req=>progress(byId(req.bookId))>=req.chapter)&&l.requires.some(req=>req.bookId===currentBook.id&&req.chapter<=currentChapter));$('#loreTab').innerHTML=available.length?available.map(l=>`<div class="evidence"><span>${esc(l.type)}</span><h3>${esc(l.title)}</h3><p>${esc(l.summary)}</p></div>`).join(''):'<p>No new lore is safe at this point.</p>';$('#connTab').innerHTML='<p>Verified cross-series connections are being audited. Nothing will appear here until every requirement and citation is reviewed.</p>'}
+function renderChapterLore(){const available=lore.filter(l=>l.requires.every(req=>progress(byId(req.bookId))>=req.chapter)&&l.requires.some(req=>req.bookId===currentBook.id&&req.chapter<=currentChapter));$('#loreTab').innerHTML=available.length?available.map(l=>`<div class="evidence"><span>${esc(l.type)}</span><h3>${esc(l.title)}</h3><p>${esc(l.summary)}</p></div>`).join(''):'<p>No new lore is safe at this point.</p>';const unlockedConnections=connections.filter(c=>c.requires.every(req=>progress(byId(req.bookId))>=req.chapter));
+ $('#connTab').innerHTML=unlockedConnections.length?unlockedConnections.map(c=>`<div class="evidence"><span>${esc(c.status)}</span><h3>${esc(c.title)}</h3><p>${esc(c.summary)}</p><small>${c.evidence.map(esc).join(' · ')}</small></div>`).join(''):'<p>No verified Connections are unlocked at your current reading progress.</p>'}
 function renderDiscussion(){const key=`${currentBook.id}-${currentChapter}`,posts=state.discussions[key]||[];$('#discussionFeed').innerHTML=posts.map(p=>`<article class="discussion-post"><b>${esc(p.author)}</b><p>${esc(p.text)}</p></article>`).join('')||'<p>No posts yet.</p>';$('#postDiscussion').onclick=()=>{const text=$('#discussionText').value.trim();if(!text)return;state.discussions[key]=state.discussions[key]||[];state.discussions[key].push({author:state.profile.name,text});save();$('#discussionText').value='';renderDiscussion()}}
-function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b>${esc(state.profile.name)}</b><span>${esc(currentProgressText())}</span></div>`}
+function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b class="reader-name">${esc(state.profile.name)}</b><span class="reader-progress">${esc(currentProgressText())}</span></div>`}
 function renderMentions(){$('#mentions').innerHTML=state.mentions.length?state.mentions.map(m=>`<div>${esc(m.from)} mentioned you</div>`).join(''):'<p>No mentions yet.</p>'}
 function renderLore(){$('#loreGrid').innerHTML=lore.map(l=>{const ok=l.requires.every(req=>progress(byId(req.bookId))>=req.chapter);return`<article class="lorecard ${ok?'':'locked'}"><small>${ok?esc(l.type):'LOCKED'}</small><h3>${esc(ok?l.title:'Undiscovered entry')}</h3><p>${ok?esc(l.summary):'Continue reading to unlock this entry safely.'}</p></article>`}).join('')}
-function renderDirectories(){const allChar=Object.entries(characters).flatMap(([id,arr])=>arr.filter(x=>progress(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));const allPlace=Object.entries(places).flatMap(([id,arr])=>arr.filter(x=>progress(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));$('#archiveCharacters').innerHTML=groupEntries(allChar);$('#archivePlaces').innerHTML=groupEntries(allPlace);$('#readerList').innerHTML=`<div class="panel"><b>${esc(state.profile.name)}</b><p>${esc(currentProgressText())}</p></div>`}
+function renderFullCharacterIndex(){
+ return Object.entries(characterIndex).map(([series,items])=>`<section class="series-directory"><h2>${esc(series)}</h2><p class="fine-print">${items.length} catalogued characters. Full spoiler-safe biographies are being reviewed.</p><div class="name-grid">${items.map(x=>`<span>${esc(x.name)}</span>`).join('')}</div></section>`).join('');
+}
+function renderDirectories(){const allChar=Object.entries(characters).flatMap(([id,arr])=>arr.filter(x=>progress(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));const allPlace=Object.entries(places).flatMap(([id,arr])=>arr.filter(x=>progress(byId(id))>=x.safeAt).map(x=>({...x,bookId:id})));$('#archiveCharacters').innerHTML=groupEntries(allChar)+renderFullCharacterIndex();$('#archivePlaces').innerHTML=groupEntries(allPlace);$('#readerList').innerHTML=`<div class="panel"><b>${esc(state.profile.name)}</b><p>${esc(currentProgressText())}</p></div>`}
 boot();

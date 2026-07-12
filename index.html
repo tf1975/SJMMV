@@ -82,6 +82,16 @@
     <article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>View the uploaded maps of Erilea, Prythian, and Lunathion.</p><button class="outline">Open the Atlas</button></div></article>
     <article id="archiveCard" class="panel feature"><span>✦</span><div><small>DISCOVER SAFELY</small><h3>The Archive</h3><p>Lore, characters, places, and connections unlock with your reading progress.</p><button class="outline">Enter the Archive</button></div></article>
   </div>
+  <div class="grid future-grid">
+    <article class="panel future-card locked-feature">
+      <span class="future-icon">◎</span>
+      <div><small>COMING LATER · PREMIUM</small><h3>Global Connect</h3><p>Meet readers beyond your private Book Club through spoiler-safe global discussions, follows, and shared reading communities.</p><button class="outline" disabled>Coming later</button></div>
+    </article>
+    <article class="panel future-card locked-feature">
+      <span class="future-icon">＋</span>
+      <div><small>COMING LATER · PREMIUM</small><h3>More to Come</h3><p>Future fantasy collections and book universes will appear here as The Archive expands.</p><button class="outline" disabled>Coming later</button></div>
+    </article>
+  </div>
   <footer id="notice"></footer>
 </section>
 
@@ -106,9 +116,14 @@
         <button id="saveFrontStatus" class="gold">Save status</button>
       </div>
       <div class="front-links">
-        <button id="openCharacters" class="outline">Characters</button>
-        <button id="openPlaces" class="outline">Places</button>
-        <button id="openBookSummary" class="outline">Whole-book summary</button>
+        <button class="outline front-panel-button" data-front-panel="frontCharactersPanel">Characters</button>
+        <button class="outline front-panel-button" data-front-panel="frontPlacesPanel">Places</button>
+        <button class="outline front-panel-button" data-front-panel="frontWholeBookPanel">Whole Book</button>
+      </div>
+      <div id="frontInlinePanels" class="front-inline-panels">
+        <section id="frontCharactersPanel" class="front-inline-panel"></section>
+        <section id="frontPlacesPanel" class="front-inline-panel"></section>
+        <section id="frontWholeBookPanel" class="front-inline-panel"></section>
       </div>
       <p id="frontContentStatus" class="fine-print"></p>
       <button id="continueIntoBook" class="gold wide">Open chapter guide →</button>
@@ -125,7 +140,6 @@
       <div id="chapterNav" class="chapters"></div>
     </div></section>
     <section class="page right"><div class="pad">
-      <div class="chapter-visual"><img id="art" class="art" alt="Chapter artwork"><div id="artStatus" class="art-status"></div></div>
       <small id="chapterLabel"></small><h2>What you’ll remember</h2><div id="summary"></div>
       <div class="tabs"><button data-tab="sumTab" class="active">Summary</button><button data-tab="bookSummaryTab">Whole Book</button><button data-tab="charactersTab">Characters</button><button data-tab="placesTab">Places</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="discTab">Discussion</button></div>
       <div id="sumTab" class="tabpane active"></div><div id="bookSummaryTab" class="tabpane"></div><div id="charactersTab" class="tabpane"></div><div id="placesTab" class="tabpane"></div><div id="loreTab" class="tabpane"></div><div id="connTab" class="tabpane"></div>
