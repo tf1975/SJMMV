@@ -8,7 +8,11 @@
         "Chaol Westfall escorts her to meet Crown Prince Dorian.",
         "Celaena immediately studies the people and surroundings for possible escape routes."
       ],
-      "art": "A bleak salt mine at dawn, chains in pale dust, a distant black-cloaked guard, cinematic fantasy landscape, no visible faces."
+      "art": "A bleak salt mine at dawn, chains in pale dust, a distant black-cloaked guard, cinematic fantasy landscape, no visible faces.",
+      "image": "assets/chapter-art/tog/chapter-01.svg",
+      "reread": [
+        "Celaena’s instinct to assess exits and threats establishes a pattern that continues throughout the series."
+      ]
     },
     "2": {
       "bullets": [
@@ -16,7 +20,9 @@
         "She clashes with Dorian and Chaol while hiding how physically weakened she has become.",
         "Dorian hints that he has an offer that could remove her from Endovier."
       ],
-      "art": "A cold stone chamber lit by narrow winter light, three silhouetted figures facing one another."
+      "art": "A cold stone chamber lit by narrow winter light, three silhouetted figures facing one another.",
+      "image": "assets/chapter-art/tog/chapter-02.svg",
+      "reread": []
     },
     "3": {
       "bullets": [
@@ -24,7 +30,11 @@
         "Dorian wants Celaena as his candidate under an alias.",
         "If she wins and serves for four years, Dorian promises to secure her freedom."
       ],
-      "art": "A black chessboard beside a sealed royal contract, one gold piece facing many dark pieces."
+      "art": "A black chessboard beside a sealed royal contract, one gold piece facing many dark pieces.",
+      "image": "assets/chapter-art/tog/chapter-03.svg",
+      "reread": [
+        "The bargain over service and freedom frames one of the novel’s central conflicts: survival inside a system she despises."
+      ]
     },
     "4": {
       "bullets": [
@@ -32,15 +42,21 @@
         "She is washed, dressed, and prepared to leave Endovier with the royal party.",
         "The suffering in the mines remains impossible for her to ignore as she departs."
       ],
-      "art": "A prison gate opening toward a snowy road and a waiting carriage at sunrise."
+      "art": "A prison gate opening toward a snowy road and a waiting carriage at sunrise.",
+      "image": "assets/chapter-art/tog/chapter-04.svg",
+      "reread": []
     },
     "5": {
       "bullets": [
         "Celaena travels toward Rifthold with Dorian, Chaol, and the royal company.",
         "She sees the glass castle above the city and remembers seeing it years earlier.",
-        "She tells Chaol she believes another assassin\u2019s betrayal led to her capture."
+        "She tells Chaol she believes another assassin’s betrayal led to her capture."
       ],
-      "art": "A glass castle above a walled winter city, viewed from a distant ridge."
+      "art": "A glass castle above a walled winter city, viewed from a distant ridge.",
+      "image": "assets/chapter-art/tog/chapter-05.svg",
+      "reread": [
+        "The glass castle’s beauty and unnatural construction become more meaningful as its hidden history is uncovered."
+      ]
     },
     "6": {
       "bullets": [
@@ -48,15 +64,19 @@
         "The comfort sharply contrasts with Endovier, but she remains wary of being watched.",
         "Chaol makes clear that her training will begin immediately."
       ],
-      "art": "An ornate bedchamber, folded silk clothing, a guarded door, winter city lights beyond."
+      "art": "An ornate bedchamber, folded silk clothing, a guarded door, winter city lights beyond.",
+      "image": "assets/chapter-art/tog/chapter-06.svg",
+      "reread": []
     },
     "7": {
       "bullets": [
-        "Chaol begins rebuilding Celaena\u2019s strength through early training and running.",
+        "Chaol begins rebuilding Celaena’s strength through early training and running.",
         "She resents how much endurance she lost but refuses to appear defeated.",
         "Their competitive hostility starts to shape their daily routine."
       ],
-      "art": "A frost-covered castle training yard before sunrise, two distant figures running."
+      "art": "A frost-covered castle training yard before sunrise, two distant figures running.",
+      "image": "assets/chapter-art/tog/chapter-07.svg",
+      "reread": []
     },
     "8": {
       "bullets": [
@@ -64,13 +84,27 @@
         "She is introduced as Lady Lillian Gordaina to conceal her identity.",
         "Cain stands out as one of the most dangerous contenders."
       ],
-      "art": "A torchlit training hall filled with shadowed competitors and weapons."
+      "art": "A torchlit training hall filled with shadowed competitors and weapons.",
+      "image": "assets/chapter-art/tog/chapter-08.svg",
+      "reread": []
     }
   },
   "sources": [
-    "SparkNotes Chapters 1\u20134",
-    "SparkNotes Chapters 5\u20138",
-    "SuperSummary Chapters 1\u20135",
+    "SparkNotes Chapters 1–4",
+    "SparkNotes Chapters 5–8",
+    "SuperSummary Chapters 1–5",
     "Reviews From a Bookworm recap"
+  ],
+  "title": "Throne of Glass",
+  "summary": [
+    "After surviving a year in the Endovier salt mines, Celaena Sardothien accepts Crown Prince Dorian's offer to compete for the position of the King’s Champion. The contest offers a path to eventual freedom, but it also places her inside the court of the ruler whose empire destroyed so much of her life.",
+    "At the glass castle, Celaena trains under Captain Chaol Westfall, grows closer to Dorian, and befriends Princess Nehemia. As competitors are murdered, she discovers that the contest is tied to forbidden magic, ancient symbols, and a threat hidden beneath the castle.",
+    "Celaena survives the final confrontation and becomes the king’s Champion. Her victory secures a future chance at freedom, but it also binds her to the king’s service and opens the door to much larger mysteries."
+  ],
+  "whatChanged": [
+    "Celaena moves from prisoner to the King’s Champion.",
+    "Her relationships with Dorian, Chaol, and Nehemia become central to her new life at court.",
+    "Ancient magic and Wyrdmarks emerge as forces that still operate despite the king’s ban on magic.",
+    "The castle and championship are revealed to hide dangers beyond the public competition."
   ]
 }

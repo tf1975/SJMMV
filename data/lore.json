@@ -3,23 +3,39 @@
     "id": "endovier",
     "title": "Endovier",
     "type": "canon",
+    "category": "location",
     "summary": "A brutal salt-mine prison camp used by Adarlan for forced labor.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 1
       }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 1,
+        "note": "Celaena’s imprisonment and survival in Endovier are established."
+      }
     ]
   },
   {
-    "id": "champion",
-    "title": "The King\u2019s Champion",
+    "id": "kings-champion",
+    "title": "The King’s Champion",
     "type": "canon",
-    "summary": "A covert agent chosen to carry out the king\u2019s missions.",
+    "category": "title",
+    "summary": "A covert operative selected through a royal competition to carry out missions for the King of Adarlan.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 3
+      }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 3,
+        "note": "Dorian explains the competition, service term, and promise of freedom."
       }
     ]
   },
@@ -27,27 +43,39 @@
     "id": "glass-castle",
     "title": "The Glass Castle",
     "type": "canon",
-    "summary": "The royal seat in Rifthold, built partly of glass and visible above the city.",
+    "category": "location",
+    "summary": "The royal seat in Rifthold, built partly from glass and rising above the city.",
     "requires": [
       {
         "bookId": "tog",
         "chapter": 5
       }
+    ],
+    "evidence": [
+      {
+        "bookId": "tog",
+        "chapter": 5,
+        "note": "Celaena sees and recalls the castle while approaching Rifthold."
+      }
     ]
   },
   {
-    "id": "crossing",
-    "title": "World-Crossing Thread",
-    "type": "connection",
-    "summary": "A cross-world link that appears only after every required chapter is complete.",
+    "id": "celaena-alias",
+    "title": "Lady Lillian Gordaina",
+    "type": "canon",
+    "category": "identity",
+    "summary": "The alias assigned to Celaena during the Champion competition to conceal that Dorian’s contestant is Adarlan’s Assassin.",
     "requires": [
       {
         "bookId": "tog",
-        "chapter": 55
-      },
+        "chapter": 8
+      }
+    ],
+    "evidence": [
       {
-        "bookId": "hofas",
-        "chapter": 102
+        "bookId": "tog",
+        "chapter": 8,
+        "note": "She is introduced to the other competitors under the false name."
       }
     ]
   }
