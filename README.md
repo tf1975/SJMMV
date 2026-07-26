@@ -132,3 +132,31 @@ Still browser-local:
 - Character profiles are deduplicated inside each series and remain gated by completed chapters.
 - Original Throne of Glass chapter summaries now cover Chapters 1–40.
 - Lore and Connections gained additional reviewed artifacts, world-walking concepts, canon crossovers, and clearly marked fan theories.
+# Archive 2.6 community setup
+
+Before testing the new community features, run `supabase/archive-community-2.6.sql` in the Supabase SQL Editor.
+
+The following work immediately after that migration:
+
+- all current readers in the Book Club panel;
+- Book Club bulletin posts;
+- chapter and book-opening/book-ending song recommendations;
+- private Supabase Storage uploads for reader art;
+- spoiler-gated reader theories;
+- meetups and events;
+- community “Dear Sarah” letters.
+
+The Archivist and mention emails use Netlify Functions so private keys never appear in browser code. Add these values under Netlify → Site configuration → Environment variables:
+
+- `OPENAI_API_KEY` — enables AI answers;
+- `OPENAI_MODEL` — optional, defaults to `gpt-5.4-nano`;
+- `SUPABASE_URL` — `https://ikvwfkmyyynyicxqqqlf.supabase.co`;
+- `SUPABASE_PUBLISHABLE_KEY` — the existing browser-safe publishable key;
+- `SUPABASE_SERVICE_ROLE_KEY` — needed only by the mention-email function; never put it in frontend code;
+- `RESEND_API_KEY` — enables mention emails;
+- `RESEND_FROM_EMAIL` — a verified sender such as `The Archive <mentions@thechapterarchive.com>`;
+- `SITE_URL` — `https://thechapterarchive.com`.
+
+Without an OpenAI key, The Archivist automatically falls back to the local spoiler-safe Archive index. Without Resend configuration, in-site mentions continue to work but the optional email is skipped.
+
+The Archivist verifies the reader’s Supabase progress on every request, sends only unlocked facts to OpenAI, refuses unsupported questions, checks the answer for locked character names, and limits each account to 20 questions per hour. OpenAI keys remain server-side.
