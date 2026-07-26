@@ -28,11 +28,16 @@ export async function handler(event) {
   if (!userResponse.ok) return fail(401, 'Session expired.', `Supabase auth returned ${userResponse.status}`);
   const requester = await userResponse.json();
   const adminHeaders = adminHeadersFor(serviceKey);
-  const mentionResponse = await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mentionId)}&select=id,post_id,mentioned_user_id,email_sent_at`, { headers: adminHeaders });
-  const mention = (await mentionResponse.json())[0];
-  if (!mention) return fail(404, 'Mention not found.');
+  // The post author is allowed to read the mention they just created. Use their
+  // session for this lookup instead of bypassing RLS with the server key.
+  const mentionResponse = await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mentionId)}&select=id,post_id,mentioned_user_id,email_sent_at`, { headers: authHeaders });
+  if (!mentionResponse.ok) return fail(502, 'Supabase could not load the new mention.', `${mentionResponse.status}: ${(await mentionResponse.text()).slice(0,500)}`);
+  const mentionRows = await mentionResponse.json();
+  const mention = mentionRows[0];
+  if (!mention) return fail(404, 'The new mention is not visible to its author. Rerun the mention security policies.');
   if (mention.email_sent_at) return json(200, { sent: true, duplicate: true });
-  const postResponse = await fetch(`${SUPABASE_URL}/rest/v1/chapter_posts?id=eq.${encodeURIComponent(mention.post_id)}&select=id,author_id,author_nickname,book_id,chapter_number,body`, { headers: adminHeaders });
+  const postResponse = await fetch(`${SUPABASE_URL}/rest/v1/chapter_posts?id=eq.${encodeURIComponent(mention.post_id)}&select=id,author_id,author_nickname,book_id,chapter_number,body`, { headers: authHeaders });
+  if (!postResponse.ok) return fail(502, 'Supabase could not load the discussion post.', `${postResponse.status}: ${(await postResponse.text()).slice(0,500)}`);
   const post = (await postResponse.json())[0];
   if (!post || post.author_id !== requester.id) return fail(403, 'Only the post author can send this notice.');
   const recipientResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${mention.mentioned_user_id}`, { headers: adminHeaders });
