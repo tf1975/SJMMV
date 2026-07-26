@@ -4,29 +4,39 @@ const SITE_URL = (process.env.SITE_URL || 'https://thechapterarchive.com').repla
 const json = (statusCode, body) => ({ statusCode, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(body) });
 const bearer = headers => String(headers.authorization || '').replace(/^Bearer\s+/i, '');
 const clean = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
+const fail = (statusCode, error, detail) => { console.error('[notify-mention]', error, detail || ''); return json(statusCode, { error }); };
+const adminHeadersFor = key => {
+  const headers = { apikey: key, 'Content-Type': 'application/json' };
+  // Legacy service_role keys are JWTs and can be used as the bearer token. New
+  // sb_secret keys authenticate through the apikey header and must not be sent
+  // as a bearer token.
+  if (String(key).split('.').length === 3) headers.Authorization = `Bearer ${key}`;
+  return headers;
+};
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed.' });
-  const token = bearer(event.headers), serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY, resendKey = process.env.RESEND_API_KEY;
-  if (!token) return json(401, { error: 'Authentication required.' });
-  if (!serviceKey || !resendKey || !process.env.RESEND_FROM_EMAIL) return json(503, { error: 'Mention email delivery is not configured.' });
-  let body; try { body = JSON.parse(event.body || '{}'); } catch { return json(400, { error: 'Invalid request.' }); }
-  const mentionId = String(body.mentionId || ''); if (!/^[0-9a-f-]{36}$/i.test(mentionId)) return json(400, { error: 'Invalid mention.' });
+  const token = bearer(event.headers), serviceKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY, resendKey = process.env.RESEND_API_KEY;
+  if (!token) return fail(401, 'Authentication required.');
+  const missing = [['SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY', serviceKey], ['RESEND_API_KEY', resendKey], ['RESEND_FROM_EMAIL', process.env.RESEND_FROM_EMAIL]].filter(([,value]) => !value).map(([name]) => name);
+  if (missing.length) return fail(503, `Development email configuration is missing: ${missing.join(', ')}.`);
+  let body; try { body = JSON.parse(event.body || '{}'); } catch { return fail(400, 'Invalid request.'); }
+  const mentionId = String(body.mentionId || ''); if (!/^[0-9a-f-]{36}$/i.test(mentionId)) return fail(400, 'Invalid mention.');
 
   const authHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` };
   const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: authHeaders });
-  if (!userResponse.ok) return json(401, { error: 'Session expired.' });
+  if (!userResponse.ok) return fail(401, 'Session expired.', `Supabase auth returned ${userResponse.status}`);
   const requester = await userResponse.json();
-  const adminHeaders = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json' };
+  const adminHeaders = adminHeadersFor(serviceKey);
   const mentionResponse = await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mentionId)}&select=id,post_id,mentioned_user_id,email_sent_at`, { headers: adminHeaders });
   const mention = (await mentionResponse.json())[0];
-  if (!mention) return json(404, { error: 'Mention not found.' });
+  if (!mention) return fail(404, 'Mention not found.');
   if (mention.email_sent_at) return json(200, { sent: true, duplicate: true });
   const postResponse = await fetch(`${SUPABASE_URL}/rest/v1/chapter_posts?id=eq.${encodeURIComponent(mention.post_id)}&select=id,author_id,author_nickname,book_id,chapter_number,body`, { headers: adminHeaders });
   const post = (await postResponse.json())[0];
-  if (!post || post.author_id !== requester.id) return json(403, { error: 'Only the post author can send this notice.' });
+  if (!post || post.author_id !== requester.id) return fail(403, 'Only the post author can send this notice.');
   const recipientResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${mention.mentioned_user_id}`, { headers: adminHeaders });
-  if (!recipientResponse.ok) return json(404, { error: 'Mentioned reader not found.' });
+  if (!recipientResponse.ok) return fail(404, 'Mentioned reader not found.', `Supabase admin returned ${recipientResponse.status}`);
   const recipient = await recipientResponse.json();
   if (!recipient.email) return json(200, { sent: false, reason: 'No email address.' });
   let chapterIsSafe = false;
@@ -45,7 +55,7 @@ export async function handler(event) {
     ? `<p><strong>${clean(post.author_nickname)}</strong> mentioned you in a chapter discussion:</p><blockquote style="border-left:3px solid #b78b3c;padding-left:16px">${clean(excerpt)}</blockquote><p><a href="${clean(link)}" style="display:inline-block;background:#b78b3c;color:#17120a;padding:12px 18px;border-radius:9px;text-decoration:none;font-weight:bold">Open the spoiler-safe discussion</a></p>`
     : `<p><strong>${clean(post.author_nickname)}</strong> mentioned you in a chapter you have not finished yet.</p><p>The message is hidden to protect you from spoilers. It will become available in The Archive after you complete that chapter.</p>`;
   const sendResponse = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL, to: [recipient.email], subject: `${post.author_nickname} mentioned you in The Archive`, html: `<div style="font-family:Georgia,serif;max-width:600px;margin:auto;color:#251e15"><h1>The Archive</h1>${notice}<p style="font-size:12px;color:#6f6659">The Archive checks your saved reading progress before revealing chapter discussions.</p></div>` }) });
-  if (!sendResponse.ok) return json(502, { error: 'Email provider rejected the message.' });
+  if (!sendResponse.ok) return fail(502, 'Email provider rejected the message.', `${sendResponse.status}: ${(await sendResponse.text()).slice(0,500)}`);
   await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}`, { method: 'PATCH', headers: { ...adminHeaders, Prefer: 'return=minimal' }, body: JSON.stringify({ email_sent_at: new Date().toISOString() }) });
   return json(200, { sent: true });
 }

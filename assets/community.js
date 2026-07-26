@@ -219,11 +219,22 @@
   }
 
   async function notifyMention(mentionId) {
-    if (!signedIn()) return;
+    if (!signedIn()) return { ok: false, error: 'Sign in again and retry.' };
     const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) return;
-    try { await fetch('/.netlify/functions/notify-mention', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ mentionId }) }); }
-    catch (error) { console.warn('Mention email could not be queued:', error); }
+    if (!session) return { ok: false, error: 'Your session expired. Sign in again.' };
+    try {
+      const response = await fetch('/.netlify/functions/notify-mention', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ mentionId }) });
+      let payload = {}; try { payload = await response.json(); } catch {}
+      if (!response.ok) {
+        const error = payload.error || `Email service returned ${response.status}.`;
+        console.error('Mention email rejected:', response.status, error);
+        return { ok: false, error };
+      }
+      return { ok: payload.sent !== false, error: payload.reason || null };
+    } catch (error) {
+      console.error('Mention email could not be reached:', error);
+      return { ok: false, error: 'The development email function could not be reached.' };
+    }
   }
 
   function handleDeepLink() {

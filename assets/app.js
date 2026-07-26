@@ -393,14 +393,19 @@ async function renderDiscussion(){
  };
 }
 async function createMentionsForPost(postId,text){
+ const status=$('#mentionEmailStatus');if(status){status.textContent='';status.className='mention-email-status'}
  const {data:profiles,error}=await supabaseClient.rpc('list_mentionable_readers');
- if(error){console.error('Mention lookup failed:',error);return}
+ if(error){console.error('Mention lookup failed:',error);if(status){status.textContent='The post saved, but readers could not be checked for email mentions.';status.classList.add('error')}return}
  const recipients=(profiles||[]).filter(profile=>profile.id!==authUser.id&&new RegExp(`(^|[^A-Za-z0-9_])@${escapeRegex(profile.nickname)}(?=$|[^A-Za-z0-9_])`,'i').test(text));
  if(!recipients.length)return;
  const rows=recipients.map(profile=>({post_id:postId,mentioned_user_id:profile.id}));
  const {data:createdMentions,error:mentionError}=await supabaseClient.from('mentions').upsert(rows,{onConflict:'post_id,mentioned_user_id'}).select('id');
- if(mentionError)console.error('Mention save failed:',mentionError);
- else for(const mention of createdMentions||[])void window.ArchiveCommunity?.notifyMention(mention.id);
+ if(mentionError){console.error('Mention save failed:',mentionError);if(status){status.textContent='The post saved, but the mention could not be created.';status.classList.add('error')}return}
+ if(!window.ArchiveCommunity?.notifyMention){if(status){status.textContent='The mention saved, but the email service is unavailable in this build.';status.classList.add('error')}return}
+ if(status)status.textContent='Mention saved. Sending the email notice…';
+ const results=await Promise.all((createdMentions||[]).map(mention=>window.ArchiveCommunity.notifyMention(mention.id)));
+ const failure=results.find(result=>!result?.ok);
+ if(status){status.textContent=failure?`Mention saved, but email was not sent: ${failure.error}`:'Mention saved and email notice sent.';status.classList.add(failure?'error':'success')}
 }
 function escapeRegex(value){return String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 async function loadMentionCandidates(){
