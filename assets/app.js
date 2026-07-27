@@ -105,6 +105,7 @@ async function applySession(session){
  else $('#onboardingGate').classList.add('hidden');
 
  renderAll();
+ window.ArchiveCommunity?.handleDeepLink();
 }
 
 async function loadCloudState(defaultName,expectedUserId,loadId){
@@ -265,7 +266,7 @@ function renderAll(){
  $('#modeBtn').textContent=reread?'Reread':'First Read';$('#visibleModeToggle').textContent=reread?'Switch to First Read':'Switch to Reread Mode';
  $('#modeStatus').textContent=reread?'Reread Mode is ON — later significance appears only when safe.':'First Read is ON — future context remains hidden.';
  $('#setupHeadline').textContent=`${state.profile.name}’s books and chapters`;$('#setupSummary').textContent=currentProgressText()+(authUser?' · Synced to your Archive account':' · Saved only in this browser');
- document.body.classList.toggle('reread',reread);$('#notice').textContent=catalog.platform.notice;renderReleases();renderLibrary();renderReaders();renderMentions();renderLore();renderDirectories();
+ document.body.classList.toggle('reread',reread);$('#notice').textContent=catalog.platform.notice;renderReleases();renderLibrary();renderReaders();renderMentions();renderLore();renderDirectories();window.ArchiveCommunity?.renderHome();
 }
 function currentProgressText(){const active=allBooks().filter(b=>readingStatus(b)==='reading');if(!active.length)return'No current book selected. Use Update books & chapters to set your place.';return active.map(b=>`${b.title}: Chapter ${progress(b)}`).join(' · ')}
 function renderReleases(){const el=$('#releases');el.innerHTML=allBooks().filter(b=>b.upcoming).map(b=>`<div class="release"><span><strong>${esc(b.title)}</strong><br>${new Date(b.release).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}</span><b id="c-${b.id}"></b></div>`).join('');tick()}
@@ -299,7 +300,7 @@ function renderBookFront(){
  const p=progress(currentBook),status=readingStatus(currentBook);$$('input[name="frontStatus"]').forEach(r=>r.checked=r.value===status);$('#frontChapter').max=currentBook.chapters;$('#frontChapter').value=Math.max(1,p||1);$('#frontChapterWrap').classList.toggle('hidden',status!=='reading');
  $('#frontRereading').checked=!!state.bookSettings[currentBook.id]?.rereading;
  $$('input[name="frontStatus"]').forEach(r=>r.onchange=()=>$('#frontChapterWrap').classList.toggle('hidden',r.value!=='reading'||!r.checked));
- renderFrontPanels();
+ renderFrontPanels();window.ArchiveCommunity?.renderBookFront();
 }
 function renderFrontPanels(){
  if(isTandem(currentBook)){renderTandemFrontPanels();return}
@@ -309,8 +310,8 @@ function renderFrontPanels(){
  const fm=frontMatter[currentBook.id]||{};
  const mayReadFull=readingStatus(currentBook)==='finished';
  const fullContent=bookContent[currentBook.id];
- const full=mayReadFull?(fullContent?.summary?fullContent.summary.map(x=>`<p>${esc(x)}</p>`).join(''):`<p>${esc(fm.summary||'Full summary in editorial production.')}</p><p class="fine-print">A spoiler-filled complete recap is still being reviewed.</p>`):'<div class="locked-summary"><b>Finish this book to unlock its complete summary.</b><p>The spoiler-free overview above remains available while you read.</p></div>';
- $('#frontWholeBookPanel').innerHTML='<h3>Whole-book summary</h3>'+full;
+ const full=mayReadFull?(fullContent?.summary?fullContent.summary.map(x=>`<p>${esc(x)}</p>`).join(''):'<p class="fine-print">The spoiler-filled complete recap is still in editorial review. It will not repeat the spoiler-free opening overview.</p>'):'<div class="locked-summary"><b>Finish this book to unlock its complete, spoiler-filled summary.</b><p>The spoiler-free overview above remains available while you read.</p></div>';
+ $('#frontWholeBookPanel').innerHTML='<h3>Complete book summary · spoilers</h3>'+full;
  $$('.front-inline-panel,.front-panel-button').forEach(x=>x.classList.remove('active'));
 }
 function tandemUnderlyingProgress(done=tandemStep()){
@@ -344,7 +345,7 @@ function renderChapter(){
  $('#chapterLabel').textContent=`Chapter ${currentChapter}`;const seed=bookContent[currentBook.id]?.chapters?.[String(currentChapter)]||null;
  const chapterSafe=currentChapter<=completedThrough(currentBook)||readingStatus(currentBook)==='finished';
  $('#summary').innerHTML=!chapterSafe?'<div class="locked-summary"><b>Finish this chapter to unlock its recap.</b><p>This protects you from seeing the chapter’s events too early.</p></div>':seed?`<ul>${seed.bullets.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>This chapter summary is in editorial production.</p>';
- renderBookDirectoryTabs();renderChapterLore();renderDiscussion();
+ renderBookDirectoryTabs();renderChapterLore();renderDiscussion();window.ArchiveCommunity?.renderChapter();
  $('#complete').onclick=async()=>{if(currentChapter>=currentBook.chapters)setBookProgress(currentBook,'finished',currentBook.chapters);else setBookProgress(currentBook,'reading',Math.max(progress(currentBook),currentChapter+1));save();await saveProgressToCloud(currentBook.id);currentChapter=Math.min(currentBook.chapters,currentChapter+1);renderAll();renderBook()};
  $('#next').onclick=()=>{if(currentChapter<currentBook.chapters&&currentChapter<Math.max(1,progress(currentBook))){currentChapter++;renderBook()}};
 }
@@ -358,7 +359,7 @@ function renderTandemChapter(){
  $('#loreTab').innerHTML=relatedLore.length?relatedLore.map(entry=>`<div class="evidence"><span>${esc(entry.type)}</span><h3>${esc(entry.title)}</h3><p>${esc(entry.summary)}</p></div>`).join(''):'<p>No new lore is safe at this section.</p>';
  const relatedConnections=connections.filter(entry=>entry.requires.every(requirementCompleted)&&entry.requires.some(req=>req.bookId==='eos'||req.bookId==='tod'));
  $('#connTab').innerHTML=relatedConnections.length?relatedConnections.map(entry=>`<div class="evidence"><span>${esc(entry.status)}</span><h3>${esc(entry.title)}</h3><p>${esc(entry.summary)}</p><small>${entry.evidence.map(esc).join(' · ')}</small></div>`).join(''):'<p>No verified Connections are unlocked at this section.</p>';
- renderDiscussion();
+ renderDiscussion();window.ArchiveCommunity?.renderChapter();
  $('#complete').textContent='Mark section complete';$('#next').textContent='Next section →';
  $('#complete').onclick=async()=>{await setTandemStep(Math.max(tandemStep(),currentChapter));currentChapter=Math.min(currentBook.chapters,currentChapter+1);renderAll();renderBook()};
  $('#next').onclick=()=>{if(currentChapter<currentBook.chapters&&currentChapter<Math.max(1,progress(currentBook))){currentChapter++;renderBook()}};
@@ -392,13 +393,19 @@ async function renderDiscussion(){
  };
 }
 async function createMentionsForPost(postId,text){
+ const status=$('#mentionEmailStatus');if(status){status.textContent='';status.className='mention-email-status'}
  const {data:profiles,error}=await supabaseClient.rpc('list_mentionable_readers');
- if(error){console.error('Mention lookup failed:',error);return}
+ if(error){console.error('Mention lookup failed:',error);if(status){status.textContent='The post saved, but readers could not be checked for email mentions.';status.classList.add('error')}return}
  const recipients=(profiles||[]).filter(profile=>profile.id!==authUser.id&&new RegExp(`(^|[^A-Za-z0-9_])@${escapeRegex(profile.nickname)}(?=$|[^A-Za-z0-9_])`,'i').test(text));
  if(!recipients.length)return;
  const rows=recipients.map(profile=>({post_id:postId,mentioned_user_id:profile.id}));
- const {error:mentionError}=await supabaseClient.from('mentions').upsert(rows,{onConflict:'post_id,mentioned_user_id'});
- if(mentionError)console.error('Mention save failed:',mentionError);
+ const {data:createdMentions,error:mentionError}=await supabaseClient.from('mentions').upsert(rows,{onConflict:'post_id,mentioned_user_id'}).select('id');
+ if(mentionError){console.error('Mention save failed:',mentionError);if(status){status.textContent='The post saved, but the mention could not be created.';status.classList.add('error')}return}
+ if(!window.ArchiveCommunity?.notifyMention){if(status){status.textContent='The mention saved, but the email service is unavailable in this build.';status.classList.add('error')}return}
+ if(status)status.textContent='Mention saved. Sending the email notice…';
+ const results=await Promise.all((createdMentions||[]).map(mention=>window.ArchiveCommunity.notifyMention(mention.id)));
+ const failure=results.find(result=>!result?.ok);
+ if(status){status.textContent=failure?`Mention saved, but email was not sent: ${failure.error}`:'Mention saved and email notice sent.';status.classList.add(failure?'error':'success')}
 }
 function escapeRegex(value){return String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 async function loadMentionCandidates(){
@@ -435,7 +442,7 @@ function insertMention(nickname){
  const textarea=$('#discussionText'),match=mentionMatch||currentMentionMatch();if(!match)return;textarea.setRangeText(`@${nickname} `,match.start,match.end,'end');hideMentionSuggestions();textarea.focus();
 }
 function hideMentionSuggestions(){mentionActiveIndex=-1;mentionMatch=null;$('#mentionSuggestions').classList.add('hidden');$('#mentionSuggestions').innerHTML=''}
-function renderReaders(){$('#readers').innerHTML=`<div class="reader-row"><b class="reader-name">${esc(state.profile.name)}</b><span class="reader-progress">${esc(currentProgressText())}</span></div>`}
+function renderReaders(){const container=$('#readers');container.innerHTML=`<div class="reader-row"><b class="reader-name">${esc(state.profile.name)}</b><span class="reader-progress">${esc(currentProgressText())}</span></div>`;window.ArchiveCommunity?.renderReaders(container)}
 async function renderMentions(){
  const container=$('#mentions');
  if(!authUser){container.innerHTML=state.mentions.length?state.mentions.map(m=>`<div>${esc(m.from)} mentioned you</div>`).join(''):'<p>No mentions yet.</p>';return}
@@ -458,7 +465,11 @@ async function syncTandemBooks(done){
  save();await Promise.all([saveProgressToCloud('eos'),saveProgressToCloud('tod')]);
 }
 async function setTandemStep(done){state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemStep:Math.max(0,Math.min(tandem.steps.length,done))}};save();await Promise.all([saveBookSettingsToCloud('tog-plan'),syncTandemBooks(done)]);renderAll()}
-function renderLore(){$('#loreGrid').innerHTML=lore.map(l=>{const ok=l.requires.every(requirementCompleted);return`<article class="lorecard ${ok?'':'locked'}"><small>${ok?esc(l.type):'LOCKED'}</small><h3>${esc(ok?l.title:'Undiscovered entry')}</h3><p>${ok?esc(l.summary):'Continue reading to unlock this entry safely.'}</p></article>`}).join('')}
+function renderLore(){
+ $('#loreGrid').innerHTML=lore.map(l=>{const ok=l.requires.every(requirementCompleted);return`<article class="lorecard ${ok?'':'locked'}"><small>${ok?esc(l.type):'LOCKED'}</small><h3>${esc(ok?l.title:'Undiscovered entry')}</h3><p>${ok?esc(l.summary):'Continue reading to unlock this entry safely.'}</p></article>`}).join('');
+ const unlocked=connections.filter(entry=>entry.requires.every(requirementCompleted));
+ $('#connectionsPanel').innerHTML=unlocked.length?`<div class="loregrid">${unlocked.map(entry=>`<article class="lorecard"><small>${esc(entry.status)}</small><h3>${esc(entry.title)}</h3><p>${esc(entry.summary)}</p><small>${entry.evidence.map(esc).join(' · ')}</small></article>`).join('')}</div>`:'<div class="panel"><h3>Verified connections</h3><p>No connections are safe at your current reading progress. They unlock as soon as every required chapter has been completed.</p></div>';
+}
 function renderFullCharacterIndex(){
  return Object.entries(characterIndex).map(([series,items])=>`<section class="series-directory locked-summary"><h2>${esc(series)}</h2><p>${items.length} characters are catalogued. Names and biographies appear individually only when your completed chapters make them safe.</p></section>`).join('');
 }

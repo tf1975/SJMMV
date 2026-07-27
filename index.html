@@ -119,9 +119,30 @@
     <article class="panel"><small>BOOK CLUB</small><h3>Readers</h3><div id="readers"></div></article>
     <article class="panel"><small>LETTERS</small><h3>Mentions</h3><div id="mentions"></div><p class="fine-print">Mentions are synced securely to your Archive account.</p></article>
   </div>
+  <div class="grid personal-grid">
+    <article class="panel personal-archive-card"><small>PRIVATE TO YOU</small><h3>My Personal Archive</h3><p>Keep book and chapter notes together. Only you can see them.</p><div id="personalNotesFeed" class="personal-notes-feed"></div></article>
+    <article class="panel playlist-card"><small>BOOK CLUB PLAYLIST</small><h3>Songs from the shelves</h3><p>Spoiler-safe recommendations from openings, completed chapters, and finished books.</p><div id="homePlaylistFeed" class="playlist-feed"></div></article>
+  </div>
+  <div class="grid community-grid">
+    <article class="panel archivist-card">
+      <small>SPOILER-SAFE AI</small><h3>The Archivist</h3>
+      <p>Ask about a character, place, object, or mystery. Answers use only what you have already read.</p>
+      <form id="archivistForm" class="stacked-form"><label for="archivistQuestion">What would you like to know?</label><div class="inline-form"><input id="archivistQuestion" maxlength="300" placeholder="Who is Chaol again?" required><button class="gold" type="submit">Ask</button></div></form>
+      <div id="archivistAnswer" class="archivist-answer" aria-live="polite"><p class="fine-print">The Archivist will never intentionally reveal information beyond your saved progress.</p></div>
+    </article>
+    <article class="panel">
+      <small>BOOK CLUB</small><h3>Bulletin Board</h3><p>Leave a note for everyone in the current Book Club.</p>
+      <div id="bulletinFeed" class="social-feed"></div>
+      <form id="bulletinForm" class="stacked-form"><textarea id="bulletinText" maxlength="1200" placeholder="Share a reading update, question, or announcement…" required></textarea><button class="gold" type="submit">Post to the club</button></form>
+    </article>
+  </div>
   <div class="grid">
     <article id="atlasCard" class="panel feature"><span>⌖</span><div><small>ALWAYS OPEN</small><h3>The Atlas</h3><p>Explore Erilea, Prythian, and Midgard.</p><button class="outline">Open the Atlas</button></div></article>
     <article id="archiveCard" class="panel feature"><span>✦</span><div><small>DISCOVER SAFELY</small><h3>The Archive</h3><p>Lore, characters, places, and connections unlock with your reading progress.</p><button class="outline">Enter the Archive</button></div></article>
+  </div>
+  <div class="grid community-grid">
+    <article class="panel"><small>GATHER</small><h3>Meetups & Events</h3><div id="eventsFeed" class="social-feed"></div><form id="eventForm" class="stacked-form"><input id="eventTitle" maxlength="120" placeholder="Event name" required><input id="eventWhen" type="datetime-local" required><input id="eventWhere" maxlength="180" placeholder="Location or video link" required><textarea id="eventDetails" maxlength="1000" placeholder="Details (optional)"></textarea><button class="gold" type="submit">Add event</button></form></article>
+    <article class="panel"><small>COMMUNITY LETTERS</small><h3>Dear Sarah</h3><p>Write a message to Sarah J. Maas. This is a fan community collection and is not an official delivery channel.</p><div id="dearSarahFeed" class="social-feed"></div><form id="dearSarahForm" class="stacked-form"><textarea id="dearSarahText" maxlength="2000" placeholder="Dear Sarah…" required></textarea><button class="gold" type="submit">Add my letter</button></form></article>
   </div>
   <div class="grid future-grid">
     <article class="panel future-card locked-feature">
@@ -130,7 +151,7 @@
     </article>
     <article class="panel future-card locked-feature">
       <span class="future-icon">＋</span>
-      <div><small>COMING LATER · PREMIUM</small><h3>More to Come</h3><p>Future fantasy collections and book universes will appear here as The Archive expands.</p><button class="outline" disabled>Coming later</button></div>
+      <div><small>COMING LATER · PREMIUM</small><h3>The Library</h3><p>Future books, fantasy collections, and new reading universes will live here as The Archive expands.</p><button class="outline" disabled>More shelves coming</button></div>
     </article>
   </div>
   <footer id="notice"></footer>
@@ -168,11 +189,15 @@
         <button class="outline front-panel-button" data-front-panel="frontCharactersPanel">Characters</button>
         <button class="outline front-panel-button" data-front-panel="frontPlacesPanel">Places</button>
         <button class="outline front-panel-button" data-front-panel="frontWholeBookPanel">Whole Book</button>
+        <button class="outline front-panel-button" data-front-panel="frontCommunityPanel">Opening & Ending Songs/Art</button>
+        <button class="outline front-panel-button" data-front-panel="frontNotesPanel">My Notes</button>
       </div>
       <div id="frontInlinePanels" class="front-inline-panels">
         <section id="frontCharactersPanel" class="front-inline-panel"></section>
         <section id="frontPlacesPanel" class="front-inline-panel"></section>
         <section id="frontWholeBookPanel" class="front-inline-panel"></section>
+        <section id="frontCommunityPanel" class="front-inline-panel"><div id="bookStartCommunity"></div><div id="bookEndCommunity"></div></section>
+        <section id="frontNotesPanel" class="front-inline-panel"><div id="bookPersonalNote"></div></section>
       </div>
       <p id="frontContentStatus" class="fine-print"></p>
       <button id="continueIntoBook" class="gold wide">Open chapter guide →</button>
@@ -190,9 +215,11 @@
     </div></section>
     <section class="page right"><div class="pad">
       <small id="chapterLabel"></small><h2>What you’ll remember</h2><div id="summary"></div>
-      <div class="tabs"><button data-tab="charactersTab" class="active">Characters</button><button data-tab="placesTab">Places</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="discTab">Discussion</button></div>
+      <div class="tabs"><button data-tab="charactersTab" class="active">Characters</button><button data-tab="placesTab">Places</button><button data-tab="loreTab">Lore</button><button data-tab="connTab">Connections</button><button data-tab="songsTab">Songs</button><button data-tab="artTab">Art</button><button data-tab="notesTab">My Notes</button><button data-tab="discTab">Discussion</button></div>
       <div id="charactersTab" class="tabpane active"></div><div id="placesTab" class="tabpane"></div><div id="loreTab" class="tabpane"></div><div id="connTab" class="tabpane"></div>
-      <div id="discTab" class="tabpane"><div id="discussionFeed"></div><div class="mention-composer"><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..." aria-autocomplete="list" aria-controls="mentionSuggestions"></textarea><div id="mentionSuggestions" class="mention-suggestions hidden" role="listbox" aria-label="Readers to mention"></div></div><button id="postDiscussion" class="gold">Post</button></div>
+      <div id="songsTab" class="tabpane"><div id="chapterSongs"></div></div><div id="artTab" class="tabpane"><div id="chapterArt"></div></div>
+      <div id="notesTab" class="tabpane"><div id="chapterPersonalNote"></div></div>
+      <div id="discTab" class="tabpane"><div id="discussionFeed"></div><div class="mention-composer"><textarea id="discussionText" placeholder="Write a reaction, theory, quote, or @mention..." aria-autocomplete="list" aria-controls="mentionSuggestions"></textarea><div id="mentionSuggestions" class="mention-suggestions hidden" role="listbox" aria-label="Readers to mention"></div></div><button id="postDiscussion" class="gold">Post</button><p id="mentionEmailStatus" class="mention-email-status" role="status" aria-live="polite"></p></div>
       <div class="actions"><button id="complete" class="gold">Mark chapter complete</button><button id="next" class="outline">Next chapter →</button></div>
     </div></section>
   </div>
@@ -200,11 +227,12 @@
 
 <section id="archive" class="view">
   <button class="back" data-home>← Home</button><h1>The Archive</h1><p>Browse only what your reading progress makes safe.</p>
-  <div class="archive-tabs"><button data-archive="lorePanel" class="active">Lore & Canon</button><button data-archive="charactersPanel">Characters</button><button data-archive="placesPanel">Places</button><button data-archive="connectionsPanel">Connections</button></div>
+  <div class="archive-tabs"><button data-archive="lorePanel" class="active">Lore & Canon</button><button data-archive="charactersPanel">Characters</button><button data-archive="placesPanel">Places</button><button data-archive="connectionsPanel">Connections</button><button data-archive="theoriesPanel">Reader Theories</button></div>
   <div id="lorePanel" class="archive-pane active"><div id="loreGrid" class="loregrid"></div></div>
   <div id="charactersPanel" class="archive-pane"><div id="archiveCharacters" class="directory"></div></div>
   <div id="placesPanel" class="archive-pane"><div id="archivePlaces" class="directory"></div></div>
   <div id="connectionsPanel" class="archive-pane"><div class="panel"><h3>Verified connections</h3><p>Connection entries will appear only after their evidence and chapter requirements are reviewed. No placeholder theories are presented as fact.</p></div></div>
+  <div id="theoriesPanel" class="archive-pane"><div class="panel"><h3>Reader Theories</h3><p>Share your own connections and ideas. Theories are clearly separated from verified canon and remain spoiler-locked to their selected chapter.</p><div id="theoriesFeed" class="social-feed"></div><form id="theoryForm" class="stacked-form"><input id="theoryTitle" maxlength="140" placeholder="Theory title" required><select id="theoryBook"></select><input id="theoryChapter" type="number" min="1" placeholder="Spoiler through chapter" required><textarea id="theoryText" maxlength="3000" placeholder="Explain your theory…" required></textarea><button class="gold" type="submit">Publish theory</button></form></div></div>
 </section>
 
 <section id="atlas" class="view">
@@ -226,5 +254,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2" integrity="sha384-sgcvElP/LlNRtORGYFLO/9K/bENcpJK19HgvqslWXog6d8f/Va4TpltGiBlGntCM" crossorigin="anonymous"></script>
 <script src="assets/progress-model.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/community.js"></script>
 </body>
 </html>
