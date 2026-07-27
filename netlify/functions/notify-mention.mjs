@@ -23,7 +23,7 @@ export async function handler(event) {
   let body; try { body = JSON.parse(event.body || '{}'); } catch { return fail(400, 'Invalid request.'); }
   const mentionId = String(body.mentionId || ''); if (!/^[0-9a-f-]{36}$/i.test(mentionId)) return fail(400, 'Invalid mention.');
 
-  const authHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` };
+  const authHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
   const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: authHeaders });
   if (!userResponse.ok) return fail(401, 'Session expired.', `Supabase auth returned ${userResponse.status}`);
   const requester = await userResponse.json();
@@ -41,22 +41,21 @@ export async function handler(event) {
   const post = (await postResponse.json())[0];
   if (!post || post.author_id !== requester.id) return fail(403, 'Only the post author can send this notice.');
 
-  // Atomically claim this mention before contacting the email provider. If two
-  // requests arrive together, only one receives a row and sends the notice.
-  const claimedAt = new Date().toISOString();
-  const claimResponse = await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}&email_sent_at=is.null`, {
-    method: 'PATCH',
-    headers: { ...adminHeaders, Prefer: 'return=representation' },
-    body: JSON.stringify({ email_sent_at: claimedAt })
+  // Claim delivery through a database function that verifies the signed-in
+  // caller owns the post. This avoids relying on a server-key PATCH to bypass
+  // the mention UPDATE policy and remains atomic under concurrent requests.
+  const emailDeliveryCall = action => fetch(`${SUPABASE_URL}/rest/v1/rpc/${action}_mention_email`, {
+    method: 'POST',
+    headers: authHeaders,
+    body: JSON.stringify({ target_mention: mention.id })
   });
+  const claimResponse = await emailDeliveryCall('claim');
   if (!claimResponse.ok) return fail(502, 'The mention email could not be reserved.', `${claimResponse.status}: ${(await claimResponse.text()).slice(0,500)}`);
-  const claimedRows = await claimResponse.json();
-  if (!claimedRows.length) return json(200, { sent: true, duplicate: true });
-  const releaseClaim = () => fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}&email_sent_at=eq.${encodeURIComponent(claimedAt)}`, {
-    method: 'PATCH',
-    headers: { ...adminHeaders, Prefer: 'return=minimal' },
-    body: JSON.stringify({ email_sent_at: null })
-  });
+  if (!(await claimResponse.json())) return json(200, { sent: true, duplicate: true });
+  const releaseClaim = async () => {
+    const response = await emailDeliveryCall('release');
+    if (!response.ok) console.error('[notify-mention] Could not release email claim', response.status, (await response.text()).slice(0,500));
+  };
 
   const recipientResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${mention.mentioned_user_id}`, { headers: adminHeaders });
   if (!recipientResponse.ok) {
@@ -87,6 +86,12 @@ export async function handler(event) {
   if (!sendResponse.ok) {
     await releaseClaim();
     return fail(502, 'Email provider rejected the message.', `${sendResponse.status}: ${(await sendResponse.text()).slice(0,500)}`);
+  }
+  const completeResponse = await emailDeliveryCall('complete');
+  if (!completeResponse.ok || !(await completeResponse.json())) {
+    // Resend has already accepted the message. Preserve the claim to prevent an
+    // immediate duplicate and log the bookkeeping failure for investigation.
+    console.error('[notify-mention] Email sent but delivery could not be completed', completeResponse.status);
   }
   return json(200, { sent: true });
 }

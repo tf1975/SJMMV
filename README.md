@@ -173,3 +173,7 @@ Before testing these features, run `supabase/archive-personal-notes-playlist-2.7
 - Private notes are protected by Row Level Security and can only be read by their owner.
 - Meetups & Events and Dear Sarah appear above the two future premium cards.
 - Bulletin Board posts do not send group email. Email remains limited to direct chapter `@mentions`.
+
+## Archive 2.7.4 mention-email delivery
+
+Run `supabase/mention-email-delivery-2.7.4.sql` in the Supabase SQL Editor before deploying this build. It adds an authenticated, atomic delivery claim so duplicate requests cannot send the same mention email twice. The database function verifies that the signed-in caller owns the discussion post; it does not weaken the existing mention RLS policies.
