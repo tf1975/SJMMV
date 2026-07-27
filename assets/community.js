@@ -288,7 +288,7 @@
     } catch (error) {
       console.error('Archivist request failed:', error);
       const fallback = localArchivist(question);
-      output.innerHTML = `<p>${html(fallback.answer)}</p>${fallback.sources.length ? `<small>Unlocked evidence: ${fallback.sources.map(html).join(' · ')}</small>` : ''}<p class="fine-print">The AI service is not configured yet; this answer used the spoiler-safe Archive index.</p>`;
+      output.innerHTML = `<p>${html(fallback.answer)}</p>${fallback.sources.length ? `<small>Unlocked evidence: ${fallback.sources.map(html).join(' · ')}</small>` : ''}`;
     }
   }
 
