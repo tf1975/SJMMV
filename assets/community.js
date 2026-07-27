@@ -29,7 +29,7 @@
 
   async function renderHome() {
     ensureTheoryBooks();
-    await Promise.allSettled([renderBulletin(), renderEvents(), renderLetters()]);
+    await Promise.allSettled([renderBulletin(), renderEvents(), renderLetters(), renderPersonalArchive(), renderHomePlaylist()]);
   }
 
   async function renderReaders(container) {
@@ -90,14 +90,16 @@
     event.currentTarget.reset(); await renderLetters();
   }
 
-  function renderBookFront() {
-    renderContributionArea($('#bookStartCommunity'), 'book-start', null, 'At the beginning', true);
+  function renderBookFrontCommunity() {
+    renderContributionArea($('#bookStartCommunity'), 'book-start', null, 'Opening songs & art', true);
     const finished = readingStatus(currentBook) === 'finished';
-    if (finished) renderContributionArea($('#bookEndCommunity'), 'book-end', null, 'After finishing', true);
+    if (finished) renderContributionArea($('#bookEndCommunity'), 'book-end', null, 'Ending songs & art', true);
     else $('#bookEndCommunity').innerHTML = '<div class="locked-summary"><b>Finish this book to unlock the ending gallery and playlist.</b></div>';
+    renderPersonalNote($('#bookPersonalNote'), 0, 'Book notes');
   }
 
   function renderChapter() {
+    renderPersonalNote($('#chapterPersonalNote'), currentChapter, `Chapter ${currentChapter} notes`);
     if (completedThrough(currentBook) < currentChapter) {
       $('#chapterSongs').innerHTML = '<div class="locked-summary"><b>Finish this chapter to unlock its song recommendations.</b></div>';
       $('#chapterArt').innerHTML = '<div class="locked-summary"><b>Finish this chapter to unlock its art gallery.</b></div>';
@@ -153,6 +155,7 @@
     if (onlyKind) query = query.eq('kind', onlyKind);
     const { data, error } = await query.limit(50);
     if (error) { feed.innerHTML = '<p>Reader submissions could not load.</p>'; return; }
+    const likeMap = await loadSongLikeMap((data || []).filter(item => item.kind === 'song').map(item => item.id));
     const cards = await Promise.all((data || []).map(async item => {
       let art = '';
       if (item.kind === 'art' && item.storage_path) {
@@ -160,10 +163,95 @@
         if (signed?.signedUrl) art = `<button class="art-card" type="button" data-art-src="${html(signed.signedUrl)}"><img src="${html(signed.signedUrl)}" alt="${html(item.title)}"></button>`;
       }
       const title = item.external_url ? `<a href="${html(item.external_url)}" target="_blank" rel="noopener noreferrer">${html(item.title)}</a>` : html(item.title);
-      return `<article class="submission-card">${art}<b>${title}</b>${item.artist ? `<span>${html(item.artist)}</span>` : ''}${item.note ? `<p>${html(item.note)}</p>` : ''}<small>Suggested by ${html(item.author_nickname)}</small></article>`;
+      const likes = item.kind === 'song' ? songLikeMarkup(item.id, likeMap.get(item.id) || []) : '';
+      return `<article class="submission-card">${art}<b>${title}</b>${item.artist ? `<span>${html(item.artist)}</span>` : ''}${item.note ? `<p>${html(item.note)}</p>` : ''}<small>Suggested by ${html(item.author_nickname)}</small>${likes}</article>`;
     }));
     feed.innerHTML = cards.join('') || '<p>No submissions yet. Be the first.</p>';
     feed.querySelectorAll('.art-card').forEach(button => button.onclick = () => openArt(button.dataset.artSrc));
+    bindSongLikeButtons(feed, () => loadContributions(container, placement, chapter, onlyKind));
+  }
+
+  async function loadSongLikeMap(submissionIds) {
+    const map = new Map(); if (!signedIn() || !submissionIds.length) return map;
+    const { data: likes, error } = await supabaseClient.from('song_likes').select('submission_id,user_id').in('submission_id', submissionIds);
+    if (error) { console.error('Song likes could not load:', error); return map; }
+    const userIds = [...new Set((likes || []).map(like => like.user_id))];
+    let names = new Map();
+    if (userIds.length) {
+      const { data: profiles } = await supabaseClient.from('profiles').select('id,nickname').in('id', userIds);
+      names = new Map((profiles || []).map(profile => [profile.id, profile.nickname]));
+    }
+    for (const like of likes || []) {
+      const list = map.get(like.submission_id) || [];
+      list.push({ userId: like.user_id, nickname: names.get(like.user_id) || 'Reader' }); map.set(like.submission_id, list);
+    }
+    return map;
+  }
+
+  function songLikeMarkup(submissionId, likes) {
+    const mine = likes.some(like => like.userId === authUser?.id), names = likes.map(like => like.nickname);
+    return `<div class="song-like-row"><button class="outline song-like-button" type="button" data-song-like="${html(submissionId)}" data-liked="${mine}">${mine ? '♥ Liked' : '♡ Like'} · ${likes.length}</button><span class="song-like-names">${names.length ? html(names.join(', ')) : 'No likes yet'}</span></div>`;
+  }
+
+  function bindSongLikeButtons(container, refresh) {
+    container.querySelectorAll('[data-song-like]').forEach(button => button.onclick = async () => {
+      if (!signedIn()) return;
+      button.disabled = true; const submissionId = button.dataset.songLike;
+      const request = button.dataset.liked === 'true'
+        ? supabaseClient.from('song_likes').delete().eq('submission_id', submissionId).eq('user_id', authUser.id)
+        : supabaseClient.from('song_likes').insert({ submission_id: submissionId, user_id: authUser.id });
+      const { error } = await request; button.disabled = false;
+      if (error) return alert('Your song like could not be saved.');
+      await refresh();
+    });
+  }
+
+  async function renderHomePlaylist() {
+    const feed = $('#homePlaylistFeed'); if (!feed) return;
+    if (!signedIn()) { feed.innerHTML = '<p>Sign in to see the Book Club playlist.</p>'; return; }
+    const { data, error } = await supabaseClient.from('reader_submissions').select('id,author_nickname,book_id,chapter_number,placement,title,artist,note,external_url,created_at').eq('kind', 'song').order('created_at', { ascending: false }).limit(40);
+    if (error) { console.error('Homepage playlist failed:', error); feed.innerHTML = '<p>The playlist could not load.</p>'; return; }
+    const likeMap = await loadSongLikeMap((data || []).map(item => item.id));
+    feed.innerHTML = (data || []).map(item => {
+      const context = item.placement === 'book-start' ? 'Opening playlist' : item.placement === 'book-end' ? 'Ending playlist' : `Chapter ${Number(item.chapter_number)}`;
+      const title = item.external_url ? `<a href="${html(item.external_url)}" target="_blank" rel="noopener noreferrer">${html(item.title)}</a>` : `<b>${html(item.title)}</b>`;
+      return `<article class="playlist-item"><small>${html(bookTitle(item.book_id))} · ${html(context)}</small><div>${title}${item.artist ? ` — ${html(item.artist)}` : ''}</div>${item.note ? `<p>${html(item.note)}</p>` : ''}<small>Suggested by ${html(item.author_nickname)}</small>${songLikeMarkup(item.id, likeMap.get(item.id) || [])}</article>`;
+    }).join('') || '<p>No safe song recommendations have been added yet.</p>';
+    bindSongLikeButtons(feed, renderHomePlaylist);
+  }
+
+  async function renderPersonalArchive() {
+    const feed = $('#personalNotesFeed'); if (!feed) return;
+    if (!signedIn()) { feed.innerHTML = '<p>Sign in to open your Personal Archive.</p>'; return; }
+    const { data, error } = await supabaseClient.from('personal_notes').select('book_id,chapter_number,body,updated_at').eq('user_id', authUser.id).order('updated_at', { ascending: false }).limit(20);
+    if (error) { console.error('Personal Archive failed:', error); feed.innerHTML = '<p>Your Personal Archive could not load.</p>'; return; }
+    feed.innerHTML = (data || []).map(note => `<button type="button" class="personal-note-card" data-note-book="${html(note.book_id)}" data-note-chapter="${Number(note.chapter_number)}"><small>${html(bookTitle(note.book_id))}${note.chapter_number ? ` · Chapter ${Number(note.chapter_number)}` : ' · Book notes'}</small><p>${html(note.body.length > 220 ? `${note.body.slice(0, 217)}…` : note.body)}</p><small>Updated ${html(readableDate(note.updated_at))}</small></button>`).join('') || '<p>No notes yet. Open a book or chapter to begin your Personal Archive.</p>';
+    feed.querySelectorAll('[data-note-book]').forEach(button => button.onclick = () => {
+      const book = byId(button.dataset.noteBook); if (!book) return;
+      currentBook = book; const chapter = Number(button.dataset.noteChapter);
+      if (chapter > 0) { currentChapter = chapter; view('book'); renderBook(); setTimeout(() => document.querySelector('[data-tab="notesTab"]')?.click(), 0); }
+      else { view('bookFront'); renderBookFront(); setTimeout(() => document.querySelector('[data-front-panel="frontNotesPanel"]')?.click(), 0); }
+    });
+  }
+
+  async function renderPersonalNote(container, chapter, heading) {
+    if (!container || !currentBook) return;
+    if (!signedIn()) { container.innerHTML = '<p>Sign in to keep private notes.</p>'; return; }
+    const { data, error } = await supabaseClient.from('personal_notes').select('body,updated_at').eq('user_id', authUser.id).eq('book_id', currentBook.id).eq('chapter_number', chapter).maybeSingle();
+    if (error) { console.error('Personal note failed:', error); container.innerHTML = '<p>Your private note could not load.</p>'; return; }
+    container.innerHTML = `<section class="personal-note-editor"><h3>${html(heading)}</h3><p class="fine-print">Private—only you can see this note. It also appears in My Personal Archive on your homepage.</p><textarea maxlength="8000" placeholder="Keep track of clues, questions, favorite moments, or anything you want to remember…">${html(data?.body || '')}</textarea><div class="note-actions"><button type="button" class="gold" data-save-note>Save private note</button>${data?.body ? '<button type="button" class="outline" data-delete-note>Delete note</button>' : ''}</div><p class="field-message" data-note-status></p></section>`;
+    const textarea = container.querySelector('textarea'), status = container.querySelector('[data-note-status]');
+    container.querySelector('[data-save-note]').onclick = async () => {
+      const body = textarea.value.trim(); if (!body) { status.textContent = 'Write a note first, or use Delete note to remove it.'; return; }
+      const { error: saveError } = await supabaseClient.from('personal_notes').upsert({ user_id: authUser.id, book_id: currentBook.id, chapter_number: chapter, body }, { onConflict: 'user_id,book_id,chapter_number' });
+      status.textContent = saveError ? 'Your note could not be saved.' : 'Saved to your Personal Archive.';
+      if (!saveError) await renderPersonalArchive();
+    };
+    container.querySelector('[data-delete-note]')?.addEventListener('click', async () => {
+      const { error: deleteError } = await supabaseClient.from('personal_notes').delete().eq('user_id', authUser.id).eq('book_id', currentBook.id).eq('chapter_number', chapter);
+      if (deleteError) { status.textContent = 'Your note could not be deleted.'; return; }
+      await renderPersonalNote(container, chapter, heading); await renderPersonalArchive();
+    });
   }
 
   function openArt(src) {
@@ -249,6 +337,15 @@
   // Existing tab handlers call the lexical function, so attach a direct listener for the new pane.
   document.querySelector('[data-archive="theoriesPanel"]')?.addEventListener('click', () => void renderTheories());
 
-  window.ArchiveCommunity = { bind, renderHome, renderReaders, renderBookFront, renderChapter, renderTheories, notifyMention, handleDeepLink };
+  window.ArchiveCommunity = {
+    bind,
+    renderHome,
+    renderReaders,
+    renderBookFront: renderBookFrontCommunity,
+    renderChapter,
+    renderTheories,
+    notifyMention,
+    handleDeepLink
+  };
   bind();
 })();

@@ -160,3 +160,16 @@ The Archivist and mention emails use Netlify Functions so private keys never app
 Without an OpenAI key, The Archivist automatically falls back to the local spoiler-safe Archive index. Without Resend configuration, in-site mentions continue to work but the optional email is skipped.
 
 The Archivist verifies the reader’s Supabase progress on every request, sends only unlocked facts to OpenAI, refuses unsupported questions, checks the answer for locked character names, and limits each account to 20 questions per hour. OpenAI keys remain server-side.
+
+## Archive 2.7 personal notes and Book Club playlist
+
+Before testing these features, run `supabase/archive-personal-notes-playlist-2.7.sql` in the Supabase SQL Editor.
+
+- Every book has a private book-level note in its opening page.
+- Every chapter has a private note under **My Notes**.
+- Recent private notes appear in **My Personal Archive** on the homepage and link back to their source.
+- Opening, chapter, and ending song recommendations appear in **Songs from the shelves** on the homepage when they are safe for the signed-in reader.
+- Readers can like songs, see the total, and see which Book Club nicknames liked each recommendation.
+- Private notes are protected by Row Level Security and can only be read by their owner.
+- Meetups & Events and Dear Sarah appear above the two future premium cards.
+- Bulletin Board posts do not send group email. Email remains limited to direct chapter `@mentions`.
