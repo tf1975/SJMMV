@@ -19,7 +19,7 @@ export async function handler(event) {
   const token = bearer(event.headers), serviceKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY, resendKey = process.env.RESEND_API_KEY;
   if (!token) return fail(401, 'Authentication required.');
   const missing = [['SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY', serviceKey], ['RESEND_API_KEY', resendKey], ['RESEND_FROM_EMAIL', process.env.RESEND_FROM_EMAIL]].filter(([,value]) => !value).map(([name]) => name);
-  if (missing.length) return fail(503, `Development email configuration is missing: ${missing.join(', ')}.`);
+  if (missing.length) return fail(503, `Mention email configuration is missing: ${missing.join(', ')}.`);
   let body; try { body = JSON.parse(event.body || '{}'); } catch { return fail(400, 'Invalid request.'); }
   const mentionId = String(body.mentionId || ''); if (!/^[0-9a-f-]{36}$/i.test(mentionId)) return fail(400, 'Invalid mention.');
 
@@ -40,10 +40,34 @@ export async function handler(event) {
   if (!postResponse.ok) return fail(502, 'Supabase could not load the discussion post.', `${postResponse.status}: ${(await postResponse.text()).slice(0,500)}`);
   const post = (await postResponse.json())[0];
   if (!post || post.author_id !== requester.id) return fail(403, 'Only the post author can send this notice.');
+
+  // Atomically claim this mention before contacting the email provider. If two
+  // requests arrive together, only one receives a row and sends the notice.
+  const claimedAt = new Date().toISOString();
+  const claimResponse = await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}&email_sent_at=is.null`, {
+    method: 'PATCH',
+    headers: { ...adminHeaders, Prefer: 'return=representation' },
+    body: JSON.stringify({ email_sent_at: claimedAt })
+  });
+  if (!claimResponse.ok) return fail(502, 'The mention email could not be reserved.', `${claimResponse.status}: ${(await claimResponse.text()).slice(0,500)}`);
+  const claimedRows = await claimResponse.json();
+  if (!claimedRows.length) return json(200, { sent: true, duplicate: true });
+  const releaseClaim = () => fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}&email_sent_at=eq.${encodeURIComponent(claimedAt)}`, {
+    method: 'PATCH',
+    headers: { ...adminHeaders, Prefer: 'return=minimal' },
+    body: JSON.stringify({ email_sent_at: null })
+  });
+
   const recipientResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${mention.mentioned_user_id}`, { headers: adminHeaders });
-  if (!recipientResponse.ok) return fail(404, 'Mentioned reader not found.', `Supabase admin returned ${recipientResponse.status}`);
+  if (!recipientResponse.ok) {
+    await releaseClaim();
+    return fail(404, 'Mentioned reader not found.', `Supabase admin returned ${recipientResponse.status}`);
+  }
   const recipient = await recipientResponse.json();
-  if (!recipient.email) return json(200, { sent: false, reason: 'No email address.' });
+  if (!recipient.email) {
+    await releaseClaim();
+    return json(200, { sent: false, reason: 'No email address.' });
+  }
   let chapterIsSafe = false;
   if (post.book_id === 'tandem') {
     const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/user_book_settings?user_id=eq.${encodeURIComponent(mention.mentioned_user_id)}&book_id=eq.tog-plan&select=ui_preferences`, { headers: adminHeaders });
@@ -60,7 +84,9 @@ export async function handler(event) {
     ? `<p><strong>${clean(post.author_nickname)}</strong> mentioned you in a chapter discussion:</p><blockquote style="border-left:3px solid #b78b3c;padding-left:16px">${clean(excerpt)}</blockquote><p><a href="${clean(link)}" style="display:inline-block;background:#b78b3c;color:#17120a;padding:12px 18px;border-radius:9px;text-decoration:none;font-weight:bold">Open the spoiler-safe discussion</a></p>`
     : `<p><strong>${clean(post.author_nickname)}</strong> mentioned you in a chapter you have not finished yet.</p><p>The message is hidden to protect you from spoilers. It will become available in The Archive after you complete that chapter.</p>`;
   const sendResponse = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL, to: [recipient.email], subject: `${post.author_nickname} mentioned you in The Archive`, html: `<div style="font-family:Georgia,serif;max-width:600px;margin:auto;color:#251e15"><h1>The Archive</h1>${notice}<p style="font-size:12px;color:#6f6659">The Archive checks your saved reading progress before revealing chapter discussions.</p></div>` }) });
-  if (!sendResponse.ok) return fail(502, 'Email provider rejected the message.', `${sendResponse.status}: ${(await sendResponse.text()).slice(0,500)}`);
-  await fetch(`${SUPABASE_URL}/rest/v1/mentions?id=eq.${encodeURIComponent(mention.id)}`, { method: 'PATCH', headers: { ...adminHeaders, Prefer: 'return=minimal' }, body: JSON.stringify({ email_sent_at: new Date().toISOString() }) });
+  if (!sendResponse.ok) {
+    await releaseClaim();
+    return fail(502, 'Email provider rejected the message.', `${sendResponse.status}: ${(await sendResponse.text()).slice(0,500)}`);
+  }
   return json(200, { sent: true });
 }
