@@ -177,3 +177,11 @@ Before testing these features, run `supabase/archive-personal-notes-playlist-2.7
 ## Archive 2.7.4 mention-email delivery
 
 Run `supabase/mention-email-delivery-2.7.4.sql` in the Supabase SQL Editor before deploying this build. It adds an authenticated, atomic delivery claim so duplicate requests cannot send the same mention email twice. The database function verifies that the signed-in caller owns the discussion post; it does not weaken the existing mention RLS policies.
+
+## Archive 2.7.5 confirmed signup handoff
+
+New email/password readers now remain on a clear confirmation screen after registration. When they click Supabase's confirmation link, the client receives and persists the session, returns them to The Archive already signed in, and opens bookshelf onboarding automatically. Email confirmation remains enabled; readers are not asked to enter their password a second time.
+
+## Responsive mobile experience
+
+The Archive keeps the desktop bookshelf and two-page reading layout on larger screens. On screens 760px wide or smaller, it automatically switches to a touch-first single-column layout: the header controls become scrollable, books and cards stack, the book pages flow vertically, chapter tools become full-width, and chapter tabs can be swiped horizontally. The browser detects the layout with `matchMedia`, while the CSS media rules provide the responsive presentation without changing authentication, Supabase, or reading data.
