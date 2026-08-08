@@ -6,6 +6,16 @@
   <meta name="theme-color" content="#111713">
   <title>The Archive</title>
   <link rel="stylesheet" href="assets/styles.css">
+  <script>
+    (() => {
+      const query = window.matchMedia('(max-width: 760px)');
+      const updateLayout = () => {
+        document.documentElement.dataset.layout = query.matches ? 'mobile' : 'desktop';
+      };
+      updateLayout();
+      query.addEventListener?.('change', updateLayout);
+    })();
+  </script>
 </head>
 <body>
 <div class="dust"></div>
@@ -42,6 +52,13 @@
         <button class="gold wide" type="submit">Create account</button>
       </form>
       <button class="text-link auth-back" type="button">← Back</button>
+    </div>
+    <div id="emailConfirmationStep" class="auth-step confirmation-step" hidden>
+      <div class="confirmation-seal" aria-hidden="true">✉</div>
+      <h2>Open your confirmation email</h2>
+      <p>We sent a secure confirmation link to <strong id="confirmationEmail"></strong>.</p>
+      <p>Click that link and The Archive will bring you back already signed in. You will continue directly to your bookshelf setup—there is no need to enter your password again.</p>
+      <button class="text-link auth-back" type="button">Return to sign in</button>
     </div>
     <div id="passwordResetStep" class="auth-step" hidden>
       <h2>Reset your password</h2>
