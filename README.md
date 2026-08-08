@@ -185,3 +185,7 @@ New email/password readers now remain on a clear confirmation screen after regis
 ## Responsive mobile experience
 
 The Archive keeps the desktop bookshelf and two-page reading layout on larger screens. On screens 760px wide or smaller, it automatically switches to a touch-first single-column layout: the header controls become scrollable, books and cards stack, the book pages flow vertically, chapter tools become full-width, and chapter tabs can be swiped horizontally. The browser detects the layout with `matchMedia`, while the CSS media rules provide the responsive presentation without changing authentication, Supabase, or reading data.
+
+## Archive 2.7.6 browser navigation
+
+The active Archive view is now stored in the URL hash. Opening a book, entering its chapter guide, changing chapters, returning to the overview, or opening the Atlas/Archive/reader views creates a browser history entry. The browser Back and Forward buttons restore the matching view and book/chapter, while Supabase OAuth callback hashes are cleared after authentication is processed.

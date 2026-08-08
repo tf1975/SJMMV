@@ -26,13 +26,48 @@ const tandemPreference=()=>readingPlan().tandemPreference||'unsure';
 const assassinsBladeOrder=()=>readingPlan().assassinsBladeOrder||'archivist';
 const orderedTogIds=()=>assassinsBladeOrder()==='purist'?['tab','tog','com','hof','qos','eos','tod','koa']:assassinsBladeOrder()==='romantic'?['tog','com','hof','tab','qos','eos','tod','koa']:['tog','com','tab','hof','qos','eos','tod','koa'];
 const orderedBooksForCollection=c=>c.id!=='throne-of-glass'?c.books:[...c.books].sort((a,b)=>orderedTogIds().indexOf(a[0])-orderedTogIds().indexOf(b[0]));
-function view(id){$$('.view').forEach(v=>v.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+let restoringRoute=false;
+const routeHashForView=id=>{
+ if(id==='bookFront'&&currentBook)return`#book-front/${encodeURIComponent(currentBook.id)}`;
+ if(id==='book'&&currentBook)return`#book/${encodeURIComponent(currentBook.id)}/${Math.max(1,currentChapter||1)}`;
+ return`#${id}`;
+};
+function syncRoute(mode='push',id){
+ const hash=routeHashForView(id||document.querySelector('.view.active')?.id||'home');
+ if(window.location.hash===hash)return;
+ const method=mode==='replace'?'replaceState':'pushState';
+ window.history[method]({archiveRoute:hash},'',hash);
+}
+function view(id,options={}){
+ const target=$('#'+id);if(!target)return;
+ $$('.view').forEach(v=>v.classList.remove('active'));target.classList.add('active');
+ if(!options.fromHistory&&!restoringRoute)syncRoute(options.replace?'replace':'push',id);
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function restoreRouteFromHash(){
+ const raw=window.location.hash.replace(/^#/,'');
+ if(!raw){view('home',{fromHistory:true});return}
+ if(raw.includes('access_token=')||raw.includes('refresh_token=')||raw.startsWith('error=')){window.history.replaceState({},'',window.location.pathname+window.location.search);view('home',{fromHistory:true});return}
+ const parts=raw.split('/'),route=parts.shift();
+ if(route==='book-front'||route==='book'){
+  const id=decodeURIComponent(parts.shift()||''),book=id==='tandem'?tandemBook():byId(id);
+  if(!book||book.upcoming){view('home',{fromHistory:true});return}
+  currentBook=book;
+  const requestedChapter=Number(parts.shift());
+  currentChapter=route==='book'&&Number.isFinite(requestedChapter)&&requestedChapter>0?Math.min(book.chapters,Math.max(1,requestedChapter)):Math.max(1,progress(book)||1);
+  if(route==='book-front')renderBookFront({fromHistory:true});
+  else{view('book',{fromHistory:true});renderBook({fromHistory:true})}
+  return
+ }
+ const allowed=['home','archive','atlas','reader'];
+ view(allowed.includes(route)?route:'home',{fromHistory:true});
+}
 async function boot(){
  const [loadedCatalog,togContent,comContent,loadedLore,loadedFrontMatter,loadedCharacters,loadedPlaces,loadedCharacterIndex,loadedConnections,loadedTandem]=await Promise.all([
   'data/catalog.json','content/tog.json','content/com.json','data/lore.json','data/front-matter.json','data/characters.json','data/places.json','data/character-index.json','data/connections.json','data/tandem.json'
  ].map(u=>fetch(u).then(r=>r.json())));
  catalog=loadedCatalog;bookContent={tog:togContent,com:comContent};lore=loadedLore;frontMatter=loadedFrontMatter;characters=loadedCharacters;places=loadedPlaces;characterIndex=loadedCharacterIndex;connections=loadedConnections;tandem=loadedTandem;
- bind();await initAuth();renderAll();
+ bind();await initAuth();renderAll();if(authUser&&state.profile.onboarded)restoreRouteFromHash();
 }
 function bind(){
  $('#homeBtn').onclick=()=>view('home');$$('[data-home]').forEach(b=>b.onclick=()=>view('home'));$('#readerBtn').onclick=()=>view('reader');
@@ -49,6 +84,7 @@ function bind(){
  $$('.map-open').forEach(b=>b.onclick=()=>openMap(b.dataset.src,b.dataset.title));$('#closeMap').onclick=()=>$('#mapModal').classList.add('hidden');$('#mapModal').onclick=e=>{if(e.target.id==='mapModal')$('#mapModal').classList.add('hidden')};
  $('#saveTandemFront').onclick=saveTandemFront;$('#toggleTandemFront').onclick=toggleTandemEnabled;
  $('#discussionText').addEventListener('input',updateMentionSuggestions);$('#discussionText').addEventListener('focus',async()=>{await loadMentionCandidates();updateMentionSuggestions()});$('#discussionText').addEventListener('keydown',handleMentionKeys);document.addEventListener('click',event=>{if(!event.target.closest('.mention-composer'))hideMentionSuggestions()});
+ window.addEventListener('hashchange',restoreRouteFromHash);window.addEventListener('popstate',restoreRouteFromHash);
 }
 function openArchivePane(id){$$('.archive-tabs button,.archive-pane').forEach(x=>x.classList.remove('active'));document.querySelector(`[data-archive="${id}"]`)?.classList.add('active');$('#'+id).classList.add('active')}
 function openMap(src,title){$('#mapModalImage').src=src;$('#mapModalTitle').textContent=title;$('#mapModal').classList.remove('hidden')}
@@ -291,8 +327,8 @@ function toggleFrontPanel(id){
  $$('.front-inline-panel').forEach(p=>p.classList.toggle('active',p.id===id&&!p.classList.contains('active')));
  $$('.front-panel-button').forEach(b=>b.classList.toggle('active',b.dataset.frontPanel===id&&$('#'+id).classList.contains('active')));
 }
-function renderBookFront(){
- view('bookFront');const fm=frontMatter[currentBook.id]||{};
+function renderBookFront(options={}){
+ view('bookFront',options);const fm=frontMatter[currentBook.id]||{};
  const tandemMode=isTandem(currentBook),tandemOverview='Read Empire of Storms and Tower of Dawn as one continuous experience. The books unfold during the same period in different parts of the world, and this guide tells you exactly when to switch without revealing what happens next.';
  $('#frontCoverSeries').textContent=currentBook.collection;$('#frontCoverTitle').textContent=tandemMode?'Empire of Storms + Tower of Dawn':currentBook.title;$('#frontSeries').textContent=currentBook.collection;$('#frontTitle').textContent=currentBook.title;$('#frontTagline').textContent=tandemMode?'Two books. One shared timeline.':fm.tagline||'';$('#frontSummary').textContent=tandemMode?tandemOverview:fm.summary||'Spoiler-free summary in editorial production.';$('#frontContentStatus').textContent=tandemMode?'Fifty spoiler-free reading sections based on the selected tandem guide.':fm.contentStatus||'Content in editorial production.';
  $('#frontReadingStatus').classList.toggle('hidden',tandemMode);$('#tandemFrontStatus').classList.toggle('hidden',!tandemMode);$('#continueIntoBook').textContent=tandemMode?'Open tandem guide →':'Open chapter guide →';
@@ -327,7 +363,8 @@ function renderTandemFrontPanels(){
 async function saveTandemFront(){const section=Math.max(1,Math.min(tandem.steps.length,Number($('#tandemFrontSection').value||1)));await setTandemStep(section-1);currentChapter=section;renderBookFront()}
 async function toggleTandemEnabled(){const enabling=tandemPreference()!=='yes';state.bookSettings['tog-plan']={...(state.bookSettings['tog-plan']||{}),uiPreferences:{...readingPlan(),tandemPreference:enabling?'yes':'no'}};save();await saveBookSettingsToCloud('tog-plan');renderAll();renderBookFront()}
 async function saveFrontStatus(){const status=$('input[name="frontStatus"]:checked').value;setBookProgress(currentBook,status,status==='not-started'?0:status==='finished'?currentBook.chapters:Math.max(1,Math.min(currentBook.chapters,Number($('#frontChapter').value||1))));state.bookSettings[currentBook.id]={...(state.bookSettings[currentBook.id]||{}),rereading:$('#frontRereading').checked};currentChapter=Math.max(1,progress(currentBook)||1);save();await Promise.all([saveProgressToCloud(currentBook.id),saveBookSettingsToCloud(currentBook.id)]);renderAll();renderBookFront()}
-function renderBook(){
+function renderBook(options={}){
+ if(!options.fromHistory&&!restoringRoute)syncRoute('push','book');
  const tandemMode=isTandem(currentBook),unit=tandemMode?'Section':'Ch.';$('#seriesLabel').textContent=currentBook.collection;$('#bookTitle').textContent=currentBook.title;$('#bookmark').innerHTML=`${esc(state.profile.name)}<br><b>${readingStatus(currentBook)==='finished'?'Finished':`${unit} ${progress(currentBook)||1}`}</b>`;$('#chapterNumber').min=tandemMode?1:0;$('#chapterNumber').max=currentBook.chapters;$('#chapterNumber').value=progress(currentBook);$('#quickProgressLabel').textContent=tandemMode?'Jump to current section':'Jump to current chapter';$('#saveChapterNumber').textContent=tandemMode?'Save section':'Save chapter';$('#markFinished').textContent=tandemMode?'Mark tandem read finished':'Mark book finished';
  $('#saveChapterNumber').onclick=async()=>{const chapter=Math.max(tandemMode?1:0,Math.min(currentBook.chapters,Number($('#chapterNumber').value||0)));if(tandemMode){await setTandemStep(chapter-1)}else{setBookProgress(currentBook,chapter===0?'not-started':'reading',chapter);save();await saveProgressToCloud(currentBook.id)}currentChapter=Math.max(1,progress(currentBook)||1);renderAll();renderBook()};
  $('#markFinished').onclick=async()=>{if(tandemMode)await setTandemStep(currentBook.chapters);else{setBookProgress(currentBook,'finished',currentBook.chapters);save();await saveProgressToCloud(currentBook.id)}currentChapter=currentBook.chapters;renderAll();renderBook()};
